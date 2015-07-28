@@ -1,3 +1,8 @@
+#  Started to build it from scratch, but after discovering
+#  that bitnami puts out a working image for free, there was
+#  no need to work through this. We'll just use the bitnami
+#  version, at least for now.
+
 sudo yum install httpd.x86_64
 
 sudo service httpd start
