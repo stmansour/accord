@@ -1,0 +1,16 @@
+sudo yum install httpd.x86_64
+
+sudo service httpd start
+sudo service tomcat7 start
+sudo yum -yy install tomcat7.noarch
+sudo yum -y install tomcat7-webapps.noarch
+
+
+wget http://bit.ly/Hqv9aj
+mv Hqv9aj artifactory-3.9.2.zip
+unzip artifactory-3.9.2.zip
+sudo mv artifactory-3.9.2 /usr/local
+cd /usr/local/artifactory-3.9.2/bin
+sudo bash installService.sh
+service artifactory check
+sudo service artifactory start

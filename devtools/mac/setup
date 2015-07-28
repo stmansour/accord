@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# For steve's setup only...
+# Assumes that Google Drive for StMansour has been installed.
+#
+pushd ~
+ln -s Google\ Drive/smanHome/profile .profile
+ln -s Google\ Drive/smanHome/vimrc  .vimrc
+popd
+
+#
+#  get 'wget'
+#  a lot of automation uses wget
+#
+rm -rf wget-1.15
+curl -O http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz
+tar -zxvf wget-1.15.tar.gz
+pushd wget-1.15/
+./configure --with-ssl=openssl
+make
+sudo make install
+popd
+
+#
+# begin general setup
+#
+
+# download the latest version of git from source forge
+# git also comes with xcode, so if you use xcode, you don't need to 
+# download it
+# http://sourceforge.net/projects/git-osx-installer/files/
+
+#
+# GRADLE
+#
+wget https://services.gradle.org/distributions/gradle-2.5-bin.zip
+unzip gradle-2.5-bin.zip
+sudo mv gradle-2.5 /usr/local
+sudo ln -s /usr/local/gradle-2.5/bin/gradle /usr/bin/gradle
+rm gradle-2.5-bin.zip
+
