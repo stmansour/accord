@@ -1,2 +1,2 @@
 #!/bin/sh
-scp -i ~/.ssh/smanAWS1.pem $1 bitnami@ec2-52-6-164-191.compute-1.amazonaws.com:~/
+scp -i ~/.ssh/*.pem $1 bitnami@ec2-52-6-164-191.compute-1.amazonaws.com:~/
