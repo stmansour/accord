@@ -114,24 +114,18 @@ sudo service nginx start
 sudo chkconfig nginx on
 
 #
-# Setup the 'jenkins' user to be identified as ottobldr :-)
-# The ssh keys for ottobldr are in ottobldrssh.tar
+# Setup the 'jenkins' user to be identified as ottoaccord :-)
+# The ssh keys for ottoaccord are in ottoaccord.tar
 #
 sudo cat > qq_genkey_qq << EOF
 #!/bin/bash
 cd ~jenkins
-tar xvf ottobldrssh.tar
+tar xvf ottoaccord.tar
 chown -R jenkins:jenkins .ssh
 EOF
 sudo chmod +x qq_genkey_qq
 sudo mv qq_genkey_qq ~jenkins/
-sudo cp ottobldrssh.tar ~jenkins/
+sudo cp ottoaccord.tar ~jenkins/
 sudo su -c './qq_genkey_qq' - jenkins
 sudo rm ~jenkins/qq_genkey_qq
-sudo rm ~jenkins/ottobldrssh.tar
-
-echo " "
-echo "Please execute this command as the 'jenkins' user"
-echo "git -c core.askpass=true ls-remote -h git@github.com:stmansour/sort.git HEAD"
-echo "and answer 'yes' when asked about the host. "
-echo " "
+sudo rm ~jenkins/ottoaccord.tar

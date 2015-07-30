@@ -10,10 +10,20 @@
 #  2. Edit 'setup' and set EXTERNAL_HOST_NAME to use the new minstance Public DNS name.
 #
 #  3. Upload 'setup' and ottobldrssh.tar to the new machine.
+#       Name:  Otto Accord
+#       Email: ottoaccord@gmail.com
+#       PW:    <old NS, numbers, double end>
+#       accounts on gmail and github.  This user will be associated with Jenkins (or 
+#       whatever) automated builds and will have permission to write to artifactory
+#       in the Jenkins-Snapshot/Release area.
+
+if [ -e ottoaccord.tar.gz ]; then
+    gunzip ottoaccord.tar.gz
+fi
 
 echo -n "Target hostname: "
 read hostname
-scp -i ~/.ssh/smanAWS1.pem setup ottobldrssh.tar ec2-user@${hostname}:~/
+scp -i ~/.ssh/smanAWS1.pem setup ottoaccord.tar ec2-user@${hostname}:~/
 
 #scp -i ~/.ssh/smanAWS1.pem setup ottobldrssh.tar ec2-user@ec2-52-2-162-170.compute-1.amazonaws.com:~/
 
@@ -99,4 +109,6 @@ scp -i ~/.ssh/smanAWS1.pem setup ottobldrssh.tar ec2-user@${hostname}:~/
 #     Java development we use:
 #	- Jacoco coverage report
 #	- Violations plugin
+#       - Jenkins Artifactory plugin
+#       - Jenkins Gradle plugin
 #
