@@ -12,7 +12,7 @@
 #  3. Upload 'setup' and ottobldrssh.tar to the new machine.
 #       Name:  Otto Accord
 #       Email: ottoaccord@gmail.com
-#       PW:    <old NS, numbers, double end>
+#       PW:    0tt0acc0rd
 #       accounts on gmail and github.  This user will be associated with Jenkins (or 
 #       whatever) automated builds and will have permission to write to artifactory
 #       in the Jenkins-Snapshot/Release area.
