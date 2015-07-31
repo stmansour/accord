@@ -1,0 +1,10 @@
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\bin\Debug\SimpleQbCMS.exe.config
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\obj\Debug\SimpleQbCMS.csprojResolveAssemblyReference.cache
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\obj\Debug\SimpleQbCMS.Form1.resources
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\obj\Debug\SimpleQbCMS.Properties.Resources.resources
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\obj\Debug\SimpleQbCMS.csproj.GenerateResource.Cache
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\bin\Debug\SimpleQbCMS.exe
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\bin\Debug\SimpleQbCMS.pdb
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\bin\Debug\Newtonsoft.Json.dll
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\obj\Debug\SimpleQbCMS.exe
+D:\Govind\Codebase\Windows\WinForms\SimpleQbCMS\SimpleQbCMS\obj\Debug\SimpleQbCMS.pdb
