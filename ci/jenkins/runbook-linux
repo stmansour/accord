@@ -7,15 +7,15 @@
 #	- Configure Security Group - allow access for SSH (port 22) and TCP, (port 80)
 #	- Launch
 #
-#  2. Edit 'setup' and set EXTERNAL_HOST_NAME to use the new minstance Public DNS name.
+#  2. Edit 'setup-linux' and set EXTERNAL_HOST_NAME to use the new minstance Public DNS name.
 #
-#  3. Upload 'setup' and ottobldrssh.tar to the new machine.
+#  3. Upload 'setup-linux' and ottobldrssh.tar to the new machine.
 #       Name:  Otto Accord
 #       Email: ottoaccord@gmail.com
 #       PW:    0tt0acc0rd
 #       accounts on gmail and github.  This user will be associated with Jenkins (or 
-#       whatever) automated builds and will have permission to write to artifactory
-#       in the Jenkins-Snapshot/Release area.
+#       whatever) automated builds and will have permission to write to Artifactory
+#       in the jenkins-snapshot/release area.
 
 if [ -e ottoaccord.tar.gz ]; then
     gunzip ottoaccord.tar.gz
@@ -23,9 +23,9 @@ fi
 
 echo -n "Target hostname: "
 read hostname
-scp -i ~/.ssh/smanAWS1.pem setup ottoaccord.tar ec2-user@${hostname}:~/
+scp -i ~/.ssh/smanAWS1.pem setup-linux ottoaccord.tar ec2-user@${hostname}:~/
 
-#scp -i ~/.ssh/smanAWS1.pem setup ottobldrssh.tar ec2-user@ec2-52-2-162-170.compute-1.amazonaws.com:~/
+#scp -i ~/.ssh/smanAWS1.pem setup-linux ottobldrssh.tar ec2-user@ec2-52-2-162-170.compute-1.amazonaws.com:~/
 
 #  4. ssh to the new instance. An easy way to do this is to update the ~/.ssh/config
 #     file with info about the new instance, something like the following:
@@ -43,7 +43,7 @@ scp -i ~/.ssh/smanAWS1.pem setup ottoaccord.tar ec2-user@${hostname}:~/
 #  5. Run the setup script. Note: part of the setup script executes 'sudo yum update',
 #     so you can disregard the login message that asks you to do this.
 #
-#	chmod +x setup ; ./setup
+#	chmod +x setup-linux ; ./setup-linux
 #
 #     This adds OpenJava 1.7, git, and gradle 2.5. It also installs Jenkins and sets
 #     up an njinx proxy that forwards port 80 requests to port 8080 (jenkins default).

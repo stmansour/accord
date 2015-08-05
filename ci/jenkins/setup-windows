@@ -1,0 +1,12 @@
+
+#  The Windows Instance: Microsoft Windows Server 2012 Base - ami-6f2cf804
+#  We will use FTP to pull some things from the internet. FTP requires
+#  ports. Ports 21, 80, 443, 50000-51000
+#
+#  go to Administrative Tools on the startup window
+#  open “Windows Firewall with Advanced Security”
+
+#     
+#  First thing to do is download the cygwin tools
+1. launch PowerShell and execute the follwing
+
