@@ -3,10 +3,29 @@
 #  We will use FTP to pull some things from the internet. FTP requires
 #  ports. Ports 21, 80, 443, 50000-51000
 #
+#  Disable firewall
 #  go to Administrative Tools on the startup window
 #  open “Windows Firewall with Advanced Security”
 
+#  Download chrome rather than using IE
+#
+#  Use chrome to download Cygwin
+#
+#  Setup cygwin install and in addition to the base system get these packages:
+#      wget, curl, unzip, git
 #     
-#  First thing to do is download the cygwin tools
-1. launch PowerShell and execute the follwing
 
+# install java
+
+#  wget http://stevemansour.com/accord/jdk-8u51-windows-x64.exe
+#    this can be done, with the "/s" option
+#
+
+#  next, update the path so that java can be found:
+#  Click Start, then Control Panel, then System and Security, then System.
+#
+#  Click Advanced system settings, click the Advanced tab, then Environment Variables.
+#
+#  Add the location of the bin folder of the JDK installation for the PATH variable in System Variables. The following is a typical value for the PATH variable:
+#
+#  C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Java\jdk1.7.0\bin
