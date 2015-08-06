@@ -15,8 +15,9 @@
 #  Setup cygwin install and in addition to the base system get these packages:
 #      wget, curl, unzip, git
 #
-#  TODO: Cygwin's setup.exe program can run in silent mode... we need to
+#  TODO: Cygwin's setup-x86_64.exe program can run in silent mode... we need to
 #        research this and figure out how to give it all the parameters it needs
+#        so that it can run automatically (no person clicking buttons)
 
 # At this point, it is assumed that we have the cygwin tools in place.
 # Open a bash shell and invoke this script.
