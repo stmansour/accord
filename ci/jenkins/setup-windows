@@ -1,31 +1,56 @@
-
-#  The Windows Instance: Microsoft Windows Server 2012 Base - ami-6f2cf804
-#  We will use FTP to pull some things from the internet. FTP requires
-#  ports. Ports 21, 80, 443, 50000-51000
+#!/bin/bash
 #
+#  The Windows Instance: Microsoft Windows Server 2012 Base - ami-6f2cf804
+#  be sure to open ports 80, 443
+
 #  Disable firewall
 #  go to Administrative Tools on the startup window
 #  open “Windows Firewall with Advanced Security”
 
-#  Download chrome rather than using IE
-#
-#  Use chrome to download Cygwin
-#
+#  Download chrome rather than using IE -- IE did not let me download anything
+#  everything was a security violation.
+
+#  Use chrome to download Cygwin from https://cygwin.com/install.html
+
 #  Setup cygwin install and in addition to the base system get these packages:
 #      wget, curl, unzip, git
-#     
+#
+#  TODO: Cygwin's setup.exe program can run in silent mode... we need to
+#        research this and figure out how to give it all the parameters it needs
 
+# At this point, it is assumed that we have the cygwin tools in place.
+# Open a bash shell and invoke this script.
+
+#
 # install java
-
-#  wget http://stevemansour.com/accord/jdk-8u51-windows-x64.exe
-#    this can be done, with the "/s" option
 #
 
-#  next, update the path so that java can be found:
-#  Click Start, then Control Panel, then System and Security, then System.
 #
-#  Click Advanced system settings, click the Advanced tab, then Environment Variables.
+# get the java sdk and install it
 #
-#  Add the location of the bin folder of the JDK installation for the PATH variable in System Variables. The following is a typical value for the PATH variable:
+# TODO: move the windows java distribution into Artifactory
+#       or better yet, see if there is someplace on the internet that lets
+#       a script download the jdk
+wget http://stevemansour.com/accord/jdk-8u51-windows-x64.exe
+chmod +x jdk-8u51-windows-x64.exe
+echo "Starting jdk installation...
+./jdk-8u51-windows-x64.exe /s
+echo "installation complete
+
 #
-#  C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Java\jdk1.7.0\bin
+# ensure that the windows system environment variables for JAVA
+# are set up properly and that the default PATH will find the
+# java programs
+#
+echo "Setting System environment variables JAVA_HOME and PATH..."
+echo "Updating global path to include $JAVAHOME/bin"
+echo "use the setx command which needs to run from a command prompt"
+cmd /C setx /M JAVA_HOME "c:\Program Files\Java\jdk1.8.0_51"
+cmd /C setx /M Path "%PATH%;%JAVA_HOME%/bin"
+
+#
+# get the latest jenkins
+#
+wget -O jenkins.zip http://mirrors.jenkins-ci.org/windows/latest
+unzip jenkins.zip
+
