@@ -12,7 +12,7 @@ SET LOCALDIR=%CD%
 SET ROOTDIR=C:/cygwin
 
 REM -- These are the packages we will install (in addition to the default packages)
-SET PACKAGES=wget,git,curl
+SET PACKAGES=wget,git,curl,unzip
 REM SET PACKAGES=%PACKAGES%,gcc4,make,automake,autoconf,readline,libncursesw-devel,
 REM SET PACKAGES=%PACKAGES%,lua,python,ruby
 
