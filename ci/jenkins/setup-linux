@@ -39,7 +39,7 @@ sudo yum -y install git-all.noarch
 #
 #  we will also need md5sum and sha1sum
 #
-sudo yum install isomd5sum.x86_64
+sudo yum -y install isomd5sum.x86_64
 
 #
 # install gradle
