@@ -18,7 +18,7 @@
 # get the java sdk and install it
 #
 cd ~Administrator/
-wget http://stevemansour.com/accord/jdk-8u51-windows-x64.exe
+wget -O unzip.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
 wget -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 chmod +x jdk-8u51-windows-x64.exe
 echo "Starting jdk installation...
@@ -39,5 +39,6 @@ cmd /C setx /M Path "c:\Program Files\Java\jdk1.8.0_51\bin"
 #
 # get the latest jenkins
 #
-#wget -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/cygwin-setup.exe
-#unzip jenkins.zip
+wget -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/cygwin-setup.exe
+chmod +x unzip.exe
+./unzip.exe jenkins.zip
