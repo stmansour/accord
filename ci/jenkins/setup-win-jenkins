@@ -18,7 +18,6 @@
 # get the java sdk and install it
 #
 cd ~Administrator/
-
 wget http://stevemansour.com/accord/jdk-8u51-windows-x64.exe
 wget -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 chmod +x jdk-8u51-windows-x64.exe
@@ -35,7 +34,7 @@ echo "Setting System environment variables JAVA_HOME and PATH..."
 echo "Updating global path to include $JAVAHOME/bin"
 echo "use the setx command which needs to run from a command prompt"
 cmd /C setx /M JAVA_HOME "c:\Program Files\Java\jdk1.8.0_51"
-cmd /C setx /M Path "%PATH%;%JAVA_HOME%/bin"
+cmd /C setx /M Path "c:\Program Files\Java\jdk1.8.0_51\bin"
 
 #
 # get the latest jenkins
