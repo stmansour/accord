@@ -3,6 +3,12 @@
 #  The Windows Instance: Microsoft Windows Server 2012 Base - ami-6f2cf804
 #  be sure to open ports 80, 443
 
+#  !!!!!!! NOTICE !!!!!!!
+#  There is a bug in all of cygwin shells that cause it to silently truncate
+#  commands longer than about 153 characters. This was causing all the 'wget'
+#  and 'curl' commands to fail, even though they would work on other OS's.
+#  These commands were moved to setup-win-jenkins.bat
+
 #  Disable firewall
 #  go to Administrative Tools on the startup window
 #  open “Windows Firewall with Advanced Security”
@@ -22,8 +28,8 @@ set JHOME="C:\Program Files\Java\jdk1.8.0_51"
 # get the java sdk and install it
 #
 cd ~Administrator/
-curl -O unzip.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
-curl -O $JAVAVER --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/$JAVAVER
+# curl -O unzip.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
+# curl -O $JAVAVER --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/$JAVAVER
 chmod +x $JAVAVER
 echo "Starting jdk installation...
 ./$JAVAVER /s
@@ -43,6 +49,6 @@ cmd /C setx /M Path "$JHOME\bin"
 #
 # get the latest jenkins
 #
-curl -O $JENKINS.zip --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/$JENKINS
+# curl -O $JENKINS.zip --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/$JENKINS
 chmod +x unzip.exe
 ./unzip.exe $JENKINS
