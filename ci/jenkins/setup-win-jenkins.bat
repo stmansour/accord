@@ -2,6 +2,9 @@ REM
 REM  -- Windows Jenkins Setup script
 REM
 
+SETLOCAL
+
+
 REM
 REM  -- Download some of the basic stuff we need to get started.
 REM
@@ -25,3 +28,6 @@ REM
 REM  -- Now we let the bash shell script take over...
 REM
 c:\cygwin\bin\bash -l setup-win-jenkins
+
+
+ENDLOCAL

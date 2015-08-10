@@ -10,6 +10,10 @@
 #  Download chrome rather than using IE -- IE did not let me download anything
 #  everything was a security violation.
 
+set JENKINS=jenkins-1.624.zip
+set JAVAVER=jdk-8u51-windows-x64.exe
+set JHOME="C:\Program Files\Java\jdk1.8.0_51"
+
 #
 # install java
 #
@@ -19,10 +23,10 @@
 #
 cd ~Administrator/
 wget -O unzip.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
-wget -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
-chmod +x jdk-8u51-windows-x64.exe
+wget -O $JAVAVER --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/$JAVAVER
+chmod +x $JAVAVER
 echo "Starting jdk installation...
-./jdk-8u51-windows-x64.exe /s
+./$JAVAVER /s
 echo "installation complete"
 
 #
@@ -33,12 +37,12 @@ echo "installation complete"
 echo "Setting System environment variables JAVA_HOME and PATH..."
 echo "Updating global path to include $JAVAHOME/bin"
 echo "use the setx command which needs to run from a command prompt"
-cmd /C setx /M JAVA_HOME "c:\Program Files\Java\jdk1.8.0_51"
-cmd /C setx /M Path "c:\Program Files\Java\jdk1.8.0_51\bin"
+cmd /C setx /M JAVA_HOME "$JHOME"
+cmd /C setx /M Path "$JHOME\bin"
 
 #
 # get the latest jenkins
 #
-wget -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/cygwin-setup.exe
+wget -O $JENKINS.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/$JENKINS
 chmod +x unzip.exe
-./unzip.exe jenkins.zip
+./unzip.exe $JENKINS
