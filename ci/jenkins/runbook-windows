@@ -13,8 +13,11 @@
    http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
 
 4. Click the Artifacts tab and browse to ext-tools/utils then click the Download
-   button for each file listed below.  Note that IE pops up a dialog box at the
-   bottom of the page. You will need to click Save to actually save the files.
+   button for each file listed below.  The default IE window size is
+   not wide enough. You will need to widen it before the Download button comes 
+   into view.  Note that IE pops up a dialog box at the bottom of the page. You
+   will need to click Save to actually save the files.
+
 	wget64.exe
 	setup-win-jenkins.bat
 
