@@ -1,6 +1,8 @@
+Instructions to setup a new Windows Jenkins Instance
+
 1. Log into the new Windows Server as Administrator
 
-2. Turn off windows web security
+2. Turn off windows web security (this is for Windows 2008, similar for older versions)
 	- click on Server Manager icon
 	- click on "Configure this local server"
 	- under Properties, click on "IE Enhanced Security Configuration   on"
