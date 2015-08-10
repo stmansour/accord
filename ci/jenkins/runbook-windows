@@ -11,6 +11,8 @@
 
 3. Use IE to go to:
    http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
+   login in as user: accord
+             passwd: developer
 
 4. Click the Artifacts tab and browse to ext-tools/utils then click the Download
    button for each file listed below.  The default IE window size is
