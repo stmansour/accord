@@ -7,14 +7,8 @@
 #  There is a bug in all of cygwin shells that cause it to silently truncate
 #  commands longer than about 153 characters. This was causing all the 'wget'
 #  and 'curl' commands to fail, even though they would work on other OS's.
-#  These commands were moved to setup-win-jenkins.bat
-
-#  Disable firewall
-#  go to Administrative Tools on the startup window
-#  open “Windows Firewall with Advanced Security”
-
-#  Download chrome rather than using IE -- IE did not let me download anything
-#  everything was a security violation.
+#  These commands were moved to setup-win-jenkins.bat where they are working
+#  correctly. If cygwin ever fixes this, we can move the lines around.
 
 set JENKINS=jenkins-1.624.zip
 set JAVAVER=jdk-8u51-windows-x64.exe
