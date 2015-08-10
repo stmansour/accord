@@ -1,19 +1,24 @@
 1. Log into the new Windows Server as Administrator
 
 2. Turn off windows web security
-	- click on Security Manager icon
+	- click on Server Manager icon
 	- click on "Configure this local server"
 	- under Properties, click on "IE Enhanced Security Configuration   on"
+	  NOTE: you may have to increase the size of the window to find it.
+	  It's in the second column, 6th line down
 	- click "on", in the dialog box turn Off security for Administrators and Users
+	  then click OK.
 
 3. Use IE to go to:
    http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
 
-4. Click the Artifacts tab and browse to ext-tools/utils then download:
+4. Click the Artifacts tab and browse to ext-tools/utils then click the Download
+   button for each file listed below.  Note that IE pops up a dialog box at the
+   bottom of the page. You will need to click Save to actually save the files.
 	wget64.exe
 	setup-win-jenkins.bat
 
-5. Open cmd.exe and go to C:\Users\Administrators\Downloads
+5. Go to the Start page and open cmd.exe. Go to C:\Users\Administrators\Downloads
 
 6. Do a 'dir' command and make sure that wget64.exe and setup-win-jenkins.bat
    are there.

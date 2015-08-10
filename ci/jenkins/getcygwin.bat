@@ -13,14 +13,12 @@ SET ROOTDIR=C:/cygwin
 
 REM -- These are the packages we will install (in addition to the default packages)
 SET PACKAGES=wget,git,curl,unzip
-REM SET PACKAGES=%PACKAGES%,gcc4,make,automake,autoconf,readline,libncursesw-devel,
-REM SET PACKAGES=%PACKAGES%,lua,python,ruby
 
 REM -- Do it!
-ECHO *** INSTALLING DEFAULT PACKAGES
-cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%"
-ECHO.
-ECHO.
+REM ECHO *** INSTALLING DEFAULT PACKAGES
+REM cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%"
+REM ECHO.
+REM ECHO.
 ECHO *** INSTALLING CUSTOM PACKAGES
 cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%" -P %PACKAGES%
 
@@ -33,4 +31,4 @@ ECHO.
 
 ENDLOCAL
 
-REM EXIT /B 0
+EXIT /B 0
