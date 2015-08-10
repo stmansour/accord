@@ -15,10 +15,10 @@ REM -- These are the packages we will install (in addition to the default packag
 SET PACKAGES=wget,git,curl,unzip
 
 REM -- Do it!
-REM ECHO *** INSTALLING DEFAULT PACKAGES
-REM cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%"
-REM ECHO.
-REM ECHO.
+ECHO *** INSTALLING DEFAULT PACKAGES
+cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%"
+ECHO.
+ECHO.
 ECHO *** INSTALLING CUSTOM PACKAGES
 cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%" -P %PACKAGES%
 
