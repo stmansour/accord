@@ -22,8 +22,8 @@ set JHOME="C:\Program Files\Java\jdk1.8.0_51"
 # get the java sdk and install it
 #
 cd ~Administrator/
-wget -O unzip.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
-wget -O $JAVAVER --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/$JAVAVER
+curl -O unzip.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
+curl -O $JAVAVER --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/$JAVAVER
 chmod +x $JAVAVER
 echo "Starting jdk installation...
 ./$JAVAVER /s
@@ -43,6 +43,6 @@ cmd /C setx /M Path "$JHOME\bin"
 #
 # get the latest jenkins
 #
-wget -O $JENKINS.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/$JENKINS
+curl -O $JENKINS.zip --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/$JENKINS
 chmod +x unzip.exe
 ./unzip.exe $JENKINS
