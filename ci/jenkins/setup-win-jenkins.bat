@@ -40,5 +40,12 @@ REM  -- Now we let the bash shell script take over...
 REM
 c:\cygwin\bin\bash -l setup-win-jenkins
 
+REM
+REM  -- jenkins.msi should now be in c:\cygwin\home\Administrator
+REM
+echo "Installing JENKINS..."
+call msiexec /i c:\cygwin\home\Adminstrator\jenkins.msi /qn /l*v jenkins.log JENKINSDIR="C:\jenkins"
+echo "Completed JENKINS installation!"
+echo "Please allow a couple of minutes for jenkins to start up"
 
 ENDLOCAL
