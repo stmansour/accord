@@ -31,7 +31,7 @@ cd ~Administrator/
 # curl -O unzip.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
 # curl -O jdk-8u51-windows-x64.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 chmod +x jdk-8u51-windows-x64.exe
-echo "Starting jdk installation...
+echo "Starting jdk installation..."
 ./jdk-8u51-windows-x64.exe /s
 echo "installation complete"
 
