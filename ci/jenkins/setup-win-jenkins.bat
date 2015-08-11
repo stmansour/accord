@@ -88,7 +88,7 @@ REM
 
 pushd c:\cygwin\home\Administrator
 echo Installing JENKINS...
-call msiexec /i jenkins.msi /qn /l*vx jenkins.log
+call c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
 echo Completed JENKINS installation!
 echo Please allow a couple of minutes for jenkins to start up
 popd
