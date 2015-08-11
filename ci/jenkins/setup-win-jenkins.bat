@@ -32,6 +32,8 @@ REM
 
 pushd c:\cygwin\home\Administrator
 C:\Users\Administrator\Downloads\wget64.exe -O unzip.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/unzip.exe
+copy unzip.exe c:\windows\system32
+
 C:\Users\Administrator\Downloads\wget64.exe -O jdk-8u51-windows-x64.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 C:\Users\Administrator\Downloads\wget64.exe -O jenkins-1.624.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/jenkins-1.624.zip
 
@@ -48,6 +50,10 @@ REM OK, so based on this we'll download and install UnxUtils.  These look like
 REM a subset of the Cygwin code, but they run as native windows apps using MSCRT.DLL
 REM rather than Cygwin's emulation layer.
 C:\Users\Administrator\Downloads\wget64.exe -O UnxUpdates.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/UnxUpdates.zip
+
+REM  -- Make sure they're in the normal Windows path
+cd c:\Windows\System32
+unzip c:\cygwin\home\Administrator\UnxUpdates.zip
 
 popd
 
