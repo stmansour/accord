@@ -4,7 +4,6 @@ REM
 
 SETLOCAL
 
-
 REM
 REM  -- Download some of the basic stuff we need to get started.
 REM
@@ -66,7 +65,7 @@ REM
 REM  -- jenkins.msi should now be in c:\cygwin\home\Administrator
 REM
 echo "Installing JENKINS..."
-call msiexec /i c:\cygwin\home\Adminstrator\jenkins.msi /qn /l*v jenkins.log JENKINSDIR="C:\jenkins"
+call msiexec /i c:\cygwin\home\Adminstrator\jenkins.msi /qn /l*v jenkins.log
 echo "Completed JENKINS installation!"
 echo "Please allow a couple of minutes for jenkins to start up"
 
