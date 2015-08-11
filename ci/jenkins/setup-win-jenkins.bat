@@ -1,8 +1,21 @@
+echo off
 REM
 REM  -- Windows Jenkins Setup script
 REM
 
 SETLOCAL
+
+REM
+REM  -- Start off by creating the directory where we can put the tools
+REM  -- we need for Jenkins.
+REM
+echo Creating c:\Windows\Accord with unix tools
+pushd "C:\Program Files"
+mkdir "Accord"
+setx /M Path "%PATH%;C:\Program Files\Accord"
+set PATH="%PATH%;C:\Program Files\Accord"
+echo C:\Program Files\Accord added to the path
+popd
 
 REM
 REM  -- Download some of the basic stuff we need to get started.
@@ -31,7 +44,7 @@ REM
 
 pushd c:\cygwin\home\Administrator
 C:\Users\Administrator\Downloads\wget64.exe -O unzip.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/unzip.exe
-copy unzip.exe c:\windows\system32
+copy unzip.exe "C:\Program Files\Accord"
 
 C:\Users\Administrator\Downloads\wget64.exe -O jdk-8u51-windows-x64.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 C:\Users\Administrator\Downloads\wget64.exe -O jenkins-1.624.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/jenkins-1.624.zip
@@ -50,11 +63,19 @@ REM a subset of the Cygwin code, but they run as native windows apps using MSCRT
 REM rather than Cygwin's emulation layer.
 C:\Users\Administrator\Downloads\wget64.exe -O UnxUpdates.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/UnxUpdates.zip
 
-REM  -- Make sure they're in the normal Windows path
-cd c:\Windows\System32
+REM
+REM  -- Create a directory for the unix tools, add it to the Windows path
+REM
+echo Extracting tools to c:\windows\accord
+cd "C:\Program Files\Accord"
 unzip c:\cygwin\home\Administrator\UnxUpdates.zip
 
 popd
+
+REM
+REM  -- To keep things consistent, let's put our wget into that directory
+REM
+copy wget64.exe "C:\Program Files\Accord"
 
 REM
 REM  -- Now we let the bash shell script take over...
@@ -66,10 +87,10 @@ REM  -- jenkins.msi should now be in c:\cygwin\home\Administrator
 REM
 
 pushd c:\cygwin\home\Administrator
-echo "Installing JENKINS..."
+echo Installing JENKINS...
 call msiexec /i jenkins.msi /qn /l*vx jenkins.log
-echo "Completed JENKINS installation!"
-echo "Please allow a couple of minutes for jenkins to start up"
+echo Completed JENKINS installation!
+echo Please allow a couple of minutes for jenkins to start up
 popd
 
 ENDLOCAL
