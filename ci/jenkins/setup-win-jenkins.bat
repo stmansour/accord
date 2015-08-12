@@ -1,50 +1,53 @@
-ECHO off
+echo off
 REM
 REM  -- Windows Jenkins Setup script
 REM
 
 SETLOCAL
 
-SET USR=accord
-SET PASS=AP4GxDHU2f6EriLqry781wG6fy
-SET ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils
-SET JART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/java
-SET INSTALLHOME=C:\Users\Administrator\Downloads
-SET ACCORDROOT=C:\Program Files
-SET ACCORDDNAME=Accord
-SET ACCORDHOME=%ACCORDROOT%\%ACCORDDNAME%
-SET WGET=%ACCORDHOME%\wget64.exe
-SET UNZIP=%ACCORDHOME%\unzip.exe
-
 REM
 REM  -- Start off by creating the directory where we can put the tools
 REM  -- we need for Jenkins.
 REM
-ECHO Creating c:\Windows\Accord with unix tools
-CD "%ACCORDROOT%"
-MKDIR "%ACCORDDNAME%"
-SETX /M Path "%PATH%;%ACCORDHOME%"
-SET PATH="%PATH%;%ACCORDHOME%"
-ECHO C:\Program Files\Accord added to the path
-CD "%INSTALLHOME%"
+echo Creating c:\Windows\Accord with unix tools
+pushd "C:\Program Files"
+mkdir "Accord"
+setx /M Path "%PATH%;C:\Program Files\Accord"
+set PATH="%PATH%;C:\Program Files\Accord"
+echo C:\Program Files\Accord added to the path
+popd
 
 REM
 REM  -- Download some of the basic stuff we need to get started.
 REM
-CALL :SUB_WGETJAVA jdk-8u51-windows-x64.exe
-CALL :SUB_WGET cygwin-setup.exe
-CALL :SUB_WGET getcygwin.bat
-CALL :SUB_WGET setup-win-jenkins
-CALL :SUB_WGET Git-1.9.5-preview20150319.exe
-CALL :SUB_WGET jenkins-1.624.zip
-CALL :SUB_WGET %UNZIP%
+wget64 -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/cygwin-setup.exe
+wget64 -O getcygwin.bat --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/getcygwin.bat
+wget64 -O setup-win-jenkins --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/setup-win-jenkins
+call getcygwin.bat
 
 REM
-REM  -- Now that we have a location for these tools and the path is updated,
-REM  -- put %WGET% in the tools directory. We'll use it a lot
+REM  -- Force Administrator home directory to be created
 REM
-COPY "%WGET%" "%ACCORDHOME%"
-COPY "%UNZIP%" "%ACCORDHOME%"
+c:\cygwin\bin\bash -l -c pwd
+
+REM
+REM  -- copy the script we need to execut in the bash shell to 
+REM  -- Adminstrator's home directory
+REM
+copy setup-win-jenkins c:\cygwin\home\Administrator
+
+REM
+REM  -- a bug in cygwin shells causes it to truncate lines after about 153 chars
+REM  -- So, the wget or curl commands end up truncating and failing.
+REM  -- We'll use good ole wget64 to pull down what we need...
+REM
+
+pushd c:\cygwin\home\Administrator
+C:\Users\Administrator\Downloads\wget64.exe -O unzip.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/unzip.exe
+copy unzip.exe "C:\Program Files\Accord"
+
+C:\Users\Administrator\Downloads\wget64.exe -O jdk-8u51-windows-x64.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
+C:\Users\Administrator\Downloads\wget64.exe -O jenkins-1.624.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/jenkins-1.624.zip
 
 REM Here's a note straight from the Jenkins Installation guide:
 REM    Since Jenkins was written to work on unix-like platforms, some parts
@@ -58,59 +61,36 @@ REM
 REM OK, so based on this we'll download and install UnxUtils.  These look like
 REM a subset of the Cygwin code, but they run as native windows apps using MSCRT.DLL
 REM rather than Cygwin's emulation layer.
-
-CALL :SUB_WGET UnxUpdates.zip
-
-ECHO Extracting tools to c:\windows\accord
-CD  "%ACCORDHOME%"
-unzip "%INSTALLHOME%\UnxUpdates.zip"
-CD "%INSTALLHOME%"
+C:\Users\Administrator\Downloads\wget64.exe -O UnxUpdates.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/UnxUpdates.zip
 
 REM
-REM  -- Install cygwin
+REM  -- Create a directory for the unix tools, add it to the Windows path
 REM
+echo Extracting tools to c:\windows\accord
+cd "C:\Program Files\Accord"
+unzip c:\cygwin\home\Administrator\UnxUpdates.zip
 
-CALL getcygwin.bat
+popd
 
 REM
-REM ensure that the windows system environment variables for JAVA
-REM are set up properly and that the default PATH will find the
-REM java programs
+REM  -- To keep things consistent, let's put our wget into that directory
 REM
+copy wget64.exe "C:\Program Files\Accord"
 
-ECHO Setting System environment variables JAVA_HOME and PATH...
-ECHO Updating global path to include C:\Program Files\Java\jdk1.8.0_51\bin
-ECHO use the SETX command which needs to run from a command prompt
-CMD /C SETX /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
-CMD /C SETX /M Path "%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
-SET JAVA_HOME="C:\Program Files\Java\jdk1.8.0_51"
-SET Path="%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
+REM
+REM  -- Now we let the bash shell script take over...
+REM
+c:\cygwin\bin\bash -l setup-win-jenkins
 
 REM
 REM  -- jenkins.msi should now be in c:\cygwin\home\Administrator
 REM
 
-ECHO Installing JENKINS...
-%UNZIP% jenkins-1.624.zip
-CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
-ECHO Completed JENKINS installation!
-ECHO Please allow a couple of minutes for jenkins to start up
-
-GOTO :EOF
-
-REM ###########################################################################
-
-:SUB_WGET
-    ECHO Downloading %~1
-    %WGET% -O %~1 --user %USR% --password %PASS% %ART%/%~1
-    EXIT /B
-
-:SUB_WGETJAVA
-    ECHO Downloading %~1
-    %WGET% -O %~1 --user %USR% --password %PASS% %JART%/%~1
-    EXIT /B
-
-
-:EOF
+pushd c:\cygwin\home\Administrator
+echo Installing JENKINS...
+call c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
+echo Completed JENKINS installation!
+echo Please allow a couple of minutes for jenkins to start up
+popd
 
 ENDLOCAL

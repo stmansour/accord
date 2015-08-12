@@ -18,12 +18,15 @@ set JHOME="C:\Program Files\Java\jdk1.8.0_51"
 # install java
 #
 
-echo "Starting jdk installation..."
-
+#
+# get the java sdk and install it
+#
 cd ~Administrator/
+# curl -O unzip.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/unzip.exe
+# curl -O jdk-8u51-windows-x64.exe --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 chmod +x jdk-8u51-windows-x64.exe
+echo "Starting jdk installation..."
 ./jdk-8u51-windows-x64.exe /s
-
 echo "installation complete"
 
 #
@@ -32,8 +35,14 @@ echo "installation complete"
 # java programs
 #
 echo "Setting System environment variables JAVA_HOME and PATH..."
-echo "Updating global path to include C:\\Program Files\\Java\\jdk1.8.0_51\\bin"
+echo "Updating global path to include $JAVAHOME/bin"
 echo "use the setx command which needs to run from a command prompt"
 cmd /C setx /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
 cmd /C setx /M Path "%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
 
+#
+# get the latest jenkins
+#
+# curl -O jenkins-1.624.zip.zip --user accord:AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/jenkins-1.624.zip
+chmod +x unzip.exe
+./unzip.exe jenkins-1.624.zip
