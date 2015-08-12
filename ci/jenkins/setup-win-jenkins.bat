@@ -78,9 +78,9 @@ REM are set up properly and that the default PATH will find the
 REM java programs
 REM
 
-ECHO "Setting System environment variables JAVA_HOME and PATH..."
-ECHO "Updating global path to include C:\\Program Files\\Java\\jdk1.8.0_51\\bin"
-ECHO "use the SETX command which needs to run from a command prompt"
+ECHO Setting System environment variables JAVA_HOME and PATH...
+ECHO Updating global path to include C:\Program Files\Java\jdk1.8.0_51\bin
+ECHO use the SETX command which needs to run from a command prompt
 SETX /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
 SETX /M Path "%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
 SET JAVA_HOME="C:\Program Files\Java\jdk1.8.0_51"
