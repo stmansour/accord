@@ -60,7 +60,7 @@ CALL :SUB_WGET UnxUpdates.zip
 
 ECHO Extracting tools to c:\windows\accord
 CD  "%ACCORDBIN%"
-unzip c:\Users\Administrator\Downloads\UnxUpdates.zip
+unzip "%INSTALLHOME%\UnxUpdates.zip"
 CD "%INSTALLHOME%"
 
 REM
