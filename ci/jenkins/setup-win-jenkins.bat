@@ -11,10 +11,10 @@ SET ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/ut
 SET JART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/java
 SET WGET=wget64.exe
 SET UNZIP=wget64.exe
-SET INSTALLHOME="C:\Users\Administrator\Downloads"
-SET ACCORDROOT="C:\Program Files"
-SET ACCORDDNAME="Accord"
-SET ACCORDHOME="%ACCORDROOT%\%ACCORDDNAME%"
+SET INSTALLHOME=C:\Users\Administrator\Downloads
+SET ACCORDROOT=C:\Program Files
+SET ACCORDDNAME=Accord
+SET ACCORDHOME=%ACCORDROOT%\%ACCORDDNAME%
 
 REM
 REM  -- Start off by creating the directory where we can put the tools
