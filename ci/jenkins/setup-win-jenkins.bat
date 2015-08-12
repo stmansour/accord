@@ -9,12 +9,12 @@ SET USR=accord
 SET PASS=AP4GxDHU2f6EriLqry781wG6fy
 SET ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils
 SET JART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/java
-SET WGET=wget64.exe
-SET UNZIP=wget64.exe
 SET INSTALLHOME=C:\Users\Administrator\Downloads
 SET ACCORDROOT=C:\Program Files
 SET ACCORDDNAME=Accord
 SET ACCORDHOME=%ACCORDROOT%\%ACCORDDNAME%
+SET WGET=%ACCORDHOME%\wget64.exe
+SET UNZIP=%ACCORDHOME%\unzip.exe
 
 REM
 REM  -- Start off by creating the directory where we can put the tools
@@ -81,8 +81,8 @@ REM
 ECHO Setting System environment variables JAVA_HOME and PATH...
 ECHO Updating global path to include C:\Program Files\Java\jdk1.8.0_51\bin
 ECHO use the SETX command which needs to run from a command prompt
-SETX /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
-SETX /M Path "%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
+CMD /C SETX /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
+CMD /C SETX /M Path "%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
 SET JAVA_HOME="C:\Program Files\Java\jdk1.8.0_51"
 SET Path="%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
 
