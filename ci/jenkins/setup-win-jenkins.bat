@@ -10,20 +10,23 @@ SET PASS=AP4GxDHU2f6EriLqry781wG6fy
 SET ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils
 SET JART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/java
 SET WGET=wget64.exe
+SET UNZIP=wget64.exe
 SET INSTALLHOME="C:\Users\Administrator\Downloads"
-SET ACCORDBIN="C:\Program Files\Accord"
+SET ACCORDROOT="C:\Program Files"
+SET ACCORDDNAME="Accord"
+SET ACCORDHOME="%ACCORDROOT%\%ACCORDDNAME%"
 
 REM
 REM  -- Start off by creating the directory where we can put the tools
 REM  -- we need for Jenkins.
 REM
 ECHO Creating c:\Windows\Accord with unix tools
-CD "C:\Program Files"
-MKDIR "Accord"
-SETX /M Path "%PATH%;%ACCORDBIN%"
-SET PATH="%PATH%;%ACCORDBIN%"
+CD "%ACCORDROOT%"
+MKDIR "%ACCORDDNAME%"
+SETX /M Path "%PATH%;%ACCORDHOME%"
+SET PATH="%PATH%;%ACCORDHOME%"
 ECHO C:\Program Files\Accord added to the path
-CD "%INSTALLHOME"
+CD "%INSTALLHOME%"
 
 REM
 REM  -- Download some of the basic stuff we need to get started.
@@ -34,14 +37,14 @@ CALL :SUB_WGET getcygwin.bat
 CALL :SUB_WGET setup-win-jenkins
 CALL :SUB_WGET Git-1.9.5-preview20150319.exe
 CALL :SUB_WGET jenkins-1.624.zip
-CALL :SUB_WGET unzip.exe
+CALL :SUB_WGET %UNZIP%
 
 REM
 REM  -- Now that we have a location for these tools and the path is updated,
-REM  -- put wget64.exe in the tools directory. We'll use it a lot
+REM  -- put %WGET% in the tools directory. We'll use it a lot
 REM
-COPY wget64.exe "%ACCORDBIN%"
-COPY unzip.exe "%ACCORDBIN%"
+COPY "%WGET%" "%ACCORDHOME%"
+COPY "%UNZIP%" "%ACCORDHOME%"
 
 REM Here's a note straight from the Jenkins Installation guide:
 REM    Since Jenkins was written to work on unix-like platforms, some parts
@@ -59,7 +62,7 @@ REM rather than Cygwin's emulation layer.
 CALL :SUB_WGET UnxUpdates.zip
 
 ECHO Extracting tools to c:\windows\accord
-CD  "%ACCORDBIN%"
+CD  "%ACCORDHOME%"
 unzip "%INSTALLHOME%\UnxUpdates.zip"
 CD "%INSTALLHOME%"
 
@@ -88,7 +91,7 @@ REM  -- jenkins.msi should now be in c:\cygwin\home\Administrator
 REM
 
 ECHO Installing JENKINS...
-unzip jenkins-1.624.zip
+%UNZIP% jenkins-1.624.zip
 CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
 ECHO Completed JENKINS installation!
 ECHO Please allow a couple of minutes for jenkins to start up
