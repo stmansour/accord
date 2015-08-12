@@ -20,10 +20,19 @@ popd
 REM
 REM  -- Download some of the basic stuff we need to get started.
 REM
+echo Downloading cygwin-setup.exe
 wget64 -O cygwin-setup.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/cygwin-setup.exe
+echo Downloading cygwin installation batch file
 wget64 -O getcygwin.bat --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/getcygwin.bat
+echo Downloading setup-win-jenkins  -- bash script for setting up this environment
 wget64 -O setup-win-jenkins --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/setup-win-jenkins
 call getcygwin.bat
+
+REM
+REM  -- Grab a windows native version of GIT
+REM
+echo Downloading windows-native git
+C:\Users\Administrator\Downloads\wget64.exe -O Git-1.9.5-preview20150319.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/Git-1.9.5-preview20150319.exe
 
 REM
 REM  -- Force Administrator home directory to be created
@@ -48,6 +57,7 @@ copy unzip.exe "C:\Program Files\Accord"
 
 C:\Users\Administrator\Downloads\wget64.exe -O jdk-8u51-windows-x64.exe --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/java/jdk-8u51-windows-x64.exe
 C:\Users\Administrator\Downloads\wget64.exe -O jenkins-1.624.zip --user accord --password AP4GxDHU2f6EriLqry781wG6fy http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory/ext-tools/utils/jenkins-1.624.zip
+
 
 REM Here's a note straight from the Jenkins Installation guide:
 REM    Since Jenkins was written to work on unix-like platforms, some parts
