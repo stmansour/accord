@@ -48,7 +48,6 @@ REM
 CALL :SUB_WGET ext-tools/java  jdk-8u51-windows-x64.exe
 CALL :SUB_WGET ext-tools/utils cygwin-setup.exe
 CALL :SUB_WGET ext-tools/utils getcygwin.bat
-CALL :SUB_WGET ext-tools/utils setup-win-jenkins.sh
 CALL :SUB_WGET ext-tools/utils Git-1.9.5-preview20150319.exe
 CALL :SUB_WGET ext-tools/utils gradle-2.6-bin.zip
 CALL :SUB_WGET ext-tools/utils jenkins-1.624.zip
@@ -59,7 +58,7 @@ CALL :SUB_WGET ext-tools/utils ottoaccord.tar.gz
 REM
 REM  -- Install cygwin
 REM
-rem call getcygwin.bat
+call getcygwin.bat
 
 REM
 REM  -- install Java

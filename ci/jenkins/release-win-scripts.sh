@@ -17,6 +17,5 @@ artf_update () {
 }
 
 artf_update ext-tools/utils getcygwin.bat
-artf_update ext-tools/utils setup-win-jenkins.sh
 artf_update ext-tools/utils setup-win-jenkins.bat
 artf_update ext-tools/utils setup-linux-jenkins.sh
