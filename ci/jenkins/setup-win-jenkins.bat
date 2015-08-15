@@ -1,4 +1,4 @@
-echo off
+@echo off
 REM
 REM  -- Windows Jenkins Setup script
 REM
@@ -22,8 +22,8 @@ ECHO Creating c:\Windows\Accord with unix tools
 PUSHD %ACCORD_ROOT%
     MKDIR %ACCORD_DNAME%
     MKDIR %ACCORD_DNAME%\bin
-    SETX /M Path "%PATH%;%ACCORD_HOME%\bin"
-    SET PATH=%PATH%;%ACCORD_HOME%\bin
+    SETX /M Path "%ACCORD_HOME%\bin;%PATH%"
+    SET PATH=%ACCORD_HOME%\bin;%PATH%
     ECHO C:\Program Files\Accord\bin added to the path
 POPD
 COPY wget64.exe "%ACCORD_HOME%\bin"
@@ -36,10 +36,11 @@ REM  -- we've actually downloaded and installed these files
 SETX /M GRADLE_HOME "%ACCORD_HOME%\gradle-2.6"
 SET GRADLE_HOME=%ACCORD_HOME%\gradle-2.6
 SETX /M Path "%PATH%;%GRADLE_HOME%\bin"
-SET PATH=%PATH%;%GRADLE_HOME%\bin
+SET PATH=%GRADLE_HOME%;%PATH%
 SETX /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
 SET JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
-SETX /M Path "%PATH%;C:\Program Files\Java\jdk1.8.0_51\bin"
+SETX /M Path "C:\Program Files\Java\jdk1.8.0_51\bin;%PATH%"
+SET PATH="C:\Program Files\Java\jdk1.8.0_51\bin;%PATH%"
 
 
 REM
@@ -49,11 +50,10 @@ CALL :SUB_WGET ext-tools/java  jdk-8u51-windows-x64.exe
 CALL :SUB_WGET ext-tools/utils cygwin-setup.exe
 CALL :SUB_WGET ext-tools/utils getcygwin.bat
 CALL :SUB_WGET ext-tools/utils Git-1.9.5-preview20150319.exe
-CALL :SUB_WGET ext-tools/utils gradle-2.6-bin.zip
+CALL :SUB_WGET ext-tools/utils gradle-2.6.tar
 CALL :SUB_WGET ext-tools/utils jenkins-1.624.zip
 CALL :SUB_WGET ext-tools/utils 7z.tar
 CALL :SUB_WGET ext-tools/utils ottoaccord.tar.gz
-
 
 REM
 REM  -- Install cygwin
@@ -67,19 +67,18 @@ ECHO "Starting jdk installation..."
 jdk-8u51-windows-x64.exe /s
 ECHO "installation complete"
 
-
 REM
 REM  -- install gradle
 REM
 echo INSTALL GRADLE...
-copy gradle-2.6-bin.zip "%ACCORD_HOME%"
+copy gradle-2.6.tar "%ACCORD_HOME%"
+copy 7z.tar "%ACCORD_HOME%"
 PUSHD "%ACCORD_HOME%"
-    CD bin
-    c:\cygwin\bin\tar.exe -xvf /cygdrive/c/Users/Administrator/Downloads/7z.tar
-    CD ..
-    MKDIR gradle-2.6   
-    CD gradle-2.6
-    ..\bin\7z e ..\gradle-2.6-bin.zip
+    cd bin
+    c:\cygwin\bin\tar.exe xvf ../7z.tar
+    cd ..
+    c:\cygwin\bin\tar.exe xvf gradle-2.6.tar
+    del gradle-2.6.tar 7z.tar
 POPD
 echo GRADLE INSTALLATION COMPLETE
 echo Current directory = %CD%
