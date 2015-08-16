@@ -33,14 +33,14 @@ REM  -- but this bat script starts failing setx commands at
 REM  -- some point. Haven't figured out what's causing it.
 REM  -- The workaround is to do this stuff up front before
 REM  -- we've actually downloaded and installed these files
-SETX /M GRADLE_HOME "%ACCORD_HOME%\gradle-2.6"
-SET GRADLE_HOME=%ACCORD_HOME%\gradle-2.6
-SETX /M Path "%PATH%;%GRADLE_HOME%\bin"
-SET PATH=%GRADLE_HOME%;%PATH%
 SETX /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
 SET JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
 SETX /M Path "C:\Program Files\Java\jdk1.8.0_51\bin;%PATH%"
 SET PATH="C:\Program Files\Java\jdk1.8.0_51\bin;%PATH%"
+SETX /M GRADLE_HOME "%ACCORD_HOME%\gradle-2.6"
+SET GRADLE_HOME=%ACCORD_HOME%\gradle-2.6
+SETX /M Path "%GRADLE_HOME%\bin;%PATH%"
+SET PATH=%GRADLE_HOME%\bin;%PATH%
 
 
 REM
