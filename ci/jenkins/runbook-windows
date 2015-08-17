@@ -45,7 +45,7 @@ Instructions to setup a new Windows Jenkins Instance
 
 	http://ec2-52-0-148-174.compute-1.amazonaws.com:8080/
 
-  9. Next, we must configure Jenkins. <<need to figure out automation for this>>
+11. Next, we must configure Jenkins. <<need to figure out automation for this>>
      	- click Manage Jenkins
 	- click Enable Security
 	- Jenkins' own user database
@@ -53,32 +53,45 @@ Instructions to setup a new Windows Jenkins Instance
 	- Logged-in users can do anything    (we'll review this later)
 	- Save
 
-       This should lead to a Sign up page.  Add the admin user, then click
-	Manage Jenkins again, then Manage Users, then add the remaining users.
+    This should lead to a Sign up page.  Add the admin user, then click
+    Manage Jenkins again, then Manage Users, then add the remaining users.
  
 	- Update all the plugins that need updating (they're on the first tab)
 	  don't reboot just yet.
 	- go to the Available tab, filter with 'github ', then check the GitHub plugin
 	- click 'Download now and install after restart' . this will take a few mins
 
-	This should be enough to create a job and make sure your installation is
-	functioning.  Here's a sample repository: git@github.com:stmansour/sort.git
+    This should be enough to create a job and make sure your installation is
+    functioning.  Here's a sample repository: git@github.com:stmansour/sort.git
 
- 10. Add any further plugins we want for Jenkins and restart.  Currently, for
-     Java development we use:
+12. Add any further plugins we want for Jenkins and restart.  Currently, for
+    Java development we use:
 	- Jacoco coverage report
 	- Violations plugin
-       - Artifactory plugin
-       - Gradle plugin
+	- Artifactory plugin
+	- Gradle plugin
 	- GIT plugin
 
  11. Configure Jenkins - (for windows...)
 	jdk	- name: JDK 1.8
 	          JAVA_HOME:  c:\Program Files\Java\jdk1.8.0_51
-       git	- name: git version 1.9.5 mysysgit.1
-                 path: c:\Program Files (x86)\Git\cmd
-       gradle 	- name: Gradle 2.6
+        git	- name: git version 1.9.5 mysysgit.1
+                  path: c:\Program Files (x86)\Git\cmd
+        gradle 	- name: Gradle 2.6
 		  GRADLE_HOME:  c:\Accord\gradle
+
+11.5 NOTE - if git hangs when Jenkins first invokes it, several problems
+     may exist:
+     	a) there may not be any credentials in the .ssh directory. The
+	   credentials should be in ottoaccord.tar
+	b) if the creds exist, the host we're trying to contact may
+	   not be in the known_hosts file. The easiest way to fix this up
+	   is to copy the lines from another known_hosts file into the one
+	   jenkins uses.
+	c) on WINDOWS... the location for the .ssh directory is in the
+	   inexplicable and completely non-obvious directory:
+
+	   	c:\Windows\SysWOW64\config\systemprofile\
 
  12. In GitHub, add the webhook in so that Jenkins builds automatically.
      On the GitHub UI, go to the repo for which you want to set up the automated
