@@ -22,27 +22,30 @@ MKDIR %ACCORD_HOME%
 MKDIR %ACCORD_HOME%\bin
 COPY wget64.exe %ACCORD_HOME%\bin
 
-REM  -- after a few 'setx /m Path' commands, the system
-REM  -- becomes unstable and the Path environment variable
-REM  -- has bad/incomplete values. Haven't figured this out yet.
-REM  -- for now, minimize the setx calls
-
 echo JAVA
 SET JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
 %STX% /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
-%STX% /M Path "%JAVA_HOME%\bin;%PATH%"
-SET PATH="%JAVA_HOME%\bin;%PATH%"
+SET PATH=%JAVA_HOME%\bin;%PATH%
 
 echo GRADLE
 SET GRADLE_HOME=%ACCORD_HOME%\gradle
 %STX% /M GRADLE_HOME "%ACCORD_HOME%\gradle"
-REM %STX% /M Path "%GRADLE_HOME%\bin;%PATH%"
-REM %STX% /M Path "C:\Accord\gradle\bin;%PATH%"
-SET PATH="%GRADLE_HOME%\bin;%PATH%"
+SET PATH=%GRADLE_HOME%\bin;%PATH%
 
 echo ACCORD
+SET PATH=%ACCORD_HOME%\bin;%PATH%
+
+REM  -- after a few 'setx /m Path' commands, the system
+REM  -- becomes unstable and the Path environment variable
+REM  -- has bad/incomplete values. Haven't figured this out yet.
+REM  -- for now, minimize the setx calls
 REM %STX% /M Path "%ACCORD_HOME%\bin;%PATH%"
-SET PATH="%ACCORD_HOME%\bin;%PATH%"
+REM %STX% /M Path "%JAVA_HOME%\bin;%PATH%"
+REM %STX% /M Path "%GRADLE_HOME%\bin;%PATH%"
+
+REM  -- until the quoting problem is nailed, this seems to work...
+SETX /M Path "C:\Program Files\Java\jdk1.8.0_51\bin;c:\Accord\Git\cmd;c:\Accord\gradle\bin;c:\Accord\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\cfn-bootstrap"
+
 
 REM
 REM  -- Download the artifacts we need
