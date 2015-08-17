@@ -84,6 +84,13 @@ ECHO GRADLE INSTALLATION COMPLETE
 ECHO Current directory = %CD%
 
 REM
+REM  -- add credentials
+REM
+PUSHD C:\Windows\SysWOW64\config\systemprofile
+    c:\cygwin\bin\tar.exe xvf /cygdrive/c/Users/Administrator/Downloads/ottoaccord.tar
+POPD
+
+REM
 REM  -- install jenkins
 REM
 ECHO Uncompressing JENKINS...
