@@ -87,7 +87,23 @@ scp -i ~/.ssh/smanAWS1.pem setup-linux ottoaccord.tar ec2-user@${hostname}:~/
 #	This should be enough to create a job and make sure your installation is
 #	functioning.  Here's a sample repository: git@github.com:stmansour/sort.git
 #
-# 10. In GitHub, add the webhook in so that Jenkins builds automatically.
+# 10. Add any further plugins we want for Jenkins and restart.  Currently, for
+#     Java development we use:
+#	- Jacoco coverage report
+#	- Violations plugin
+#       - Artifactory plugin
+#       - Gradle plugin
+#	- GIT plugin
+#
+# 11. Configure Jenkins - (for windows...)
+#	jdk	- name: JDK 1.8
+#	          JAVA_HOME:  c:\Program Files\Java\jdk1.8.0_51
+#       git	- name: git version 1.9.5 mysysgit.1
+#                 path: c:\Program Files (x86)\Git\cmd
+#       gradle 	- name: Gradle 2.6
+#		  GRADLE_HOME:  c:\Accord\gradle
+#
+# 12. In GitHub, add the webhook in so that Jenkins builds automatically.
 #     On the GitHub UI, go to the repo for which you want to set up the automated
 #     build, on the right side of the screen click "Settings", then click
 #     "Webhooks & Services". Under the Services list on the left side click the
@@ -105,10 +121,3 @@ scp -i ~/.ssh/smanAWS1.pem setup-linux ottoaccord.tar ec2-user@${hostname}:~/
 #     of the page under GitHub Web Hook, select "Manually manage hook URLs" then click
 #     the help button (?) on the right. It will list the URL to use.
 #     
-# 11. Add any further plugins we want for Jenkins and restart.  Currently, for
-#     Java development we use:
-#	- Jacoco coverage report
-#	- Violations plugin
-#       - Jenkins Artifactory plugin
-#       - Jenkins Gradle plugin
-#

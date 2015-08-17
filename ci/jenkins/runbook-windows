@@ -32,3 +32,11 @@ Instructions to setup a new Windows Jenkins Instance
    
 7. Run setup-win-jenkins.bat
 
+8. Upon completion
+	A. Jenkins will be available on port 8080
+	B. Java 1.8 is installed, JAVA_HOME set, java and javac are in the path
+	C. Gradle is installed, GRADLE_HOME is set
+
+9. Install Git for windows
+
+10. 
