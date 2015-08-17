@@ -52,7 +52,7 @@ CALL :SUB_WGET ext-tools/utils Git-1.9.5-preview20150319.exe
 CALL :SUB_WGET ext-tools/utils gradle-2.6.tar
 CALL :SUB_WGET ext-tools/utils jenkins-1.624.zip
 CALL :SUB_WGET ext-tools/utils 7z.tar
-CALL :SUB_WGET ext-tools/utils ottoaccord.tar.gz
+CALL :SUB_WGET ext-tools/utils ottoaccord.tar
 CALL :SUB_WGET ext-tools/utils deployfile.sh
 
 REM

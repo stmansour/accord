@@ -39,4 +39,62 @@ Instructions to setup a new Windows Jenkins Instance
 
 9. Install Git for windows
 
-10. 
+10. When the script completes, the jenkins service should be running and you should
+    be able to point a browser at the new instance and see jenkins.  For this example,
+    the url would be:
+
+	http://ec2-52-0-148-174.compute-1.amazonaws.com:8080/
+
+  9. Next, we must configure Jenkins. <<need to figure out automation for this>>
+     	- click Manage Jenkins
+	- click Enable Security
+	- Jenkins' own user database
+	- uncheck 'Allow users to sign up'   (we'll add the folks we want)
+	- Logged-in users can do anything    (we'll review this later)
+	- Save
+
+       This should lead to a Sign up page.  Add the admin user, then click
+	Manage Jenkins again, then Manage Users, then add the remaining users.
+ 
+	- Update all the plugins that need updating (they're on the first tab)
+	  don't reboot just yet.
+	- go to the Available tab, filter with 'github ', then check the GitHub plugin
+	- click 'Download now and install after restart' . this will take a few mins
+
+	This should be enough to create a job and make sure your installation is
+	functioning.  Here's a sample repository: git@github.com:stmansour/sort.git
+
+ 10. Add any further plugins we want for Jenkins and restart.  Currently, for
+     Java development we use:
+	- Jacoco coverage report
+	- Violations plugin
+       - Artifactory plugin
+       - Gradle plugin
+	- GIT plugin
+
+ 11. Configure Jenkins - (for windows...)
+	jdk	- name: JDK 1.8
+	          JAVA_HOME:  c:\Program Files\Java\jdk1.8.0_51
+       git	- name: git version 1.9.5 mysysgit.1
+                 path: c:\Program Files (x86)\Git\cmd
+       gradle 	- name: Gradle 2.6
+		  GRADLE_HOME:  c:\Accord\gradle
+
+ 12. In GitHub, add the webhook in so that Jenkins builds automatically.
+     On the GitHub UI, go to the repo for which you want to set up the automated
+     build, on the right side of the screen click "Settings", then click
+     "Webhooks & Services". Under the Services list on the left side click the
+     "Add Service" dropdown, in the filter area type "Jenkins", and select
+     "Jenkins (GitHub plugin).
+
+     There can only be only 1 GitHub webhook per repo (this is unfortunate).
+     If you already have one and you try to add
+     a second, "Jenkins (GitHub plugin)" will not be listed under Add Service
+
+     After adding the Jenkins GitHub plugin service, configure it with the
+     URL to jenkins. It will be something like:
+	http://ec2-52-0-148-174.compute-1.amazonaws.com/github-webhook/
+     In Jenkins, go to Manage Jenkins, then Configure System, at the bottom
+     of the page under GitHub Web Hook, select "Manually manage hook URLs" then click
+     the help button (?) on the right. It will list the URL to use.
+     
