@@ -1,6 +1,8 @@
 @echo off
 REM
 REM  -- Windows Jenkins Setup script
+REM  -- Sets up a Jenkins instance for Accord based on Amazon's
+REM  -- base system for Windows Server 2012
 REM
 
 REM
@@ -61,14 +63,14 @@ REM
 CALL getcygwin.bat
 
 REM
-REM  -- install Java
+REM  -- Install Java
 REM
 ECHO "Starting jdk installation..."
 jdk-8u51-windows-x64.exe /s
 ECHO "installation complete"
 
 REM
-REM  -- install gradle
+REM  -- Install git and gradle
 REM
 ECHO INSTALL GIT and GRADLE...
 COPY gradle-2.6.tar "%ACCORD_HOME%"
@@ -83,12 +85,13 @@ PUSHD "%ACCORD_HOME%"
     c:\cygwin\bin\tar.exe xvf gradle-2.6.tar
     DEL gradle-2.6.tar 7z.tar Git.ta*
 POPD
-ECHO GRADLE INSTALLATION COMPLETE
+ECHO GIT and GRADLE INSTALLATION COMPLETE
 ECHO Current directory = %CD%
 
 REM
 REM  -- add credentials
 REM
+ECHO Installing credentials for Jenkins to use with GitHub
 PUSHD C:\Windows\SysWOW64\config\systemprofile
     c:\cygwin\bin\tar.exe xvf /cygdrive/c/Users/Administrator/Downloads/ottoaccord.tar
 POPD

@@ -23,7 +23,7 @@ fi
 
 echo -n "Target hostname: "
 read hostname
-scp -i ~/.ssh/smanAWS1.pem setup-linux ottoaccord.tar ec2-user@${hostname}:~/
+scp -i ~/.ssh/smanAWS1.pem setup-linux-jenkins.sh ottoaccord.tar ec2-user@${hostname}:~/
 
 #scp -i ~/.ssh/smanAWS1.pem setup-linux ottobldrssh.tar ec2-user@ec2-52-2-162-170.compute-1.amazonaws.com:~/
 
