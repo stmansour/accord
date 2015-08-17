@@ -61,6 +61,14 @@ Instructions to setup a new Windows Jenkins Instance
 	- go to the Available tab, filter with 'github ', then check the GitHub plugin
 	- click 'Download now and install after restart' . this will take a few mins
 
+    Under Git, set "Path to Git executable" to point to the git.exe file:
+    	c:\Program Files (x86)\Git\cmd\git.exe
+
+    Under Gradle - they ask for GRADLE_HOME but it doesn't work. It seems like
+    gradle needs to be in the global path before things will work. As this has
+    caused untold grief in the .bat file development, we'll need to set it by hand
+    until we work out the fix.
+
     This should be enough to create a job and make sure your installation is
     functioning.  Here's a sample repository: git@github.com:stmansour/sort.git
 

@@ -21,23 +21,23 @@ MKDIR %ACCORD_HOME%\bin
 COPY wget64.exe %ACCORD_HOME%\bin
 
 REM  -- after a few 'setx /m Path' commands, the system
-REM  -- becomes unstable. Haven't figured this out yet.
+REM  -- becomes unstable and the Path environment variable
+REM  -- has bad/incomplete values. Haven't figured this out yet.
 REM  -- for now, minimize the setx calls
 
-SET JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
-SET GRADLE_HOME=%ACCORD_HOME%\gradle
-
-echo Java_home
-%STX% /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
 echo JAVA
+SET JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
+%STX% /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
 %STX% /M Path "%JAVA_HOME%\bin;%PATH%"
 SET PATH="%JAVA_HOME%\bin;%PATH%"
-echo Gradle_home
-%STX% /M GRADLE_HOME "%ACCORD_HOME%\gradle"
+
 echo GRADLE
+SET GRADLE_HOME=%ACCORD_HOME%\gradle
+%STX% /M GRADLE_HOME "%ACCORD_HOME%\gradle"
 REM %STX% /M Path "%GRADLE_HOME%\bin;%PATH%"
 REM %STX% /M Path "C:\Accord\gradle\bin;%PATH%"
 SET PATH="%GRADLE_HOME%\bin;%PATH%"
+
 echo ACCORD
 REM %STX% /M Path "%ACCORD_HOME%\bin;%PATH%"
 SET PATH="%ACCORD_HOME%\bin;%PATH%"
@@ -48,7 +48,7 @@ REM
 CALL :SUB_WGET ext-tools/java  jdk-8u51-windows-x64.exe
 CALL :SUB_WGET ext-tools/utils cygwin-setup.exe
 CALL :SUB_WGET ext-tools/utils getcygwin.bat
-CALL :SUB_WGET ext-tools/utils Git-1.9.5-preview20150319.exe
+CALL :SUB_WGET ext-tools/utils Git.tar.zip
 CALL :SUB_WGET ext-tools/utils gradle-2.6.tar
 CALL :SUB_WGET ext-tools/utils jenkins-1.624.zip
 CALL :SUB_WGET ext-tools/utils 7z.tar
@@ -70,15 +70,18 @@ ECHO "installation complete"
 REM
 REM  -- install gradle
 REM
-ECHO INSTALL GRADLE...
+ECHO INSTALL GIT and GRADLE...
 COPY gradle-2.6.tar "%ACCORD_HOME%"
+COPY Git.tar.zip "%ACCORD_HOME%"
 COPY 7z.tar "%ACCORD_HOME%"
 PUSHD "%ACCORD_HOME%"
     CD bin
     c:\cygwin\bin\tar.exe xvf ../7z.tar
     CD ..
+    .\bin\7z e Git.tar.zip
+    c:\cygwin\bin\tar.exe xvf Git.tar
     c:\cygwin\bin\tar.exe xvf gradle-2.6.tar
-    DEL gradle-2.6.tar 7z.tar
+    DEL gradle-2.6.tar 7z.tar Git.ta*
 POPD
 ECHO GRADLE INSTALLATION COMPLETE
 ECHO Current directory = %CD%
@@ -99,10 +102,6 @@ ECHO Installing JENKINS...
 CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
 ECHO Completed JENKINS installation!
 ECHO Please allow a couple of minutes for jenkins to start up
-
-REM
-REM  -- install GIT for windows
-REM
 
 GOTO :EOF
 
