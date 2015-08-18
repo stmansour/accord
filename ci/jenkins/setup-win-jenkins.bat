@@ -44,7 +44,7 @@ REM %STX% /M Path "%JAVA_HOME%\bin;%PATH%"
 REM %STX% /M Path "%GRADLE_HOME%\bin;%PATH%"
 
 REM  -- until the quoting problem is nailed, this seems to work...
-SETX /M Path "C:\Program Files\Java\jdk1.8.0_51\bin;c:\Accord\Git\cmd;c:\Accord\gradle\bin;c:\Accord\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\cfn-bootstrap"
+SETX /M Path "C:\Program Files\Java\jdk1.8.0_51\bin;c:\Accord\Git\cmd;c:\Accord\Git\bin;c:\Accord\Git\bin;c:\Accord\gradle\bin;c:\Accord\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\cfn-bootstrap"
 
 
 REM
