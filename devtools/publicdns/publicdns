@@ -1,0 +1,2 @@
+#!/bin/bash
+java -Dfile.encoding=UTF-8 -classpath /usr/local/jars:/usr/local/jars/jenkins-cli.jar:/usr/local/jars/json-simple-1.1.1.jar PublicDNS

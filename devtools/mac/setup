@@ -9,6 +9,12 @@ ln -s Google\ Drive/smanHome/vimrc  .vimrc
 popd
 
 #
+#  download brew - mac package mgr
+#
+
+
+
+#
 #  get 'wget'
 #  a lot of automation uses wget
 #
