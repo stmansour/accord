@@ -1,2 +1,2 @@
 #!/bin/bash
-java -Dfile.encoding=UTF-8 -classpath /usr/local/accord/jars:/usr/local/accord/jars/json-simple-1.1.1.jar PublicDNS
+aws ec2 describe-instances --output json | java -Dfile.encoding=UTF-8 -classpath /usr/local/accord/jars:/usr/local/accord/jars/json-simple-1.1.1.jar PublicDNS "$@"

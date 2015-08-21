@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+apply plugin: "jacoco"
+apply plugin:'templates'
+
+repositories {
+    mavenCentral()
+}
+
+findbugs {
+    toolVersion = "2.0.2"
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+	html.enabled = true
+    }
+}
+
+checkstyleMain << {
+    ant.xslt(in: reports.xml.destination,
+             style: new File('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+             out: new File(reports.xml.destination.parent, 'main.html'))
+}
+
+checkstyleTest << {
+    ant.xslt(in: reports.xml.destination,
+             style: new File('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+             out: new File(reports.xml.destination.parent, 'test.html'))
+}
+
+checkstyle {
+    configFile = new File(rootDir, 'config/checkstyle/generic.xml')
+    toolVersion = '6.1'
+}
+
+
+jacocoTestReport {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+dependencies {
+    testCompile 'junit:junit:[4,)'
+}
+
+buildscript {
+    repositories {
+        maven {
+            url 'http://dl.bintray.com/cjstehno/public'
+        }
+    }
+    dependencies {
+        classpath 'gradle-templates:gradle-templates:1.5'
+    }
+}
+
+

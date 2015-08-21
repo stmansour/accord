@@ -1,0 +1,1 @@
+cp appdirb* ~/bin/

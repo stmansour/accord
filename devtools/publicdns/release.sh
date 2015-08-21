@@ -19,6 +19,6 @@ if [ ! -f accord-linux.tar.gz ]; then
     ./package.sh
 fi
 
-artf_update ext-tools/utils accord-linux.tar.gz.tar
+artf_update ext-tools/utils accord-linux.tar.gz
 
 echo "*** COMPLETED ***"
