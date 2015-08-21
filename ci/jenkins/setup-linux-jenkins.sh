@@ -1,77 +1,80 @@
 #!/bin/bash
-##############################################################
+#
 # Setup a Jenkins instance for Java builds on amazon's linux
-##############################################################
-export FORGOT="You forgot"
-
+# This script is designed to be run only during the first boot cycle.
+# It runs as root, so no need for all the "sudo" stuff in front of
+# every command.
+#
 #
 # You MUST set this environment
 #
-export EXTERNAL_HOST_NAME=ec2-52-0-20-212.compute-1.amazonaws.com
 
-if [ "$FORGOT" = "$EXTERNAL_HOST_NAME" ]; then
-    echo " ";
-    echo " ";
-    echo "Oh my! You forgot to set the externally visible host name didn't you?"
-    echo "It should look something like this: ec2-52-3-151-221.compute-1.amazonaws.com"
-    echo "Please edit this script and set EXTERNL_HOST_NAME to the externally"
-    echo "visible name and try again."
-    echo " ";
-    echo " ";
-    exit 1
-fi
+USR=accord
+PASS=AP4GxDHU2f6EriLqry781wG6fy
+ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
+EXTERNAL_HOST_NAME=$( curl http://169.254.169.254/latest/meta-data/public-hostname )
+${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
+
+artf_get() {
+    echo "Downloading $1/$2"
+    wget -O $2 --user=$USR --password=$PASS ${ART}/$1/$2
+}
+
+echo "Hi. I am $EXTERNAL_HOST_NAME." > /tmp/HiSteve.txt
+pwd >> /tmp/HiSteve.txt
 
 #
 #  update all the out-of-date packages
 #
-sudo yum -y update
+yum -y update
 
 #
-# install Open Java 1.7
+# install Open Java 1.8
 #
-sudo yum -y install java-1.7.0-openjdk-devel.x86_64
+yum -y install java-1.8.0-openjdk-devel.x86_64
 
 #
 # install git
 #
-sudo yum -y install git-all.noarch
+yum -y install git-all.noarch
 
 #
 #  we will also need md5sum and sha1sum
 #
-sudo yum -y install isomd5sum.x86_64
+yum -y install isomd5sum.x86_64
 
 #
 # install gradle
 #
 wget https://services.gradle.org/distributions/gradle-2.5-bin.zip
 unzip gradle-2.5-bin.zip
-sudo mv gradle-2.5 /usr/local
-sudo ln -s /usr/local/gradle-2.5/bin/gradle /usr/bin/gradle
+mv gradle-2.5 /usr/local
+ln -s /usr/local/gradle-2.5/bin/gradle /usr/bin/gradle
 rm gradle-2.5-bin.zip
 
 #
 #  add user 'jenkins' before installing jenkins. The default installation
-#  creates the 'jenkins' user, but sets the shell to /bin/zero.  Unfortunately,
-#  this renders much of the su - jenkins script automation unusable. But if
-#  the jenkins user already exists, everything will be fine
+#  creates the 'jenkins' user, but sets the shell to /bin/zero.
+#  Unfortunately, this renders much of the su - jenkins script automation
+#  unusable. But if the jenkins user already exists, everything will be
+#  fine
 #
-sudo adduser -d /var/lib/jenkins jenkins
+adduser -d /var/lib/jenkins jenkins
 
 #
 #  install jenkins
 #
-sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-sudo yum -y install jenkins
-sudo service jenkins start
-sudo chkconfig jenkins on
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+yum -y install jenkins
+service jenkins start
+chkconfig jenkins on
 
 #
 # jenkins listens on port 8080
 # map port 80 http traffic to port 8080 with njinx
 #
-sudo yum -y install nginx
+yum -y install nginx
 
 #
 # change /etc/nginx/nginx.conf so that nginx acts as a proxy for 8080
@@ -103,29 +106,28 @@ cat >> my.conf  << EOF
 
 EOF
 
-sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.original
-sudo mv -f my.conf /etc/nginx/nginx.conf
-sudo chmod 0644 /etc/nginx/nginx.conf
+cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.original
+mv -f my.conf /etc/nginx/nginx.conf
+chmod 0644 /etc/nginx/nginx.conf
 
 #
 # Start nginx and ensure that it starts on boot:
 #
-sudo service nginx start
-sudo chkconfig nginx on
+service nginx start
+chkconfig nginx on
 
-#
-# Setup the 'jenkins' user to be identified as ottoaccord :-)
-# The ssh keys for ottoaccord are in ottoaccord.tar
-#
-sudo cat > qq_genkey_qq << EOF
-#!/bin/bash
+cd ~
+artf_get ext-tools/utils ottoaccord.tar.gz
+artf_get ext-tools/utils accord-linux.tar.gz
+
+echo "Installing /usr/local/accord"
+cd /usr/local
+tar xvzf ~/accord-linux.tar.gz
+
+echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
-tar xvf ottoaccord.tar
+tar xvzf ~/ottoaccord.tar.gz
 chown -R jenkins:jenkins .ssh
-EOF
-sudo chmod +x qq_genkey_qq
-sudo mv qq_genkey_qq ~jenkins/
-sudo cp ottoaccord.tar ~jenkins/
-sudo su -c './qq_genkey_qq' - jenkins
-sudo rm ~jenkins/qq_genkey_qq
-sudo rm ~jenkins/ottoaccord.tar
+cd ~
+rm *.gz
+

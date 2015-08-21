@@ -25,5 +25,6 @@ if [ ! -f ottoaccord.tar ]; then
 fi
 
 artf_update ext-tools/utils ottoaccord.tar
+artf_update ext-tools/utils ottoaccord.tar.gz
 
 echo "*** COMPLETED ***"
