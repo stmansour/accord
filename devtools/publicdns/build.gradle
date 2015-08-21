@@ -49,7 +49,7 @@ jacocoTestReport {
 }
 
 dependencies {
-    compile fileTree(dir: '/usr/local/jars', include: ['*.jar'])
+    compile fileTree(dir: '/usr/local/accord/jars', include: ['*.jar'])
     compile 'com.google.code.findbugs:annotations:3.0.0'
     testCompile 'junit:junit:[4,)'
 }
