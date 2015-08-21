@@ -119,15 +119,15 @@ chkconfig nginx on
 cd ~
 artf_get ext-tools/utils ottoaccord.tar.gz
 artf_get ext-tools/utils accord-linux.tar.gz
+artf_get ext-tools/utils jenkinsconfig.tar.gz
 
 echo "Installing /usr/local/accord"
 cd /usr/local
-tar xvzf ~/accord-linux.tar.gz
-
 echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
-tar xvzf ~/ottoaccord.tar.gz
-chown -R jenkins:jenkins .ssh
+tar xvzf --owner=jenkins --group=jenkins ~/accord-linux.tar.gz
+tar xvzf --owner=jenkins --group=jenkins ~/jenkinsconfig.tar.gz
+
 cd ~
 rm *.gz
 
