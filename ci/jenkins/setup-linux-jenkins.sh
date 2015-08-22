@@ -125,8 +125,19 @@ echo "Installing /usr/local/accord"
 cd /usr/local
 echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
-tar xvzf --owner=jenkins --group=jenkins ~/accord-linux.tar.gz
-tar xvzf --owner=jenkins --group=jenkins ~/jenkinsconfig.tar.gz
+tar xvzf ~/accord-linux.tar.gz
+
+echo "SLEEPING FOR 2 MINS TO GIVE JENKINS TIME TO START"
+sleep 120
+
+echo "Downloading pretested jenkins configuration"
+tar xvzf ~/jenkinsconfig.tar.gz
+
+echo "changing jenkins to be owner of all files"
+chown -R jenkins:jenkins ./*
+
+echo "Configuration in place. Restarting"
+service jenkins restart
 
 cd ~
 rm *.gz

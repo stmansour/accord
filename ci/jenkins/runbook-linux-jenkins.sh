@@ -1,4 +1,15 @@
 #!/bin/bash
+echo "All automated now.  Just run cr_linux_jenkins.sh.
+
+# All the steps below are instructive so I'm leaving them in.
+# All have been automated. To create a new linux version of jenkins that will 
+# be ready for you to log in as soon as it is done, just enter the command:
+
+#	cr_linux_jenkins.sh
+
+# Here's a basic outline of what it does.
+# -------------------------------------------------
+#
 #  1. Create new compute instance
 #       From the AWS dashboard:
 #	- Launch Instance
@@ -17,13 +28,9 @@
 #       whatever) automated builds and will have permission to write to Artifactory
 #       in the jenkins-snapshot/release area.
 
-if [ -e ottoaccord.tar.gz ]; then
-    gunzip ottoaccord.tar.gz
-fi
-
-echo -n "Target hostname: "
-read hostname
-scp -i ~/.ssh/smanAWS1.pem setup-linux-jenkins.sh ottoaccord.tar ec2-user@${hostname}:~/
+# echo -n "Target hostname: "
+# read hostname
+# scp -i ~/.ssh/smanAWS1.pem setup-linux-jenkins.sh ottoaccord.tar ec2-user@${hostname}:~/
 
 #scp -i ~/.ssh/smanAWS1.pem setup-linux ottobldrssh.tar ec2-user@ec2-52-2-162-170.compute-1.amazonaws.com:~/
 
@@ -108,7 +115,7 @@ scp -i ~/.ssh/smanAWS1.pem setup-linux-jenkins.sh ottoaccord.tar ec2-user@${host
 #     build, on the right side of the screen click "Settings", then click
 #     "Webhooks & Services". Under the Services list on the left side click the
 #     "Add Service" dropdown, in the filter area type "Jenkins", and select
-#     "Jenkins (GitHub plugin).
+#     Jenkins (GitHub plugin).
 #
 #     There can only be only 1 GitHub webhook per repo (this is unfortunate).
 #     If you already have one and you try to add
@@ -121,3 +128,87 @@ scp -i ~/.ssh/smanAWS1.pem setup-linux-jenkins.sh ottoaccord.tar ec2-user@${host
 #     of the page under GitHub Web Hook, select "Manually manage hook URLs" then click
 #     the help button (?) on the right. It will list the URL to use.
 #     
+
+########
+#  Here is a bit of information on how the Jenkins file system changes
+#  as it is configured.
+
+# Here is what the matured / configured jenkins server looks like
+# in terms of the xml files:
+# 
+# ls *.xml
+# com.cloudbees.jenkins.GitHubPushTrigger.xml
+# config.xml
+# credentials.xml
+# hudson.maven.MavenModuleSet.xml
+# hudson.model.UpdateCenter.xml
+# hudson.plugins.analysis.core.GlobalSettings.xml
+# hudson.plugins.git.GitSCM.xml
+# hudson.plugins.git.GitTool.xml
+# hudson.plugins.gradle.Gradle.xml
+# hudson.scm.CVSSCM.xml
+# hudson.scm.SubversionSCM.xml
+# hudson.tasks.Ant.xml
+# hudson.tasks.Mailer.xml
+# hudson.tasks.Maven.xml
+# hudson.tasks.Shell.xml
+# hudson.triggers.SCMTrigger.xml
+# jenkins.model.ArtifactManagerConfiguration.xml
+# jenkins.model.DownloadSettings.xml
+# jenkins.model.JenkinsLocationConfiguration.xml
+# jenkins.mvn.GlobalMavenConfig.xml
+# jenkins.security.QueueItemAuthenticatorConfiguration.xml
+# nodeMonitors.xml
+# org.jenkinsci.main.modules.sshd.SSHD.xml
+# org.jenkinsci.plugins.gitclient.JGitTool.xml
+# org.jfrog.hudson.ArtifactoryBuilder.xml
+# 
+# 
+# 1. After initial create of instance:
+# 
+# bash$ ls *.xml
+# hudson.model.UpdateCenter.xml
+# nodeMonitors.xml
+# 
+# 2. After Configure Global Security
+# 	Enable security checked on
+# 	Security Realm:  Jenkins' own user database.
+# 			 UNCHECK Allow users to sign up
+# 	Authorization: loggin-in users can do anything
+# 	Save
+# 
+# bash$ ls *.xml
+# config.xml
+# hudson.model.UpdateCenter.xml
+# jenkins.model.DownloadSettings.xml
+# jenkins.security.QueueItemAuthenticatorConfiguration.xml
+# nodeMonitors.xml
+# 
+# 3. After adding myself as a user
+#    It appears to have added users/sman/config.xml  containing my info
+# 
+# 4. Configure system:
+# 	Add jdk 1.8, uncheck install automatically
+# 	just updated config.xml with <jdks>
+# 
+# 5. Manage Plugins - 
+# 	Updated all existing
+# 	Added:
+# 	- Jacoco coverage report
+# 	- Violations plugin
+# 	- Artifactory plugin
+# 	- Gradle plugin
+# 	- GIT plugin
+# 
+# bash$ ls *.xml
+# config.xml                       hudson.tasks.Shell.xml
+# hudson.maven.MavenModuleSet.xml  hudson.triggers.SCMTrigger.xml
+# hudson.model.UpdateCenter.xml    jenkins.model.ArtifactManagerConfiguration.xml
+# hudson.plugins.git.GitTool.xml   jenkins.model.DownloadSettings.xml
+# hudson.scm.CVSSCM.xml            jenkins.model.JenkinsLocationConfiguration.xml
+# hudson.scm.SubversionSCM.xml     jenkins.mvn.GlobalMavenConfig.xml
+# hudson.tasks.Ant.xml             jenkins.security.QueueItemAuthenticatorConfiguration.xml
+# hudson.tasks.Mailer.xml          nodeMonitors.xml
+# hudson.tasks.Maven.xml
+# 
+
