@@ -16,7 +16,7 @@ SET PACKAGES=wget,git,curl,unzip
 
 REM -- Do it!
 ECHO *** INSTALLING CUSTOM PACKAGES
-cygwin-setup -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%" -P %PACKAGES%
+cygwin-setup.exe -q -d -D -L -X -s %SITE% -l "%LOCALDIR%" -R "%ROOTDIR%" -P %PACKAGES%
 
 REM -- Show what we did
 ECHO.
