@@ -1,0 +1,15 @@
+<powershell>
+cd c:\Users\Administrator\Downloads
+cmd.exe /c echo %CD%
+$USER = "accord"
+$PASS = "AP4GxDHU2f6EriLqry781wG6fy"
+$PAIR = "${USER}:${PASS}"
+$ARTF = "http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
+$bytes = [System.Text.Encoding]::ASCII.GetBytes($PAIR)
+$base64 = [System.Convert]::ToBase64String($bytes)
+$basicAuthValue = "Basic $base64"
+$headers = @{ Authorization = $basicAuthValue }
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/wget64.exe" -Headers $headers -Outfile wget64.exe
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/setup-win-jenkins.bat" -Headers $headers -Outfile setup-win-jenkins.bat
+cmd.exe /c '.\setup-win-jenkins.bat'
+</powershell>
