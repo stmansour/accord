@@ -1,5 +1,8 @@
-#!/bin/bash
-echo "All automated now.  Just run cr_linux_jenkins.sh.
+***   THIS HAS CHANGED FROM A BASH SCRIPT TO A TEXT FILE  ***
+*** It's All automated now.  Just run cr_linux_jenkins.sh ***
+
+# Automate the setup of a new linux jenkins instance 
+#   sman@stevemansour.com
 
 # All the steps below are instructive so I'm leaving them in.
 # All have been automated. To create a new linux version of jenkins that will 

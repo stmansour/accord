@@ -19,6 +19,10 @@ SET WGET=wget64.exe
 SET STX=C:\Windows\System32\SETX.exe
 SET LOGFILE C:\Users\Administrator\Downloads\win-jenk-install-log.txt
 
+ECHO *** BEGIN - INSTALL WINDOWS JENKINS CONFIGURATION **  >%LOGFILE%
+DATE /t >>%LOGFILE%
+TIME /t >>%LOGFILE%
+
 REM  ---------------------------------------------------------------
 REM  -- These are the credentials we'll need to access the 
 REM  -- Artifactory repository...
@@ -33,22 +37,22 @@ REM  -- we need for Jenkins.
 REM  ---------------------------------------------------------------
 SET INSTALLHOME=C:\Users\Administrator\Downloads
 SET ACCORD_HOME=C:\Accord
-ECHO Creating c:\Windows\Accord with unix tools
+ECHO Creating c:\Windows\Accord with unix tools >>%LOGFILE%
 MKDIR %ACCORD_HOME%
 MKDIR %ACCORD_HOME%\bin
 COPY wget64.exe %ACCORD_HOME%\bin
 
-echo JAVA
+echo JAVA >>%LOGFILE%
 SET JAVA_HOME=C:\Program Files\Java\%JDKVER%
 %STX% /M JAVA_HOME "C:\Program Files\Java\%JDKVER%"
 SET PATH=%JAVA_HOME%\bin;%PATH%
 
-echo GRADLE
+echo GRADLE >>%LOGFILE%
 SET GRADLE_HOME=%ACCORD_HOME%\gradle
 %STX% /M GRADLE_HOME "%ACCORD_HOME%\gradle"
 SET PATH=%GRADLE_HOME%\bin;%PATH%
 
-echo ACCORD
+echo ACCORD >>%LOGFILE%
 SET PATH=%ACCORD_HOME%\bin;%PATH%
 
 REM  ---------------------------------------------------------------
@@ -70,6 +74,9 @@ SETX /M Path "C:\Program Files\Java\%JDKVER%\bin;c:\Accord\Git\cmd;c:\Accord\Git
 REM  ---------------------------------------------------------------
 REM  -- Download the artifacts we need
 REM  ---------------------------------------------------------------
+ECHO Downloading files from Artifactory  >>%LOGFILE%
+DATE /t >>%LOGFILE%
+TIME /t >>%LOGFILE%
 CALL :SUB_WGET ext-tools/java  %JAVAINSTALLER%
 CALL :SUB_WGET ext-tools/utils cygwin-setup.exe
 CALL :SUB_WGET ext-tools/utils getcygwin.bat
@@ -81,10 +88,14 @@ CALL :SUB_WGET ext-tools/utils ottoaccord.tar
 CALL :SUB_WGET ext-tools/utils deployfile.sh
 CALL :SUB_WGET ext-tools/utils %JENKINSCONFIGTAR%
 CALL :SUB_WGET ext-tools/utils jenkins-win-archiver.sh
+ECHO Downloads completed >>%LOGFILE%
+DATE /t >>%LOGFILE%
+TIME /t >>%LOGFILE%
 
 REM  ---------------------------------------------------------------
 REM  -- begin to build out the accord-specific tool directory
 REM  ---------------------------------------------------------------
+ECHO Copying tools to  %ACCORD_HOME%\bin  >>%LOGFILE%
 COPY deployfile.sh  %ACCORD_HOME%\bin
 COPY jenkins-win-archiver.sh  %ACCORD_HOME%\bin
 c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/deployfile.sh
@@ -96,19 +107,23 @@ REM  -- to do any poking around / debugging, having this suite of
 REM  -- tools there when you need them is a life-saver.  Not only
 REM  -- are the tools there, but the man pages are there too!
 REM  ---------------------------------------------------------------
+ECHO Installing cygwin >>%LOGFILE%
 CALL getcygwin.bat
+ECHO cygwin installation complete >>%LOGFILE%
+DATE /t >>%LOGFILE%
+TIME /t >>%LOGFILE%
 
 REM  ---------------------------------------------------------------
 REM  -- Install Java
 REM  ---------------------------------------------------------------
-ECHO "Starting jdk installation..."
+ECHO "Starting JDK installation..." >>%LOGFILE%
 %JAVAINSTALLER% /s
-ECHO "installation complete"
+ECHO "JDK installation complete" >>%LOGFILE%
 
 REM  ---------------------------------------------------------------
 REM  -- Install git and gradle
 REM  ---------------------------------------------------------------
-ECHO INSTALL GIT and GRADLE...
+ECHO INSTALL GIT and GRADLE... >>%LOGFILE%
 COPY %GRADLEVER%.tar "%ACCORD_HOME%"
 COPY Git.tar.zip "%ACCORD_HOME%"
 COPY 7z.tar "%ACCORD_HOME%"
@@ -121,8 +136,8 @@ PUSHD "%ACCORD_HOME%"
     c:\cygwin\bin\tar.exe xvf %GRADLEVER%.tar
     DEL %GRADLEVER%.tar 7z.tar Git.ta*
 POPD
-ECHO GIT and GRADLE INSTALLATION COMPLETE
-ECHO Current directory = %CD%
+ECHO GIT and GRADLE INSTALLATION COMPLETE  >>%LOGFILE%
+ECHO Current directory = %CD%  >>%LOGFILE%
 
 REM  ---------------------------------------------------------------
 REM  -- add credentials.  The idea here is that for any work being
@@ -130,20 +145,20 @@ REM  -- done in Accord, our virtual build entity, Otto Accord, will
 REM  -- do the builds and manage the artifactory versions. So, all
 REM  -- projects will need to make Otto a contributor in GitHub.
 REM  ---------------------------------------------------------------
-ECHO Installing credentials for Jenkins to use with GitHub
+ECHO Installing credentials for Jenkins to use with GitHub >>%LOGFILE%
 COPY ottoaccord.tar C:\Windows\SysWOW64\config\systemprofile
 PUSHD C:\Windows\SysWOW64\config\systemprofile
-    ECHO DIR before tar
+    ECHO DIR before tar >>%LOGFILE%
     REM  ---------------------------------------------------------------
     REM  -- tar not working here during. ???
     REM  -- out of desperation, try 7z.exe too.  Tar will overwrite
     REM  -- assuming it works...
     REM  ---------------------------------------------------------------
     %ACCORD_HOME%\bin\7z.exe x ottoaccord.tar -y
-    DIR
+    DIR >>%LOGFILE%
     c:\cygwin\bin\tar.exe xvf ottoaccord.tar
-    ECHO DIR after tar
-    DIR
+    ECHO DIR after tar >>%LOGFILE%
+    DIR >>%LOGFILE%
 POPD
 
 REM  ---------------------------------------------------------------
@@ -151,7 +166,7 @@ REM  -- install jenkins
 REM  ---------------------------------------------------------------
 ECHO Uncompressing JENKINS...
 %ACCORD_HOME%\bin\7z e %JENKINSVER%.zip
-ECHO Installing JENKINS...
+ECHO Installing JENKINS... >>%LOGFILE%
 CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
 COPY %JENKINSCONFIGTAR% "C:\Program Files (x86)\Jenkins"
 PUSHD "C:\Program Files (x86)\Jenkins"
@@ -169,15 +184,20 @@ PUSHD "C:\Program Files (x86)\Jenkins"
     REM  ---------------------------------------------------------------
     .\jenkins.exe stop
     timout /t 5
-    ECHO Use 7z to untar the configuration
+    ECHO Use 7z to untar the configuration >>%LOGFILE%
     %ACCORD_HOME%\bin\7z.exe x %JENKINSCONFIGTAR% -y
-    ECHO Untarring the jenkins saved configuration
+    ECHO Untarring the jenkins saved configuration >>%LOGFILE%
     c:\cygwin\bin\tar.exe xvf %JENKINSCONFIGTAR%
-    ECHO Restarting Jenkins...
+    ECHO Restarting Jenkins... >>%LOGFILE%
     .\jenkins.exe start
     timeout /t 10
 POPD
-ECHO Completed JENKINS installation!
+
+ECHO Completed JENKINS installation! >>%LOGFILE%
+DATE /t >>%LOGFILE%
+TIME /t >>%LOGFILE%
+ECHO *** END - INSTALL WINDOWS JENKINS CONFIGURATION **  >>%LOGFILE%
+
 
 
 GOTO :EOF

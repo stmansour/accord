@@ -19,11 +19,8 @@ ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
 
 artf_get() {
     echo "Downloading $1/$2"
-    wget -O $2 --user=$USR --password=$PASS ${ART}/$1/$2
+    wget -O "$2" --user=$USR --password=$PASS ${ART}/"$1"/"$2"
 }
-
-echo "Hi. I am $EXTERNAL_HOST_NAME." > /tmp/HiSteve.txt
-pwd >> /tmp/HiSteve.txt
 
 #
 #  update all the out-of-date packages
@@ -31,18 +28,10 @@ pwd >> /tmp/HiSteve.txt
 yum -y update
 
 #
-# install Open Java 1.8
+# install Open Java 1.8, git, md5sum
 #
 yum -y install java-1.8.0-openjdk-devel.x86_64
-
-#
-# install git
-#
 yum -y install git-all.noarch
-
-#
-#  we will also need md5sum and sha1sum
-#
 yum -y install isomd5sum.x86_64
 
 #
@@ -150,5 +139,5 @@ echo "Configuration in place. Restarting"
 service jenkins start
 
 cd ~
-rm *.gz
+rm ./*.gz
 
