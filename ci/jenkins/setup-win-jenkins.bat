@@ -17,7 +17,7 @@ SET JENKINSVER=jenkins-1.624
 SET JENKINSCONFIGTAR=jenkins-win-config.tar
 SET WGET=wget64.exe
 SET STX=C:\Windows\System32\SETX.exe
-SET LOGFILE C:\Users\Administrator\Downloads\win-jenk-install-log.txt
+SET LOGFILE=C:\Users\Administrator\Downloads\win-jenk-install-log.txt
 
 ECHO *** BEGIN - INSTALL WINDOWS JENKINS CONFIGURATION **  >%LOGFILE%
 DATE /t >>%LOGFILE%
@@ -88,6 +88,7 @@ CALL :SUB_WGET ext-tools/utils ottoaccord.tar
 CALL :SUB_WGET ext-tools/utils deployfile.sh
 CALL :SUB_WGET ext-tools/utils %JENKINSCONFIGTAR%
 CALL :SUB_WGET ext-tools/utils jenkins-win-archiver.sh
+CALL :SUB_WGET ext-tools/utils winjenk.scr
 ECHO Downloads completed >>%LOGFILE%
 DATE /t >>%LOGFILE%
 TIME /t >>%LOGFILE%
