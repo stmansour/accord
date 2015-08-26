@@ -131,8 +131,14 @@ echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
 tar xvzf ~/ottoaccord.tar.gz
 
-echo "SLEEPING FOR 1 MINS TO GIVE JENKINS TIME TO START"
-sleep 60
+echo "Sleeping for 30 seconds to give Jenkins plenty of time to"
+echo "complete its initial startup."
+sleep 30
+
+echo "OK, it should be done by now. Let's shut it down so that"
+echo "we can install our configuration"
+service jenkins stop
+sleep 10
 
 echo "Downloading pretested jenkins configuration"
 tar xvf ~/jenkins-linux-config.tar
@@ -141,7 +147,7 @@ echo "changing jenkins to be owner of all files"
 chown -R jenkins:jenkins ./*
 
 echo "Configuration in place. Restarting"
-service jenkins restart
+service jenkins start
 
 cd ~
 rm *.gz

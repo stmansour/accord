@@ -21,8 +21,15 @@ artf_update ext-tools/utils setup-win-jenkins.bat
 artf_update ext-tools/utils setup-linux-jenkins.sh
 artf_update ext-tools/utils ottoaccord.tar.gz
 
+if [ ! -d ./tmp ]; then
+    mkdir ./tmp
+fi
+cd ./tmp
+cp ../ottoaccord.tar.gz .
 gunzip ottoaccord.tar.gz
 artf_update ext-tools/utils ottoaccord.tar
+rm ottoaccord.tar
+cd ..
 
 
 echo "*** COMPLETED ***"

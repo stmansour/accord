@@ -1,2 +1,2 @@
 #!/bin/bash
-tar cvf jenkinsconfig.tar *.xml plugins users
+tar cvf jenkinsconfig.tar ./*.xml plugins users
