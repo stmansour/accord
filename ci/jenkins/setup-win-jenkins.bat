@@ -6,6 +6,14 @@ REM  -- base system for Windows Server 2012
 REM
 
 REM
+REM  -- Set the versions of software that we'll download
+REM
+SET JDKVER=jdk1.8.0_51
+SET JAVAINSTALLER=jdk-8u51-windows-x64.exe
+SET GRADLEVER=gradle-2.6
+SET JENKINSVER=jenkins-1.624
+
+REM
 REM  -- Start off by creating the directory where we can put the tools
 REM  -- we need for Jenkins.
 REM
@@ -23,8 +31,8 @@ MKDIR %ACCORD_HOME%\bin
 COPY wget64.exe %ACCORD_HOME%\bin
 
 echo JAVA
-SET JAVA_HOME=C:\Program Files\Java\jdk1.8.0_51
-%STX% /M JAVA_HOME "C:\Program Files\Java\jdk1.8.0_51"
+SET JAVA_HOME=C:\Program Files\Java\%JDKVER%
+%STX% /M JAVA_HOME "C:\Program Files\Java\%JDKVER%"
 SET PATH=%JAVA_HOME%\bin;%PATH%
 
 echo GRADLE
@@ -44,21 +52,22 @@ REM %STX% /M Path "%JAVA_HOME%\bin;%PATH%"
 REM %STX% /M Path "%GRADLE_HOME%\bin;%PATH%"
 
 REM  -- until the quoting problem is nailed, this seems to work...
-SETX /M Path "C:\Program Files\Java\jdk1.8.0_51\bin;c:\Accord\Git\cmd;c:\Accord\Git\bin;c:\Accord\Git\bin;c:\Accord\gradle\bin;c:\Accord\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\cfn-bootstrap"
+SETX /M Path "C:\Program Files\Java\%JDKVER%\bin;c:\Accord\Git\cmd;c:\Accord\Git\bin;c:\Accord\Git\bin;c:\Accord\gradle\bin;c:\Accord\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\cfn-bootstrap"
 
 
 REM
 REM  -- Download the artifacts we need
 REM
-CALL :SUB_WGET ext-tools/java  jdk-8u51-windows-x64.exe
+CALL :SUB_WGET ext-tools/java  %JAVAINSTALLER%
 CALL :SUB_WGET ext-tools/utils cygwin-setup.exe
 CALL :SUB_WGET ext-tools/utils getcygwin.bat
 CALL :SUB_WGET ext-tools/utils Git.tar.zip
-CALL :SUB_WGET ext-tools/utils gradle-2.6.tar
-CALL :SUB_WGET ext-tools/utils jenkins-1.624.zip
+CALL :SUB_WGET ext-tools/utils %GRADLEVER%.tar
+CALL :SUB_WGET ext-tools/utils %JENKINSVER%.zip
 CALL :SUB_WGET ext-tools/utils 7z.tar
-CALL :SUB_WGET ext-tools/utils ottoaccord.tar
+CALL :SUB_WGET ext-tools/utils ottoaccord.tar.gz
 CALL :SUB_WGET ext-tools/utils deployfile.sh
+CALL :SUB_WGET ext-tools/utils jenkins-linux-config.tar
 
 REM
 REM  -- Install cygwin
@@ -69,14 +78,14 @@ REM
 REM  -- Install Java
 REM
 ECHO "Starting jdk installation..."
-jdk-8u51-windows-x64.exe /s
+%JAVAINSTALLER% /s
 ECHO "installation complete"
 
 REM
 REM  -- Install git and gradle
 REM
 ECHO INSTALL GIT and GRADLE...
-COPY gradle-2.6.tar "%ACCORD_HOME%"
+COPY %GRADLEVER%.tar "%ACCORD_HOME%"
 COPY Git.tar.zip "%ACCORD_HOME%"
 COPY 7z.tar "%ACCORD_HOME%"
 PUSHD "%ACCORD_HOME%"
@@ -85,8 +94,8 @@ PUSHD "%ACCORD_HOME%"
     CD ..
     .\bin\7z e Git.tar.zip
     c:\cygwin\bin\tar.exe xvf Git.tar
-    c:\cygwin\bin\tar.exe xvf gradle-2.6.tar
-    DEL gradle-2.6.tar 7z.tar Git.ta*
+    c:\cygwin\bin\tar.exe xvf %GRADLEVER%.tar
+    DEL %GRADLEVER%.tar 7z.tar Git.ta*
 POPD
 ECHO GIT and GRADLE INSTALLATION COMPLETE
 ECHO Current directory = %CD%
@@ -95,19 +104,46 @@ REM
 REM  -- add credentials
 REM
 ECHO Installing credentials for Jenkins to use with GitHub
+COPY ottoaccord.tar.gz C:\Windows\SysWOW64\config\systemprofile
 PUSHD C:\Windows\SysWOW64\config\systemprofile
-    c:\cygwin\bin\tar.exe xvf /cygdrive/c/Users/Administrator/Downloads/ottoaccord.tar
+    ECHO DIR before tar
+    REM - tar not working here during. ???
+    REM out of desperation, try 7z.exe too.  Tar will overwrite if it works
+    %ACCORD_HOME%\bin\7z.exe x ottoaccord.tar
+    DIR
+    c:\cygwin\bin\tar.exe xvf ottoaccord.tar
+    ECHO DIR after tar
+    DIR
 POPD
 
 REM
 REM  -- install jenkins
 REM
 ECHO Uncompressing JENKINS...
-"c:\Accord\bin\7z" e jenkins-1.624.zip
+%ACCORD_HOME%\bin\7z e %JENKINSVER%.zip
 ECHO Installing JENKINS...
 CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
+
+copy jenkins-linux-config.tar "C:\Program Files (x86)\Jenkins"
+PUSHD "C:\Program Files (x86)\Jenkins"
+timeout /t 30
+ECHO Directory before tar...
+DIR
+REM - tar not working here during. ???
+REM out of desperation, try 7z.exe too.  Tar will overwrite if it works
+%ACCORD_HOME%\bin\7z.exe x jenkins-linux-config.tar
+ECHO Untarring the jenkins saved configuration
+c:\cygwin\bin\tar.exe xvf jenkins-linux-config.tar
+ECHO Directory after tar...
+DIR
+ECHO Restarting Jenkins...
+.\jenkins.exe restart
+timeout /t 10
+POPD
 ECHO Completed JENKINS installation!
-ECHO Please allow a couple of minutes for jenkins to start up
+
+copy deployfile.sh  %ACCORD_HOME%\bin
+c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/deployfile.sh
 
 GOTO :EOF
 

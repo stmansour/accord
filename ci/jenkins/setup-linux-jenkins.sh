@@ -12,6 +12,8 @@
 USR=accord
 PASS=AP4GxDHU2f6EriLqry781wG6fy
 ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
+GRADLEVER=gradle-2.6
+
 EXTERNAL_HOST_NAME=$( curl http://169.254.169.254/latest/meta-data/public-hostname )
 ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
 
@@ -46,11 +48,11 @@ yum -y install isomd5sum.x86_64
 #
 # install gradle
 #
-wget https://services.gradle.org/distributions/gradle-2.5-bin.zip
-unzip gradle-2.5-bin.zip
-mv gradle-2.5 /usr/local
-ln -s /usr/local/gradle-2.5/bin/gradle /usr/bin/gradle
-rm gradle-2.5-bin.zip
+wget https://services.gradle.org/distributions/${GRADLEVER}-bin.zip
+unzip ${GRADLEVER}-bin.zip
+mv ${GRADLEVER} /usr/local
+ln -s /usr/local/${GRADLEVER}/bin/gradle /usr/bin/gradle
+rm ${GRADLEVER}-bin.zip
 
 #
 #  add user 'jenkins' before installing jenkins. The default installation
@@ -119,19 +121,21 @@ chkconfig nginx on
 cd ~
 artf_get ext-tools/utils ottoaccord.tar.gz
 artf_get ext-tools/utils accord-linux.tar.gz
-artf_get ext-tools/utils jenkinsconfig.tar.gz
+artf_get ext-tools/utils jenkins-linux-config.tar
 
 echo "Installing /usr/local/accord"
 cd /usr/local
-echo "Updating credentials for user 'jenkins' to access github"
-cd ~jenkins
 tar xvzf ~/accord-linux.tar.gz
 
-echo "SLEEPING FOR 2 MINS TO GIVE JENKINS TIME TO START"
-sleep 120
+echo "Updating credentials for user 'jenkins' to access github"
+cd ~jenkins
+tar xvzf ~/ottoaccord.tar.gz
+
+echo "SLEEPING FOR 1 MINS TO GIVE JENKINS TIME TO START"
+sleep 60
 
 echo "Downloading pretested jenkins configuration"
-tar xvzf ~/jenkinsconfig.tar.gz
+tar xvf ~/jenkins-linux-config.tar
 
 echo "changing jenkins to be owner of all files"
 chown -R jenkins:jenkins ./*
