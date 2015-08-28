@@ -13,6 +13,8 @@ USR=accord
 PASS=AP4GxDHU2f6EriLqry781wG6fy
 ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
 GRADLEVER=gradle-2.6
+JENKINS_CONFIG_TAR=jnk-lnx-conf.tar
+JENKINS_JOBS_TAR=jnk-lnx-jobs.tar
 
 EXTERNAL_HOST_NAME=$( curl http://169.254.169.254/latest/meta-data/public-hostname )
 ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
@@ -110,7 +112,8 @@ chkconfig nginx on
 cd ~
 artf_get ext-tools/utils ottoaccord.tar.gz
 artf_get ext-tools/utils accord-linux.tar.gz
-artf_get ext-tools/utils jenkins-linux-config.tar
+artf_get ext-tools/jenkins ${JENKINS_CONFIG_TAR}
+artf_get ext-tools/jenkins ${JENKINS_JOBS_TAR}
 
 echo "Installing /usr/local/accord"
 cd /usr/local
@@ -129,8 +132,10 @@ echo "we can install our configuration"
 service jenkins stop
 sleep 10
 
-echo "Downloading pretested jenkins configuration"
-tar xvf ~/jenkins-linux-config.tar
+echo "installing last known good configuration"
+tar xvf ~/${JENKINS_CONFIG_TAR}
+echo "installing jobs"
+tar xvf ~/${JENKINS_JOBS_TAR}
 
 echo "changing jenkins to be owner of all files"
 chown -R jenkins:jenkins ./*

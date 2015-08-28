@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ACCORD_BIN=/usr/local/accord/bin
+ARTIFACT=jnk-lnx-conf.tar
 
 #
 #  $1 = artifactory path
@@ -19,6 +20,8 @@ artf_update () {
 }
 
 cd ~jenkins
-tar cvf jenkins-linux-config.tar ./*.xml plugins users
-artf_update ext-tools/utils jenkins-linux-config.tar
+tar cvf ${ARTIFACT} ./*.xml plugins users
+echo "Storing ${ARTIFACT} to Artifactory:/ext-tools/jenkins"
+artf_update ext-tools/jenkins ${ARTIFACT}
 echo "*** COMPLETED ***"
+

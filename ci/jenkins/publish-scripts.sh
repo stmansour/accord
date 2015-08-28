@@ -32,5 +32,4 @@ artf_update ext-tools/utils ottoaccord.tar
 rm ottoaccord.tar
 cd ..
 
-
 echo "*** COMPLETED ***"
