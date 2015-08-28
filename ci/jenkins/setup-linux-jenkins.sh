@@ -5,6 +5,7 @@
 # It runs as root, so no need for all the "sudo" stuff in front of
 # every command.
 #
+# To debug, the logfile produced by Amazon is in /var/log/cloud-init-output.log
 #
 # You MUST set this environment
 #

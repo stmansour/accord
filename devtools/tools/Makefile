@@ -1,5 +1,6 @@
 all: install package publish
 	@echo "*** COMPLETE ***"
+
 install:
 	cp *.sh /usr/local/accord/bin
 	@echo "*** INSTALL COMPLETE in tools ***"

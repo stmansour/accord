@@ -1,8 +1,7 @@
 #!/bin/bash
 
-ACCORD_BIN=/cygdrive/c/accord/bin
-JENKINS_HOME="/cygdrive/c/Program\ Files\ \(x86\)/Jenkins/"
-ARTIFACT=jnk-win-conf.tar
+ACCORD_BIN=/c/accord/bin
+ARTIFACT=jnk-win-job.tar
 
 #
 #  $1 = artifactory path
@@ -20,7 +19,7 @@ artf_update () {
     fi
 }
 
-cd "${JENKINS_HOME}/jobs"
+cd "C:\Program Files (x86)\Jenkins\jobs"
 tar cvf ${ARTIFACT} ./*/config.xml ./*/nextBuildNumber
 artf_update ext-tools/jenkins ${ARTIFACT}
 echo "*** COMPLETED ***"

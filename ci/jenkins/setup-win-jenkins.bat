@@ -14,7 +14,8 @@ SET JDKVER=jdk1.8.0_51
 SET JAVAINSTALLER=jdk-8u51-windows-x64.exe
 SET GRADLEVER=gradle-2.6
 SET JENKINSVER=jenkins-1.624
-SET JENKINSCONFIGTAR=jenkins-win-config.tar
+SET JENKINSCONFIGTAR=jnk-win-conf.tar
+SET JENKINSJOBTAR=jnk-win-job.tar
 SET WGET=wget64.exe
 SET STX=C:\Windows\System32\SETX.exe
 SET LOGFILE=C:\Users\Administrator\Downloads\win-jenk-install-log.txt
@@ -86,7 +87,6 @@ CALL :SUB_WGET ext-tools/utils %JENKINSVER%.zip
 CALL :SUB_WGET ext-tools/utils 7z.tar
 CALL :SUB_WGET ext-tools/utils ottoaccord.tar
 CALL :SUB_WGET ext-tools/utils deployfile.sh
-CALL :SUB_WGET ext-tools/utils %JENKINSCONFIGTAR%
 CALL :SUB_WGET ext-tools/utils jnk-win-conf-archiver.sh
 CALL :SUB_WGET ext-tools/utils jnk-win-job-archiver.sh
 CALL :SUB_WGET ext-tools/utils rmfile.sh
@@ -94,6 +94,8 @@ CALL :SUB_WGET ext-tools/utils getfile.sh
 CALL :SUB_WGET ext-tools/utils deployfile.sh
 CALL :SUB_WGET ext-tools/utils updatefile.sh
 CALL :SUB_WGET ext-tools/utils winjenk.scr
+CALL :SUB_WGET ext-tools/jenkins %JENKINSCONFIGTAR%
+CALL :SUB_WGET ext-tools/jenkins %JENKINSJOBTAR%
 ECHO Downloads completed >>%LOGFILE%
 DATE /t >>%LOGFILE%
 TIME /t >>%LOGFILE%
@@ -180,6 +182,7 @@ ECHO Uncompressing JENKINS...
 ECHO Installing JENKINS... >>%LOGFILE%
 CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
 COPY %JENKINSCONFIGTAR% "C:\Program Files (x86)\Jenkins"
+COPY %JENKINSJOBTAR% "C:\Program Files (x86)\Jenkins\jobs"
 PUSHD "C:\Program Files (x86)\Jenkins"
     REM  ---------------------------------------------------------------
     REM  The installer automatically starts Jenkins (even though we
@@ -199,12 +202,20 @@ PUSHD "C:\Program Files (x86)\Jenkins"
     %ACCORD_HOME%\bin\7z.exe x %JENKINSCONFIGTAR% -y
     ECHO Untarring the jenkins saved configuration >>%LOGFILE%
     c:\cygwin\bin\tar.exe xvf %JENKINSCONFIGTAR%
+    ECHO Untarring the jenkins saved jobs >>%LOGFILE%
+    CD jobs
+    c:\cygwin\bin\tar.exe xvf %JENKINSJOBTAR%
+    CD ..
     ECHO Restarting Jenkins... >>%LOGFILE%
     .\jenkins.exe start
     timeout /t 10
 POPD
 
 ECHO Completed JENKINS installation! >>%LOGFILE%
+
+ECHO Linking /c to /cygdrive/c for compatibility with Git's unix system...
+c:\cygwin\bin\bash.exe -l -c "ln -s /cygdrive/c /c"
+
 DATE /t >>%LOGFILE%
 TIME /t >>%LOGFILE%
 ECHO *** END - INSTALL WINDOWS JENKINS CONFIGURATION **  >>%LOGFILE%
@@ -220,6 +231,17 @@ REM  ---------------------------------------------------------------
 :SUB_WGET
     ECHO DOWNLOADING %~1/%~2
     %WGET% -O %~2 --user %USR% --password %PASS% %ART%/%~1/%~2
+
+    REM  This is ridiculous and it makes no sense... but without the 
+    REM  timeout statement, invariably one of the files being downloaded
+    REM  is skipped. Incomprehensible. This is really bad, and it didn't
+    REM  start happening until the list of files grew... maybe past 10
+    REM  or something.  Anyway, with the timeout in place, all the files
+    REM  download. It's a .bat script issue, not an artifactory issue. 
+    REM  Or maybe it's a file system issue -- maybe how AWS provides 
+    REM  volume space for windows.  (doesn't happen on linux)
+    timeout /t 1
+
     EXIT /B
 
 :EOF
