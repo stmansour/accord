@@ -1,5 +1,11 @@
+BINLOC = /usr/local/accord/bin
+
+all: install package publish
+	@echo "*** COMPLETED ***"
+
 install:
-	cp setup-linux-jenkins.sh setup-win-jenkins.bat winjenk.scr /usr/local/accord/bin/
+	if [ ! -d $(BINLOC) ]; then mkdir -p $(BINLOC); fi
+	cp setup-linux-jenkins.sh setup-win-jenkins.bat winjenk.scr $(BINLOC)
 	@echo "*** INSTALL COMPLETE in jenkins ***"
 
 package:
