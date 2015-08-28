@@ -2,6 +2,7 @@
 
 ACCORD_BIN=/cygdrive/c/accord/bin
 JENKINS_HOME="/cygdrive/c/Program\ Files\ \(x86\)/Jenkins/"
+ARTIFACT=jnk-win-conf.tar
 
 #
 #  $1 = artifactory path
@@ -20,7 +21,6 @@ artf_update () {
 }
 
 cd "${JENKINS_HOME}"
-tar cvf jenkins-win-config.tar ./*.xml plugins users
-artf_update ext-tools/utils jenkins-win-config.tar
+tar cvf ${ARTIFACT} ./*.xml plugins users
+artf_update ext-tools/jenkins ${ARTIFACT}
 echo "*** COMPLETED ***"
-

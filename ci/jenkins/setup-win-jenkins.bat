@@ -87,7 +87,12 @@ CALL :SUB_WGET ext-tools/utils 7z.tar
 CALL :SUB_WGET ext-tools/utils ottoaccord.tar
 CALL :SUB_WGET ext-tools/utils deployfile.sh
 CALL :SUB_WGET ext-tools/utils %JENKINSCONFIGTAR%
-CALL :SUB_WGET ext-tools/utils jenkins-win-archiver.sh
+CALL :SUB_WGET ext-tools/utils jnk-win-conf-archiver.sh
+CALL :SUB_WGET ext-tools/utils jnk-win-job-archiver.sh
+CALL :SUB_WGET ext-tools/utils rmfile.sh
+CALL :SUB_WGET ext-tools/utils getfile.sh
+CALL :SUB_WGET ext-tools/utils deployfile.sh
+CALL :SUB_WGET ext-tools/utils updatefile.sh
 CALL :SUB_WGET ext-tools/utils winjenk.scr
 ECHO Downloads completed >>%LOGFILE%
 DATE /t >>%LOGFILE%
@@ -98,7 +103,12 @@ REM  -- begin to build out the accord-specific tool directory
 REM  ---------------------------------------------------------------
 ECHO Copying tools to  %ACCORD_HOME%\bin  >>%LOGFILE%
 COPY deployfile.sh  %ACCORD_HOME%\bin
-COPY jenkins-win-archiver.sh  %ACCORD_HOME%\bin
+COPY jnk-win-conf-archiver.sh  %ACCORD_HOME%\bin
+COPY jnk-win-job-archiver.sh  %ACCORD_HOME%\bin
+COPY getfile.sh  %ACCORD_HOME%\bin
+COPY deployfile.sh  %ACCORD_HOME%\bin
+COPY updatefile.sh  %ACCORD_HOME%\bin
+COPY rmfile.sh  %ACCORD_HOME%\bin
 c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/deployfile.sh
 
 REM  ---------------------------------------------------------------
