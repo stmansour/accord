@@ -135,7 +135,9 @@ sleep 10
 echo "installing last known good configuration"
 tar xvf ~/${JENKINS_CONFIG_TAR}
 echo "installing jobs"
+cd jobs
 tar xvf ~/${JENKINS_JOBS_TAR}
+cd ~jenkins
 
 echo "changing jenkins to be owner of all files"
 chown -R jenkins:jenkins ./*
