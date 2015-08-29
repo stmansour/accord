@@ -78,9 +78,9 @@ REM  ---------------------------------------------------------------
 REM  -- begin to build out the accord-specific tool directory
 REM  ---------------------------------------------------------------
 ECHO Copying tools to  %ACCORD_HOME%\bin  >>%LOGFILE%
-COPY deployfile.sh  %ACCORD_HOME%\bin
+COPY *.sh  %ACCORD_HOME%\bin\
 COPY jenkins-win-archiver.sh  %ACCORD_HOME%\bin
-c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/deployfile.sh
+c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/*.sh
 
 REM  ---------------------------------------------------------------
 REM  -- Install cygwin.  For this installation script, I think we
