@@ -187,6 +187,19 @@ PUSHD "C:\Program Files (x86)\Jenkins"
 POPD
 
 ECHO Completed JENKINS installation! >>%LOGFILE%
+
+REM  ---------------------------------------------------------------
+REM  -- Create a symbolic link so that /c maps to /cygdrive/c 
+REM  -- This makes file access for the unix tools the same
+REM  -- whether we use the cygwin tools or the tools that come with
+REM  -- the windows version of GIT
+REM  ---------------------------------------------------------------
+C:\cygwin\bin\bash.exe -l -c "ln -s /cygdrive/c /c"
+
+REM  ---------------------------------------------------------------
+REM  -- OK, that's it. The system should be ready for use now.
+REM  ---------------------------------------------------------------
+
 DATE /t >>%LOGFILE%
 TIME /t >>%LOGFILE%
 ECHO *** END - INSTALL WINDOWS JENKINS CONFIGURATION **  >>%LOGFILE%
