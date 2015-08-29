@@ -11,5 +11,22 @@ $basicAuthValue = "Basic $base64"
 $headers = @{ Authorization = $basicAuthValue }
 Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/wget64.exe" -Headers $headers -Outfile wget64.exe
 Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/setup-win-jenkins.bat" -Headers $headers -Outfile setup-win-jenkins.bat
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jdk-8u51-windows-x64.exe" -Headers $headers -Outfile jdk-8u51-windows-x64.exe
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/cygwin-setup.exe" -Headers $headers -Outfile cygwin-setup.exe
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/getcygwin.bat" -Headers $headers -Outfile getcygwin.bat
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/Git.tar.zip" -Headers $headers -Outfile Git.tar.zip
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/gradle-2.6.tar" -Headers $headers -Outfile gradle-2.6.tar
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jenkins-1.624.zip" -Headers $headers -Outfile jenkins-1.624.zip
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/7z.tar" -Headers $headers -Outfile 7z.tar
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/ottoaccord.tar" -Headers $headers -Outfile ottoaccord.tar
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jnk-win-conf-archiver.sh" -Headers $headers -Outfile jnk-win-conf-archiver.sh
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jnk-win-job-archiver.sh" -Headers $headers -Outfile jnk-win-job-archiver.sh
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/rmfile.sh" -Headers $headers -Outfile rmfile.sh
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/getfile.sh" -Headers $headers -Outfile getfile.sh
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/deployfile.sh" -Headers $headers -Outfile deployfile.sh
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/updatefile.sh" -Headers $headers -Outfile updatefile.sh
+Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/winjenk.scr" -Headers $headers -Outfile winjenk.scr
+Invoke-WebRequest -uri "${ARTF}/ext-tools/jenkins/jnk-win-conf.tar" -Headers $headers -Outfile jnk-win-conf.tar
+Invoke-WebRequest -uri "${ARTF}/ext-tools/jenkins/jnk-win-job.tar" -Headers $headers -Outfile jnk-win-job.tar
 cmd.exe /c '.\setup-win-jenkins.bat'
 </powershell>

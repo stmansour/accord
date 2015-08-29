@@ -3,6 +3,9 @@ REM  ---------------------------------------------------------------
 REM  -- Windows Jenkins Setup script
 REM  -- Sets up a Jenkins instance for Accord based on Amazon's
 REM  -- base system for Windows Server 2012
+REM  -- All necessary files have been downloaded by the powershell
+REM  -- script and can be found in c:\Users\Administrator\Downloads
+REM  --
 REM  -- Version 1.0
 REM  --    sman@stevemansour.com
 REM  ---------------------------------------------------------------
@@ -71,46 +74,12 @@ REM  -- until the quoting problem is nailed, this seems to work...
 REM  ---------------------------------------------------------------
 SETX /M Path "C:\Program Files\Java\%JDKVER%\bin;c:\Accord\Git\cmd;c:\Accord\Git\bin;c:\Accord\Git\bin;c:\Accord\gradle\bin;c:\Accord\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Amazon\cfn-bootstrap"
 
-
-REM  ---------------------------------------------------------------
-REM  -- Download the artifacts we need
-REM  ---------------------------------------------------------------
-ECHO Downloading files from Artifactory  >>%LOGFILE%
-DATE /t >>%LOGFILE%
-TIME /t >>%LOGFILE%
-CALL :SUB_WGET ext-tools/java  %JAVAINSTALLER%
-CALL :SUB_WGET ext-tools/utils cygwin-setup.exe
-CALL :SUB_WGET ext-tools/utils getcygwin.bat
-CALL :SUB_WGET ext-tools/utils Git.tar.zip
-CALL :SUB_WGET ext-tools/utils %GRADLEVER%.tar
-CALL :SUB_WGET ext-tools/utils %JENKINSVER%.zip
-CALL :SUB_WGET ext-tools/utils 7z.tar
-CALL :SUB_WGET ext-tools/utils ottoaccord.tar
-CALL :SUB_WGET ext-tools/utils deployfile.sh
-CALL :SUB_WGET ext-tools/utils jnk-win-conf-archiver.sh
-CALL :SUB_WGET ext-tools/utils jnk-win-job-archiver.sh
-CALL :SUB_WGET ext-tools/utils rmfile.sh
-CALL :SUB_WGET ext-tools/utils getfile.sh
-CALL :SUB_WGET ext-tools/utils deployfile.sh
-CALL :SUB_WGET ext-tools/utils updatefile.sh
-CALL :SUB_WGET ext-tools/utils winjenk.scr
-CALL :SUB_WGET ext-tools/jenkins %JENKINSCONFIGTAR%
-CALL :SUB_WGET ext-tools/jenkins %JENKINSJOBTAR%
-ECHO Downloads completed >>%LOGFILE%
-DATE /t >>%LOGFILE%
-TIME /t >>%LOGFILE%
-
 REM  ---------------------------------------------------------------
 REM  -- begin to build out the accord-specific tool directory
 REM  ---------------------------------------------------------------
 ECHO Copying tools to  %ACCORD_HOME%\bin  >>%LOGFILE%
 COPY deployfile.sh  %ACCORD_HOME%\bin
-COPY jnk-win-conf-archiver.sh  %ACCORD_HOME%\bin
-COPY jnk-win-job-archiver.sh  %ACCORD_HOME%\bin
-COPY getfile.sh  %ACCORD_HOME%\bin
-COPY deployfile.sh  %ACCORD_HOME%\bin
-COPY updatefile.sh  %ACCORD_HOME%\bin
-COPY rmfile.sh  %ACCORD_HOME%\bin
+COPY jenkins-win-archiver.sh  %ACCORD_HOME%\bin
 c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/deployfile.sh
 
 REM  ---------------------------------------------------------------
@@ -182,7 +151,6 @@ ECHO Uncompressing JENKINS...
 ECHO Installing JENKINS... >>%LOGFILE%
 CALL c:\Windows\System32\msiexec.exe /i jenkins.msi /qn /l*vx jenkins.log
 COPY %JENKINSCONFIGTAR% "C:\Program Files (x86)\Jenkins"
-COPY %JENKINSJOBTAR% "C:\Program Files (x86)\Jenkins\jobs"
 PUSHD "C:\Program Files (x86)\Jenkins"
     REM  ---------------------------------------------------------------
     REM  The installer automatically starts Jenkins (even though we
@@ -200,48 +168,27 @@ PUSHD "C:\Program Files (x86)\Jenkins"
     timout /t 5
     ECHO Use 7z to untar the configuration >>%LOGFILE%
     %ACCORD_HOME%\bin\7z.exe x %JENKINSCONFIGTAR% -y
-    ECHO Untarring the jenkins saved configuration >>%LOGFILE%
-    c:\cygwin\bin\tar.exe xvf %JENKINSCONFIGTAR%
-    ECHO Untarring the jenkins saved jobs >>%LOGFILE%
-    CD jobs
-    c:\cygwin\bin\tar.exe xvf %JENKINSJOBTAR%
-    CD ..
+
+    REM  ---------------------------------------------------------------
+    REM  --  Now install the jobs
+    REM  ---------------------------------------------------------------
+    ECHO Use 7z to untar the jobs  >>%LOGFILE%
+    cd .\jobs
+    COPY "C:\Users\Administrator\Downloads\%JENKINSJOBTAR%" .
+    %ACCORD_HOME%\bin\7z.exe x %JENKINSJOBTAR% -y
+    cd ..
+
+    REM  ---------------------------------------------------------------
+    REM  --  All done. Now restart jenkins
+    REM  ---------------------------------------------------------------
     ECHO Restarting Jenkins... >>%LOGFILE%
     .\jenkins.exe start
     timeout /t 10
 POPD
 
 ECHO Completed JENKINS installation! >>%LOGFILE%
-
-ECHO Linking /c to /cygdrive/c for compatibility with Git's unix system...
-c:\cygwin\bin\bash.exe -l -c "ln -s /cygdrive/c /c"
-
 DATE /t >>%LOGFILE%
 TIME /t >>%LOGFILE%
 ECHO *** END - INSTALL WINDOWS JENKINS CONFIGURATION **  >>%LOGFILE%
-
-
-
-GOTO :EOF
-
-REM ################################################################
-REM  ---------------------------------------------------------------
-REM  --  A subroutine to pull files from Artifactory
-REM  ---------------------------------------------------------------
-:SUB_WGET
-    ECHO DOWNLOADING %~1/%~2
-    %WGET% -O %~2 --user %USR% --password %PASS% %ART%/%~1/%~2
-
-    REM  This is ridiculous and it makes no sense... but without the 
-    REM  timeout statement, invariably one of the files being downloaded
-    REM  is skipped. Incomprehensible. This is really bad, and it didn't
-    REM  start happening until the list of files grew... maybe past 10
-    REM  or something.  Anyway, with the timeout in place, all the files
-    REM  download. It's a .bat script issue, not an artifactory issue. 
-    REM  Or maybe it's a file system issue -- maybe how AWS provides 
-    REM  volume space for windows.  (doesn't happen on linux)
-    timeout /t 1
-
-    EXIT /B
 
 :EOF
