@@ -12,39 +12,91 @@
     Prerequisite  : PowerShell V2
 #>
 
-$JDKVER = "jdk1.8.0_51"
-$JAVAINSTALLER = "jdk-8u51-windows-x64.exe"
-
-cd c:\Users\Administrator\Downloads
-cmd.exe /c echo %CD%
-
-$USER = "accord"
-$PASS = "AP4GxDHU2f6EriLqry781wG6fy"
-$PAIR = "${USER}:${PASS}"
-$ARTF = "http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
-$bytes = [System.Text.Encoding]::ASCII.GetBytes($PAIR)
-$base64 = [System.Convert]::ToBase64String($bytes)
+$USER           = "accord"
+$PASS           = "AP4GxDHU2f6EriLqry781wG6fy"
+$PAIR           = "${USER}:${PASS}"
+$ARTF           = "http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
+$bytes          = [System.Text.Encoding]::ASCII.GetBytes($PAIR)
+$base64         = [System.Convert]::ToBase64String($bytes)
 $basicAuthValue = "Basic $base64"
-$headers = @{ Authorization = $basicAuthValue }
+$headers        = @{ Authorization = $basicAuthValue }
+$LOGFILE        = "ps1log.txt"
 
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/wget64.exe" -Headers $headers -Outfile wget64.exe
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/setup-win-jenkins.bat" -Headers $headers -Outfile setup-win-jenkins.bat
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/${JAVAINSTALLER}" -Headers $headers -Outfile ${JAVAINSTALLER}
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/cygwin-setup.exe" -Headers $headers -Outfile cygwin-setup.exe
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/getcygwin.bat" -Headers $headers -Outfile getcygwin.bat
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/Git.tar.zip" -Headers $headers -Outfile Git.tar.zip
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/gradle-2.6.tar" -Headers $headers -Outfile gradle-2.6.tar
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jenkins-1.624.zip" -Headers $headers -Outfile jenkins-1.624.zip
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/7z.tar" -Headers $headers -Outfile 7z.tar
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/ottoaccord.tar" -Headers $headers -Outfile ottoaccord.tar
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jnk-win-conf-archiver.sh" -Headers $headers -Outfile jnk-win-conf-archiver.sh
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/jnk-win-job-archiver.sh" -Headers $headers -Outfile jnk-win-job-archiver.sh
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/rmfile.sh" -Headers $headers -Outfile rmfile.sh
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/getfile.sh" -Headers $headers -Outfile getfile.sh
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/deployfile.sh" -Headers $headers -Outfile deployfile.sh
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/updatefile.sh" -Headers $headers -Outfile updatefile.sh
-Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/winjenk.scr" -Headers $headers -Outfile winjenk.scr
-Invoke-WebRequest -uri "${ARTF}/ext-tools/jenkins/jnk-win-conf.tar" -Headers $headers -Outfile jnk-win-conf.tar
-Invoke-WebRequest -uri "${ARTF}/ext-tools/jenkins/jnk-win-job.tar" -Headers $headers -Outfile jnk-win-job.tar
+$utilfiles = @( "jdk-8u51-windows-x64.exe", 
+	    "gradle-2.6.tar", 
+	    "jenkins-1.624.zip", 
+	    "wget64.exe", 
+	    "setup-win-jenkins.bat", 
+	    "cygwin-setup.exe", 
+	    "getcygwin.bat", 
+	    "Git.tar.zip", 
+	    "7z.tar", 
+	    "ottoaccord.tar", 
+	    "jnk-win-conf-archiver.sh", 
+	    "jnk-win-job-archiver.sh", 
+	    "rmfile.sh", 
+	    "getfile.sh", 
+	    "deployfile.sh", 
+	    "updatefile.sh", 
+	    "winjenk.scr")
+
+$jenkinsfiles = @(
+	    "jnk-win-conf.tar", 
+	    "jnk-win-job.tar")
+
+cd "C:\Users\Administrator\Downloads"
+pwd >> ${LOGFILE}    
+
+#----------------------------------------------------------
+#  Sometimes the files don't download on the first try...
+#  Retry up to 3 times...
+#----------------------------------------------------------
+$retries = 0
+do {
+    $retries += 1
+    echo "iteration $retries"
+
+    #------------------------------------
+    #  Try to download everything
+    #------------------------------------
+    foreach ($file in $utilfiles)    {
+	if (-not (test-path $file)) {
+	    echo "download: $file"
+            Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/${file}" -Headers ${headers} -Outfile ${file}
+	}
+    }
+    foreach ($file in $jenkinsfiles)    {
+	if (-not (test-path $file)) {
+	    echo "download: $file"
+            Invoke-WebRequest -uri "${ARTF}/ext-tools/jenkins/${file}" -Headers ${headers} -Outfile ${file}
+	}
+    }
+
+    #------------------------------------
+    #  Validate...
+    #------------------------------------
+    $downloadCount = $utilfiles.Count + $jenkinsfiles.Count
+    $downloadERR   = 0
+    foreach ($file in $utilfiles)    { if (-not (test-path $file)) { $downloadERR += 1} }
+    foreach ($file in $jenkinsfiles) { if (-not (test-path $file)) { $downloadERR += 1} }
+
+    #------------------------------------
+    #  Validate...
+    #------------------------------------
+    get-date >> ${LOGFILE}
+    echo "Total files to download:    ${downloadCount}" >> ${LOGFILE}
+    echo "Total files not downloaded: ${downloadERR}" >> ${LOGFILE}
+    echo ""
+
+} while ( $downloadErr -gt 0 -and $retries -lt 3 )
+
+if ($downloadERR -gt 0) {
+    echo "Giving up.  Could not download the following files: " >> ${LOGFILE}
+    foreach ($file in $utilfiles)    { if (-not (test-path $file)) { echo "$file"} } >> ${LOGFILE}
+    foreach ($file in $jenkinsfiles) { if (-not (test-path $file)) { echo "$file"} } >> ${LOGFILE}
+}
+
 cmd.exe /c '.\setup-win-jenkins.bat'
+tzutil.exe /s "Pacific Standard Time"
+
 </powershell>

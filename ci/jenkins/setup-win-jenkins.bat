@@ -44,7 +44,6 @@ SET ACCORD_HOME=C:\Accord
 ECHO Creating c:\Windows\Accord with unix tools >>%LOGFILE%
 MKDIR %ACCORD_HOME%
 MKDIR %ACCORD_HOME%\bin
-COPY wget64.exe %ACCORD_HOME%\bin
 
 echo JAVA >>%LOGFILE%
 SET JAVA_HOME=C:\Program Files\Java\%JDKVER%
@@ -79,8 +78,8 @@ REM  -- begin to build out the accord-specific tool directory
 REM  ---------------------------------------------------------------
 ECHO Copying tools to  %ACCORD_HOME%\bin  >>%LOGFILE%
 COPY *.sh  %ACCORD_HOME%\bin\
-COPY jenkins-win-archiver.sh  %ACCORD_HOME%\bin
 c:\cygwin\bin\chmod.exe +x /cygdrive/c/Accord/bin/*.sh
+COPY wget64.exe %ACCORD_HOME%\bin
 
 REM  ---------------------------------------------------------------
 REM  -- Install cygwin.  For this installation script, I think we
@@ -174,8 +173,10 @@ PUSHD "C:\Program Files (x86)\Jenkins"
     REM  ---------------------------------------------------------------
     ECHO Use 7z to untar the jobs  >>%LOGFILE%
     cd .\jobs
-    COPY "C:\Users\Administrator\Downloads\%JENKINSJOBTAR%" .
-    %ACCORD_HOME%\bin\7z.exe x %JENKINSJOBTAR% -y
+    ECHO Current directory is now: %CD%  >>%LOGFILE%
+    ECHO Will attempt to COPY "C:\Users\Administrator\Downloads\%JENKINSJOBTAR%" .  >>%LOGFILE%
+    COPY "C:\Users\Administrator\Downloads\%JENKINSJOBTAR%" . >>%LOGFILE% 2>&1
+    %ACCORD_HOME%\bin\7z.exe x %JENKINSJOBTAR% -y  >>%LOGFILE% 2>&1
     cd ..
 
     REM  ---------------------------------------------------------------
