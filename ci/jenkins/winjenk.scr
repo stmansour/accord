@@ -34,6 +34,7 @@ $utilfiles = @( "jdk-8u51-windows-x64.exe",
 	    "ottoaccord.tar", 
 	    "jnk-win-conf-archiver.sh", 
 	    "jnk-win-job-archiver.sh", 
+	    "qmaster.sh", 
 	    "rmfile.sh", 
 	    "getfile.sh", 
 	    "deployfile.sh", 
@@ -81,7 +82,7 @@ do {
     foreach ($file in $jenkinsfiles) { if (-not (test-path $file)) { $downloadERR += 1} }
 
     #------------------------------------
-    #  Validate...
+    #  Log status of the download
     #------------------------------------
     get-date >> ${LOGFILE}
     echo "Total files to download:    ${downloadCount}" >> ${LOGFILE}
@@ -96,7 +97,47 @@ if ($downloadERR -gt 0) {
     foreach ($file in $jenkinsfiles) { if (-not (test-path $file)) { echo "$file"} } >> ${LOGFILE}
 }
 
+#-----------------------------------------------------------------------------
+#  setup work is done in a .bat script.  At some point we may want to rewrite
+#  this code in PowerShell
+#-----------------------------------------------------------------------------
 cmd.exe /c '.\setup-win-jenkins.bat'
+
+#-----------------------------------------------------------------------------
+#  Let's set the time zone to West Coast time. UTC is 8 hours off from SJC
+#-----------------------------------------------------------------------------
 tzutil.exe /s "Pacific Standard Time"
+
+#-----------------------------------------------------------------------------
+#  Enable powershell scripts to run on this machine after first login
+#-----------------------------------------------------------------------------
+Set-ExecutionPolicy RemoteSigned -Force
+
+#-----------------------------------------------------------------------------
+#  Disable the infuriating IE enhanced security settings that prohibit IE
+#  from opening any website.
+#-----------------------------------------------------------------------------
+function Disable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0 -Force
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0 -Force
+    Stop-Process -Name Explorer -Force
+    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
+}
+function Enable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 1 -Force
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 1 -Force
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been enabled." -ForegroundColor Green
+}
+function Disable-UserAccessControl {
+    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000 -Force
+    Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green
+}
+Disable-UserAccessControl
+Disable-InternetExplorerESC
 
 </powershell>

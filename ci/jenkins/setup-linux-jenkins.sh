@@ -6,9 +6,6 @@
 # every command.
 #
 # To debug, the logfile produced by Amazon is in /var/log/cloud-init-output.log
-#
-# You MUST set this environment
-#
 
 USR=accord
 PASS=AP4GxDHU2f6EriLqry781wG6fy
@@ -34,6 +31,9 @@ yum -y update
 # install Open Java 1.8, git, md5sum
 #
 yum -y install java-1.8.0-openjdk-devel.x86_64
+# yum -y install golang-pkg-bin-linux-amd64.x86_64
+# yum -y install golang-cover.x86_64
+# yum -y install golang-vet.x86_64
 yum -y install git-all.noarch
 yum -y install isomd5sum.x86_64
 
@@ -46,6 +46,12 @@ mv ${GRADLEVER} /usr/local
 ln -s /usr/local/${GRADLEVER}/bin/gradle /usr/bin/gradle
 rm ${GRADLEVER}-bin.zip
 
+#  Install go 1.51.  The yum installs that amazon provides are
+#  (or at least were) for version 1.42. I've already made use
+#  of 1.5 features.
+wget https://storage.googleapis.com/golang/go1.5.1.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.5.1.linux-amd64.tar.gz
+
 #
 #  add user 'jenkins' before installing jenkins. The default installation
 #  creates the 'jenkins' user, but sets the shell to /bin/zero.
@@ -55,6 +61,15 @@ rm ${GRADLEVER}-bin.zip
 #
 adduser -d /var/lib/jenkins jenkins
 
+#  update everybody's path so go will work nicely
+chmod 0666 ~ec2-user/.bash_profile
+echo "GOROOT=/usr/local/go" >> ~ec2-user/.bash_profile
+echo 'PATH=$PATH:$GOROOT/bin' >> ~ec2-user/.bash_profile
+chmod 0644 ~ec2-user/.bash_profile
+chmod 0666 ~jenkins/.bash_profile
+echo "GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
+echo 'PATH=$PATH:$GOROOT/bin' >> ~jenkins/.bash_profile
+chmod 0644 ~jenkins/.bash_profile
 #
 #  install jenkins
 #
