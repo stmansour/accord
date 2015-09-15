@@ -1,0 +1,37 @@
+<powershell>
+<#
+.SYNOPSIS
+    This script sets up an AWS windows 2012 instance to be a Jenkins
+    build machine for Accord.
+.DESCRIPTION
+    The first section loads a number of files to install from Accord's
+    Artifactory server. Then the second section installs these components.
+.NOTES
+    File Name     : winjenk.scr  (since it is loaded with the aws command)
+    Author        : sman@stevemansour.com
+    Prerequisite  : PowerShell V2
+#>
+
+$USER           = "accord"
+$PASS           = "AP4GxDHU2f6EriLqry781wG6fy"
+$PAIR           = "${USER}:${PASS}"
+$ARTF           = "http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
+$bytes          = [System.Text.Encoding]::ASCII.GetBytes($PAIR)
+$base64         = [System.Convert]::ToBase64String($bytes)
+$basicAuthValue = "Basic $base64"
+$headers        = @{ Authorization = $basicAuthValue }
+$LOGFILE        = "ps1log.txt"
+
+$utilfiles = @( "jdk-8u51-windows-x64.exe", 
+	    "wget64.exe", 
+	    "cygwin-setup.exe", 
+	    "getcygwin.bat", 
+	    "7z.tar", 
+	    "ottoaccord.tar", 
+	    "qmaster.sh", 
+	    "rmfile.sh", 
+	    "getfile.sh", 
+	    "deployfile.sh", 
+	    "updatefile.sh", 
+        "qmaster.scr1",
+        "qmaster.scr2",
