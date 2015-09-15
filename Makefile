@@ -1,5 +1,9 @@
-all: install package publish
+all: clean install package publish
 	@echo "*** COMPLETE ***"
+
+clean:
+	cd ./devtools;make clean
+	@echo "*** CLEAN COMPLETE in accord ***"
 
 install:	
 	cd ./ci;make install

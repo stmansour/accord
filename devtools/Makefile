@@ -1,3 +1,6 @@
+clean:
+	cd ./publicdns;make clean
+
 install:
 	cd ./tools;make install
 	cd ./publicdns;make install
