@@ -9,6 +9,7 @@ install:
 	cd ./ci;make install
 	cd ./cloud;make install
 	cd ./devtools;make install
+	cd ./testtools;make install
 	@echo "*** INSTALL COMPLETE in accord ***"
 
 package:
