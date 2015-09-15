@@ -61,15 +61,6 @@ tar -C /usr/local -xzf go1.5.1.linux-amd64.tar.gz
 #
 adduser -d /var/lib/jenkins jenkins
 
-#  update everybody's path so go will work nicely
-chmod 0666 ~ec2-user/.bash_profile
-echo "GOROOT=/usr/local/go" >> ~ec2-user/.bash_profile
-echo 'PATH=$PATH:$GOROOT/bin' >> ~ec2-user/.bash_profile
-chmod 0644 ~ec2-user/.bash_profile
-chmod 0666 ~jenkins/.bash_profile
-echo "GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
-echo 'PATH=$PATH:$GOROOT/bin' >> ~jenkins/.bash_profile
-chmod 0644 ~jenkins/.bash_profile
 #
 #  install jenkins
 #
@@ -138,6 +129,22 @@ tar xvzf ~/accord-linux.tar.gz
 echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
 tar xvzf ~/ottoaccord.tar.gz
+
+#  update everybody's path so go will work nicely
+chmod 0666 ~ec2-user/.bash_profile
+echo "GOROOT=/usr/local/go" >> ~ec2-user/.bash_profile
+echo "ACCORD=/usr/local/accord" >> ~ec2-user/.bash_profile
+echo "export GOROOT" >> ~ec2-user/.bash_profile
+echo "export ACCORD" >> ~ec2-user/.bash_profile
+echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~ec2-user/.bash_profile
+chmod 0644 ~ec2-user/.bash_profile
+chmod 0666 ~jenkins/.bash_profile
+echo "GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
+echo "export GOROOT" >> ~jenkins/.bash_profile
+echo "export ACCORD" >> ~jenkins/.bash_profile
+echo "ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
+echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~jenkins/.bash_profile
+chmod 0644 ~jenkins/.bash_profile
 
 echo "Sleeping for 30 seconds to give Jenkins plenty of time to"
 echo "complete its initial startup."
