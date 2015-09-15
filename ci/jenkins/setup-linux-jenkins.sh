@@ -171,3 +171,9 @@ service jenkins start
 cd ~
 rm ./*.gz
 
+# set the timezone to Pacific
+cd /etc
+mv localtime localtime.old
+ln -s /usr/share/zoneinfo/US/Pacific localtime
+cd
+
