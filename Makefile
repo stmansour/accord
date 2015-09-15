@@ -15,8 +15,8 @@ package:
 	cd ./ci;make package
 	cd ./cloud;make package
 	cd ./devtools;make package
-	cd /usr/local;tar cvf accord-linux.tar accord
-	mv /usr/local/accord-linux.tar .
+	cd /usr/local;tar cvf /tmp/accord-linux.tar accord
+	mv /tmp/accord-linux.tar .
 	gzip -f accord-linux.tar
 	@echo "accord-linux.tar.gz ready for publishing"
 	@echo "*** PACKAGE COMPLETE in accord ***"
