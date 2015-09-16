@@ -131,18 +131,17 @@ cd ~jenkins
 tar xvzf ~/ottoaccord.tar.gz
 
 #  update everybody's path so go will work nicely
+GOROOT=/usr/local/go
+ACCORD=/usr/local/accord
 chmod 0666 ~ec2-user/.bash_profile
-echo "GOROOT=/usr/local/go" >> ~ec2-user/.bash_profile
-echo "ACCORD=/usr/local/accord" >> ~ec2-user/.bash_profile
-echo "export GOROOT" >> ~ec2-user/.bash_profile
-echo "export ACCORD" >> ~ec2-user/.bash_profile
+echo "export GOROOT=/usr/local/go" >> ~ec2-user/.bash_profile
+echo "export ACCORD=/usr/local/accord" >> ~ec2-user/.bash_profile
 echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~ec2-user/.bash_profile
+echo "alias jenk='sudo su - jenkins'"
 chmod 0644 ~ec2-user/.bash_profile
 chmod 0666 ~jenkins/.bash_profile
-echo "GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
-echo "export GOROOT" >> ~jenkins/.bash_profile
-echo "export ACCORD" >> ~jenkins/.bash_profile
-echo "ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
+echo "export GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
+echo "export ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
 echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~jenkins/.bash_profile
 chmod 0644 ~jenkins/.bash_profile
 
@@ -176,4 +175,5 @@ cd /etc
 mv localtime localtime.old
 ln -s /usr/share/zoneinfo/US/Pacific localtime
 cd
+
 
