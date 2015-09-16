@@ -11,7 +11,7 @@
 #
 
 LOGFILE=qmaster.log
-cd ~
+cd ~ec2-user/
 echo "qmaster log" >>${LOGFILE} 2>&1
 date >> ${LOGFILE}
 
@@ -46,8 +46,9 @@ yum -y install isomd5sum.x86_64
 artf_get ext-tools/utils accord-linux.tar.gz
 echo "Installing /usr/local/accord" >>${LOGFILE}
 cd /usr/local
-tar xvzf ~/accord-linux.tar.gz
-cd ~
+tar xvzf ~ec2-user/accord-linux.tar.gz
+chown -R ec2-user:ec2-user accord
+cd ~ec2-user/
 
 #----------------------------------------------
 #  Now download the requested apps...

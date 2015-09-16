@@ -5,9 +5,9 @@ HOST=localhost
 PORT=8080
 
 usage() {
-    echo "Usage:   clientsim -n instname -u instanceUid -s state [-h host] [-p port] [-i]"
+    echo "Usage:   clientsim.sh -n instname -u instanceUid -s state [-h host] [-p port] [-i]"
     echo "                                state: INIT|READY|TEST|DONE"
-    echo "Example: clientsim -p 8123 -n MainTestInstance -u prog1 -s READY"
+    echo "Example: clientsim.sh -p 8123 -n MainTestInstance -u prog1 -s READY"
 }
 while getopts ":n:u:s:p:ih:" o; do
     case "${o}" in
