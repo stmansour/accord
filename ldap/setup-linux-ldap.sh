@@ -10,8 +10,8 @@ BDBFILE=db5
 BDB_MAJ_MIN=5.3
 BDBVER=${BDB_MAJ_MIN}.28
 
-M=$(grep CPPFLAGS ~/.bashrc-local)
-if [ "x" == "x$M ]; then
+M=$(grep CPPFLAGS ~/.bash_profile)
+if [ "x" == "x$M" ]; then
 	# the configure program in ldap needs to be able to find
 	# the version of Berkeley DB we installed. 
 	# Note:  openldap will only work with bdb versions > 4.4 and
@@ -23,9 +23,10 @@ export LD_LIBRARY_PATH=/usr/local/BerkeleyDB.${BDB_MAJ_MIN}/lib
 EOF
 
 	echo "Sorry for the interruption..."
-	echo "Please issue the following command then rerun this script:"
+	echo "Please issue the following command, the script will restart:"
 	echo " "
-	echo ". ~/.bash_profile"
+	echo ". ~/.bash_profile;./setup-linux-ldap.sh"
+	exit 1
 fi
 
 sudo yum -y install gcc44.x86_64
