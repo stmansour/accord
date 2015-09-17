@@ -22,11 +22,15 @@ export LDFLAGS=-L/usr/local/BerkeleyDB.${BDB_MAJ_MIN}/lib
 export LD_LIBRARY_PATH=/usr/local/BerkeleyDB.${BDB_MAJ_MIN}/lib
 EOF
 
-	echo "Sorry for the interruption..."
-	echo "Please issue the following command, the script will restart:"
-	echo " "
-	echo ". ~/.bash_profile;./setup-linux-ldap.sh"
-	exit 1
+cat << ZZEOF
+
+Sorry for the interruption... but please issue the following 
+command, the script will restart:
+ 
+. ~/.bash_profile;./setup-linux-ldap.sh
+
+ZZEOF
+exit 1
 fi
 
 sudo yum -y install gcc44.x86_64
