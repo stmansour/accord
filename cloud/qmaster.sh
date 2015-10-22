@@ -34,6 +34,16 @@ artf_get() {
 }
 
 #--------------------------------------------------------------
+#  function to install mysql
+#--------------------------------------------------------------
+install_mysql() {
+	echo "installing mysql"
+	yum -y install mysql55-server.x86_64
+	service mysqld start
+	echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
+}
+
+#--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
 #--------------------------------------------------------------
 yum -y update

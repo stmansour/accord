@@ -31,9 +31,12 @@ yum -y update
 # install Open Java 1.8, git, md5sum
 #
 yum -y install java-1.8.0-openjdk-devel.x86_64
+
+# golang was out of date when I tried these commands...
 # yum -y install golang-pkg-bin-linux-amd64.x86_64
 # yum -y install golang-cover.x86_64
 # yum -y install golang-vet.x86_64
+
 yum -y install git-all.noarch
 yum -y install isomd5sum.x86_64
 
@@ -139,15 +142,34 @@ echo "export ACCORD=/usr/local/accord" >> ~ec2-user/.bash_profile
 echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~ec2-user/.bash_profile
 echo "alias jenk='sudo su - jenkins'"
 chmod 0644 ~ec2-user/.bash_profile
+
 chmod 0666 ~jenkins/.bash_profile
 echo "export GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
+echo 'export GOHOME=~/tmp' >> ~jenkins/.bash_profile
+echo 'export GOPATH=/var/lib/jenkins/tmp' >> ~jenkins/.bash_profile
 echo "export ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
-echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~jenkins/.bash_profile
+echo 'PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools' >> ~jenkins/.bash_profile
 chmod 0644 ~jenkins/.bash_profile
 
-echo "Sleeping for 30 seconds to give Jenkins plenty of time to"
+# build the latest golint and install...
+cat >jenkcmd.sh << EOF
+#!/bin/bash
+source ~/.bash_profile
+cd
+mkdir tmp
+cd tmp
+go get -u github.com/golang/lint/golint
+go get github.com/go-sql-driver/mysql
+cd src/github.com/golang/lint/golint
+go build
+EOF
+chmod +x jenkcmd.sh
+su - jenkins -c ./jenkcmd.sh 
+cp tmp/src/github.com/golang/lint/golint/golint /usr/local/go/bin/
+
+echo "Sleeping for 10 seconds to give Jenkins plenty of time to"
 echo "complete its initial startup."
-sleep 30
+sleep 10
 
 echo "OK, it should be done by now. Let's shut it down so that"
 echo "we can install our configuration"
@@ -167,13 +189,15 @@ chown -R jenkins:jenkins ./*
 echo "Configuration in place. Restarting"
 service jenkins start
 
-cd ~
-rm ./*.gz
-
-# set the timezone to Pacific
+echo "set the timezone to Pacific"
 cd /etc
 mv localtime localtime.old
 ln -s /usr/share/zoneinfo/US/Pacific localtime
-cd
 
+echo "installing mysql"
+yum -y install mysql55-server.x86_64
+service mysqld start
+echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
 
+cd ~
+rm ./*.gz
