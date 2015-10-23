@@ -9,7 +9,7 @@
 # The logfile produced by Amazon for this script is in:
 # /var/log/cloud-init-output.log
 #
-
+ACCORDHOME=/usr/local/accord
 LOGFILE=qmaster.log
 cd ~ec2-user/
 echo "qmaster log" >>${LOGFILE} 2>&1
@@ -45,8 +45,8 @@ install_mysql() {
 
 restoredb() {
 	pushd /tmp
-	getfile.sh getfile.sh ext-tools/testing/$1
-	restoredb.sh $1	
+	${ACCORDHOME}/bin/getfile.sh getfile.sh ext-tools/testing/$1
+	${ACCORDHOME}/testtools/restoredb.sh $1	
 	popd
 }
 #--------------------------------------------------------------
