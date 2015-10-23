@@ -43,6 +43,12 @@ install_mysql() {
 	echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
 }
 
+restoredb() {
+	pushd /tmp
+	getfile.sh getfile.sh ext-tools/testing/$1
+	restoredb.sh $1	
+	popd
+}
 #--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
 #--------------------------------------------------------------
