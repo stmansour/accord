@@ -1,0 +1,112 @@
+{
+    "EnvName": "Multiple-Instances Test Environment",
+    "UhuraURL": "http://ec2-54-174-120-207.compute-1.amazonaws.com:8100/",
+    "UhuraPort": 8100,
+    "ThisInst": 0,
+    "State": 4,
+    "Instances": [
+        {
+            "InstName": "TGO-0",
+            "OS": "Linux",
+            "HostName": "ec2-52-91-113-156.compute-1.amazonaws.com",
+            "InstAwsID": "i-7c3a7bc3",
+            "Resources": {
+                "MySql": false
+            },
+            "Apps": [
+                {
+                    "UID": "tgo0",
+                    "Name": "tgo",
+                    "Repo": "jenkins-snapshot/tgo/latest",
+                    "UPort": 8102,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                },
+                {
+                    "UID": "echosrv",
+                    "Name": "echosrv",
+                    "Repo": "jenkins-snapshot/echosrv/latest",
+                    "UPort": 8200,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                }
+            ]
+        },
+        {
+            "InstName": "TGO-1",
+            "OS": "Linux",
+            "HostName": "ec2-52-91-115-144.compute-1.amazonaws.com",
+            "InstAwsID": "i-7e3a7bc1",
+            "Resources": {
+                "MySql": false
+            },
+            "Apps": [
+                {
+                    "UID": "tgo0",
+                    "Name": "tgo",
+                    "Repo": "jenkins-snapshot/tgo/latest",
+                    "UPort": 8102,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                },
+                {
+                    "UID": "test1",
+                    "Name": "echosrv_test",
+                    "Repo": "jenkins-snapshot/echosrv_test/latest",
+                    "UPort": 8103,
+                    "IsTest": true,
+                    "State": 4,
+                    "RunCmd": "activate.sh -h {TGO-0.HostName} -p {TGO-0.echosrv.UPort} test",
+                    "KVs": [
+                        {
+                            "Key": "testresults",
+                            "Val": "PASS"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "InstName": "TGO-2",
+            "OS": "Linux",
+            "HostName": "ec2-52-91-64-122.compute-1.amazonaws.com",
+            "InstAwsID": "i-b03a7b0f",
+            "Resources": {
+                "MySql": false
+            },
+            "Apps": [
+                {
+                    "UID": "tgo0",
+                    "Name": "tgo",
+                    "Repo": "jenkins-snapshot/tgo/latest",
+                    "UPort": 8102,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                },
+                {
+                    "UID": "test2",
+                    "Name": "echosrv_test",
+                    "Repo": "jenkins-snapshot/echosrv_test/latest",
+                    "UPort": 8103,
+                    "IsTest": true,
+                    "State": 4,
+                    "RunCmd": "activate.sh -h {TGO-0.HostName} -p {TGO-0.echosrv.UPort} test",
+                    "KVs": [
+                        {
+                            "Key": "testresults",
+                            "Val": "PASS"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

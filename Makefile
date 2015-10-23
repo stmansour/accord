@@ -3,6 +3,7 @@ all: clean install package publish
 
 clean:
 	cd ./devtools;make clean
+	cd ./testtools;make clean
 	@echo "*** CLEAN COMPLETE in accord ***"
 
 install:	

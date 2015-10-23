@@ -1,0 +1,45 @@
+{
+    "EnvName": "MySql Resource Test",
+    "UhuraURL": "http://ec2-54-174-120-207.compute-1.amazonaws.com:8100/",
+    "UhuraPort": 8100,
+    "ThisInst": 0,
+    "State": 4,
+    "Instances": [
+        {
+            "InstName": "mysql0",
+            "OS": "Linux",
+            "HostName": "ec2-54-172-244-55.compute-1.amazonaws.com",
+            "InstAwsID": "i-d53c7701",
+            "Resources": {
+                "MySql": true
+            },
+            "Apps": [
+                {
+                    "UID": "t01",
+                    "Name": "tgo",
+                    "Repo": "jenkins-snapshot/tgo/latest",
+                    "UPort": 8102,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                },
+                {
+                    "UID": "test01",
+                    "Name": "mysqltest",
+                    "Repo": "jenkins-snapshot/mysqltest/latest",
+                    "UPort": 8103,
+                    "IsTest": true,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": [
+                        {
+                            "Key": "testresults",
+                            "Val": "PASS"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

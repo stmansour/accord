@@ -1,0 +1,55 @@
+{
+    "EnvName": "Multiple-Instances Test Environment",
+    "UhuraURL": "http://ec2-54-174-120-207.compute-1.amazonaws.com:8100/",
+    "UhuraPort": 8100,
+    "ThisInst": 0,
+    "State": 4,
+    "Instances": [
+        {
+            "InstName": "TGO-0",
+            "OS": "Linux",
+            "HostName": "ec2-54-172-220-142.compute-1.amazonaws.com",
+            "InstAwsID": "i-1d216ac9",
+            "Resources": {
+                "MySql": false
+            },
+            "Apps": [
+                {
+                    "UID": "tgo0",
+                    "Name": "tgo",
+                    "Repo": "jenkins-snapshot/tgo/latest",
+                    "UPort": 8102,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                },
+                {
+                    "UID": "echosrv",
+                    "Name": "echosrv",
+                    "Repo": "jenkins-snapshot/echosrv/latest",
+                    "UPort": 8103,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": null
+                },
+                {
+                    "UID": "echosrv_test",
+                    "Name": "echosrv_test",
+                    "Repo": "jenkins-snapshot/echosrv_test/latest",
+                    "UPort": 8104,
+                    "IsTest": true,
+                    "State": 4,
+                    "RunCmd": "",
+                    "KVs": [
+                        {
+                            "Key": "testresults",
+                            "Val": "PASS"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
