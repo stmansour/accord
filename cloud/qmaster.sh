@@ -44,10 +44,19 @@ install_mysql() {
 }
 
 restoredb() {
+	echo "IN RESTOREDB"
 	pushd /tmp
+	DIR=$(pwd)
+	echo "CURRENT DIRECTORY = ${DIR}"
+	echo "${ACCORDHOME}/bin/getfile.sh getfile.sh ext-tools/testing/$1"
 	${ACCORDHOME}/bin/getfile.sh getfile.sh ext-tools/testing/$1
-	${ACCORDHOME}/testtools/restoredb.sh $1	
+	echo "Get file $1 completed"
+	echo "${ACCORDHOME}/testtools/restoredb.sh /tmp/$1"
+	${ACCORDHOME}/testtools/restoredb.sh /tmp/$1
+	echo "restoredb.sh completed"
 	popd
+	DIR=$(pwd)	
+	echo "popd completed, dir = ${DIR}"
 }
 #--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
