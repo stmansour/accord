@@ -8,8 +8,8 @@
 # To debug, the logfile produced by Amazon is in /var/log/cloud-init-output.log
 
 USR=accord
-PASS=AP4GxDHU2f6EriLqry781wG6fy
-ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
+PASS=APaNK2WYcVEbSoSeqa21CLPk74
+ART=http://ec2-52-91-167-94.compute-1.amazonaws.com/artifactory
 GRADLEVER=gradle-2.6
 JENKINS_CONFIG_TAR=jnk-lnx-conf.tar
 JENKINS_JOBS_TAR=jnk-lnx-jobs.tar
@@ -120,7 +120,8 @@ service nginx start
 chkconfig nginx on
 
 cd ~
-artf_get ext-tools/utils ottoaccord.tar.gz
+# artf_get ext-tools/utils ottoaccord.tar.gz
+artf_get ext-tools/utils ottoaccord.tar
 artf_get ext-tools/utils accord-linux.tar.gz
 artf_get ext-tools/jenkins ${JENKINS_CONFIG_TAR}
 artf_get ext-tools/jenkins ${JENKINS_JOBS_TAR}

@@ -11,11 +11,11 @@ package:
 	@echo "*** PACKAGE COMPLETE in cloud ***"
 
 publish:
-	updatefile.sh ext-tools/utils cr_win_jenkins.sh
-	updatefile.sh ext-tools/utils cr_win_testenv.sh
-	updatefile.sh ext-tools/utils cr_linux_jenkins.sh
-	updatefile.sh ext-tools/utils cr_linux_testenv.sh
-	updatefile.sh ext-tools/utils qmaster.sh
-	updatefile.sh ext-tools/utils qmaster.scr1
-	updatefile.sh ext-tools/utils qmaster.scr2
+	#updatefile.sh ext-tools/utils cr_win_jenkins.sh
+	#updatefile.sh ext-tools/utils cr_win_testenv.sh
+	#updatefile.sh ext-tools/utils cr_linux_jenkins.sh
+	#updatefile.sh ext-tools/utils cr_linux_testenv.sh
+	#updatefile.sh ext-tools/utils qmaster.sh
+	#updatefile.sh ext-tools/utils qmaster.scr1
+	#updatefile.sh ext-tools/utils qmaster.scr2
 	@echo "*** PUBLISH COMPLETE in cloud ***"

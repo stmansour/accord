@@ -19,8 +19,8 @@ date >> ${LOGFILE}
 #  Our credentials to work with Artifactory
 #--------------------------------------------------------------
 USR=accord
-PASS=AP4GxDHU2f6EriLqry781wG6fy
-ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
+PASS=APaNK2WYcVEbSoSeqa21CLPk74
+ART=http://ec2-52-91-167-94.compute-1.amazonaws.com/artifactory
 
 EXTERNAL_HOST_NAME=$( curl http://169.254.169.254/latest/meta-data/public-hostname )
 ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}

@@ -13,12 +13,16 @@ if [ -z "$1" ]; then
     usage
 fi
 
-targetPath="http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
+#targetPath="http://ec2-52-91-167-94.compute-1.amazonaws.com/artifactory"
+APATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
+ARTIF=${APATH}/artifactory.url
+ARTPSW=${APATH}/credp
+targetPath=$(cat ${ARTIF})
+artp=$(cat ${ARTPSW})
+artu="accord"
 
-echo "reading from $targetPath"
+echo "reading from ${targetPath}"
 remoteFile="$1"
-artifactoryUser="accord"
-artifactoryPassword="AP4GxDHU2f6EriLqry781wG6fy"
 
-echo "wget --user=$artifactoryUser --password=$artifactoryPassword $targetPath/$remoteFile"
-wget --user=$artifactoryUser --password=$artifactoryPassword $targetPath/"$remoteFile"
+echo "wget --user=${artu} --password=${artp} ${targetPath}/${remoteFile}"
+wget --user=${artu} --password=$artp ${targetPath}/"${remoteFile}"

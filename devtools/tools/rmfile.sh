@@ -13,10 +13,13 @@ if [ -z "$1" ]; then
     usage
 fi
 
-artAddr="http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
+APATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
+ARTIF=${APATH}/artifactory.url
+ARTPSW=${APATH}/credp
+targetPath=$(cat ${ARTIF})
+artu="accord"
+artp=$(cat ${ARTPSW})
 target="$1"
-artifactoryUser="user"
-artifactoryPassword="AP6k6bTdGdXg3Njs"
 
-echo "INFO: Deleting $artAddr/$target"
-curl -i -X DELETE -u $artifactoryUser:$artifactoryPassword "$artAddr/$target"
+echo "INFO: Deleting ${targetPath}/${target}"
+curl -i -X DELETE -u ${artu}:${artp} "${targetPath}/${target}"

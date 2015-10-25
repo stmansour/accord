@@ -17,10 +17,10 @@ artf_update () {
 }
 
 artf_update ext-tools/utils getcygwin.bat
-artf_update ext-tools/utils setup-win-jenkins.bat
-artf_update ext-tools/utils setup-linux-jenkins.sh
-artf_update ext-tools/utils ottoaccord.tar.gz
-artf_update ext-tools/utils winjenk.scr
+# artf_update ext-tools/utils setup-win-jenkins.bat
+# artf_update ext-tools/utils setup-linux-jenkins.sh
+# artf_update ext-tools/utils ottoaccord.tar.gz
+# artf_update ext-tools/utils winjenk.scr
 
 if [ ! -d ./tmp ]; then
     mkdir ./tmp
