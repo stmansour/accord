@@ -32,8 +32,8 @@ REM  -- These are the credentials we'll need to access the
 REM  -- Artifactory repository...
 REM  ---------------------------------------------------------------
 SET USR=accord
-SET PASS=AP4GxDHU2f6EriLqry781wG6fy
-SET ART=http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory
+SET PASS=AP3wHZhcQQCvkC4GVCCZzPcqe3L
+SET ART=http://ec2-52-91-201-195.compute-1.amazonaws.com/artifactory
 
 REM  ---------------------------------------------------------------
 REM  -- Start off by creating the directory where we can put the tools

@@ -8,8 +8,8 @@
 # To debug, the logfile produced by Amazon is in /var/log/cloud-init-output.log
 
 USR=accord
-PASS=APaNK2WYcVEbSoSeqa21CLPk74
-ART=http://ec2-52-91-167-94.compute-1.amazonaws.com/artifactory
+PASS=AP3wHZhcQQCvkC4GVCCZzPcqe3L
+ART=http://ec2-52-91-201-195.compute-1.amazonaws.com/artifactory
 GRADLEVER=gradle-2.6
 JENKINS_CONFIG_TAR=jnk-lnx-conf.tar
 JENKINS_JOBS_TAR=jnk-lnx-jobs.tar
@@ -132,7 +132,7 @@ tar xvzf ~/accord-linux.tar.gz
 
 echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
-tar xvzf ~/ottoaccord.tar.gz
+tar xvf ~/ottoaccord.tar
 
 #  update everybody's path so go will work nicely
 GOROOT=/usr/local/go

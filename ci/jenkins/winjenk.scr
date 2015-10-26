@@ -13,9 +13,9 @@
 #>
 
 $USER           = "accord"
-$PASS           = "AP4GxDHU2f6EriLqry781wG6fy"
+$PASS           = "AP3wHZhcQQCvkC4GVCCZzPcqe3L"
 $PAIR           = "${USER}:${PASS}"
-$ARTF           = "http://ec2-52-6-164-191.compute-1.amazonaws.com/artifactory"
+$ARTF           = "http://ec2-52-91-201-195.compute-1.amazonaws.com/artifactory"
 $bytes          = [System.Text.Encoding]::ASCII.GetBytes($PAIR)
 $base64         = [System.Convert]::ToBase64String($bytes)
 $basicAuthValue = "Basic $base64"
