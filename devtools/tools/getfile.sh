@@ -13,7 +13,6 @@ if [ -z "$1" ]; then
     usage
 fi
 
-#targetPath="http://ec2-52-91-167-94.compute-1.amazonaws.com/artifactory"
 APATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 ARTIF=${APATH}/artifactory.url
 ARTPSW=${APATH}/credp
