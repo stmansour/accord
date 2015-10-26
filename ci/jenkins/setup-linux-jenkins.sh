@@ -68,8 +68,10 @@ adduser -d /var/lib/jenkins jenkins
 #  install jenkins
 #
 wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 yum -y install jenkins
+
+
 service jenkins start
 chkconfig jenkins on
 
