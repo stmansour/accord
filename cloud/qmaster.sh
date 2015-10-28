@@ -14,6 +14,8 @@ LOGFILE=qmaster.log
 cd ~ec2-user/
 echo "qmaster log" >>${LOGFILE} 2>&1
 date >> ${LOGFILE}
+echo -n "User: " >> ${LOGFILE}
+$(whoami) >> ${LOGFILE}
 
 #--------------------------------------------------------------
 #  Our credentials to work with Artifactory
@@ -40,7 +42,7 @@ install_mysql() {
 	echo "installing mysql"
 	yum -y install mysql55-server.x86_64
 	service mysqld start
-	echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
+	echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON accord.* TO 'ec2-user'@'localhost';"  | mysql
 }
 
 restoredb() {

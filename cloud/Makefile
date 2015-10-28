@@ -5,6 +5,7 @@ install:
 	cp cr_win_jenkins.sh cr_linux_jenkins.sh /usr/local/accord/bin
 	cp cr_win_testenv.sh cr_linux_testenv.sh /usr/local/accord/bin
 	cp qmaster.sh qmaster.scr? /usr/local/accord/bin
+	cp cr_win_pow.sh pow.scr /usr/local/accord/bin
 	@echo "*** INSTALL COMPLETE in cloud ***"
 
 package:
