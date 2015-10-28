@@ -1,0 +1,110 @@
+<powershell>
+<#
+.SYNOPSIS
+    This script sets up an AWS windows 2012 instance to be a Jenkins
+    build machine for Accord.
+.DESCRIPTION
+    The first section loads a number of files to install from Accord's
+    Artifactory server. Then the second section installs these components.
+.NOTES
+    File Name     : winjenk.scr  (since it is loaded with the aws command)
+    Author        : sman@stevemansour.com
+    Prerequisite  : PowerShell V2
+#>
+
+$USER           = "accord"
+$PASS           = "AP3wHZhcQQCvkC4GVCCZzPcqe3L"
+$PAIR           = "${USER}:${PASS}"
+$ARTF           = "http://ec2-52-91-201-195.compute-1.amazonaws.com/artifactory"
+$bytes          = [System.Text.Encoding]::ASCII.GetBytes($PAIR)
+$base64         = [System.Convert]::ToBase64String($bytes)
+$basicAuthValue = "Basic $base64"
+$headers        = @{ Authorization = $basicAuthValue }
+$LOGFILE        = "ps1log.txt"
+
+$utilfiles = @( "cygwin-setup.exe", 
+	    "ottoaccord.tar")
+
+cd "C:\Users\Administrator\Downloads"
+pwd >> ${LOGFILE}    
+
+#----------------------------------------------------------
+#  Sometimes the files don't download on the first try...
+#  Retry up to 3 times...
+#----------------------------------------------------------
+$retries = 0
+do {
+    $retries += 1
+    echo "iteration $retries"
+
+    #-----------------------------------------------------------
+    #  Try to download everything. Note that 
+    #  we skip downloading the file if it's already there...
+    #-----------------------------------------------------------
+    foreach ($file in $utilfiles)    {
+        if (-not (test-path $file)) {
+            echo "download: $file"
+            Invoke-WebRequest -uri "${ARTF}/ext-tools/utils/${file}" -Headers ${headers} -Outfile ${file}
+        }
+    }
+
+    #------------------------------------
+    #  Validate...
+    #------------------------------------
+    $downloadCount = $utilfiles.Count + $jenkinsfiles.Count
+    $downloadERR   = 0
+    foreach ($file in $utilfiles)    { if (-not (test-path $file)) { $downloadERR += 1} }
+
+    #------------------------------------
+    #  Log status of the download
+    #------------------------------------
+    get-date >> ${LOGFILE}
+    echo "Total files to download:    ${downloadCount}" >> ${LOGFILE}
+    echo "Total files not downloaded: ${downloadERR}" >> ${LOGFILE}
+    echo ""
+
+} while ( $downloadErr -gt 0 -and $retries -lt 3 )
+
+if ($downloadERR -gt 0) {
+    echo "Giving up.  Could not download the following files: " >> ${LOGFILE}
+    foreach ($file in $utilfiles)    { if (-not (test-path $file)) { echo "$file"} } >> ${LOGFILE}
+}
+
+#-----------------------------------------------------------------------------
+#  Let's set the time zone to West Coast time. UTC is 8 hours off from SJC
+#-----------------------------------------------------------------------------
+tzutil.exe /s "Pacific Standard Time"
+
+#-----------------------------------------------------------------------------
+#  Enable powershell scripts to run on this machine after first login
+#-----------------------------------------------------------------------------
+Set-ExecutionPolicy RemoteSigned -Force
+
+#-----------------------------------------------------------------------------
+#  Disable the infuriating IE enhanced security settings that prohibit IE
+#  from opening any website.
+#-----------------------------------------------------------------------------
+function Disable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0 -Force
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0 -Force
+    Stop-Process -Name Explorer -Force
+    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
+}
+function Enable-InternetExplorerESC {
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 1 -Force
+    Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 1 -Force
+    Stop-Process -Name Explorer
+    Write-Host "IE Enhanced Security Configuration (ESC) has been enabled." -ForegroundColor Green
+}
+function Disable-UserAccessControl {
+    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000 -Force
+    Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green
+}
+Disable-UserAccessControl
+Disable-InternetExplorerESC
+
+</powershell>
