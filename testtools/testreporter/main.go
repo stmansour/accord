@@ -72,6 +72,8 @@ var UEnv *EnvDescr
 
 type testRpt struct {
 	envDescr string
+	urlReq   string
+	report   bool
 }
 
 // TestReporter is the program data struct
@@ -92,6 +94,10 @@ func ulog(format string, a ...interface{}) {
 
 // BuildReport reads the json result file from uhura and generates a summary report
 func BuildReport() {
+	if !TestReporter.report {
+		return
+	}
+
 	var results string
 	var tests int
 	var pass int
@@ -121,6 +127,26 @@ func BuildReport() {
 	fmt.Printf("Total tests fail: %d\n", fail)
 }
 
+// PrintURL looks at the Instance and App supplied on the command line
+// and prints an http url to the host and port
+func PrintURL() {
+	if len(TestReporter.urlReq) > 0 {
+		// format is like "phone,phonebook"
+		sa := strings.Split(TestReporter.urlReq, ",")
+		sa[0] = strings.ToLower(strings.Trim(sa[0], " \r\n"))
+		sa[1] = strings.ToLower(strings.Trim(sa[1], " \r\n"))
+		for i := 0; i < len(UEnv.Instances); i++ {
+			if sa[0] == strings.ToLower(UEnv.Instances[i].InstName) {
+				for j := 0; j < len(UEnv.Instances[i].Apps); j++ {
+					if sa[1] == UEnv.Instances[i].Apps[j].Name {
+						fmt.Printf("http://%s:%d/\n", UEnv.Instances[i].HostName, UEnv.Instances[i].Apps[j].UPort)
+						return
+					}
+				}
+			}
+		}
+	}
+}
 func loadEnvDescriptor(fname string) {
 	content, e := ioutil.ReadFile(fname)
 	if e != nil {
@@ -139,12 +165,17 @@ func loadEnvDescriptor(fname string) {
 
 func processCommandLine() {
 	fPtr := flag.String("f", "EnvShutdownStatus.json", "file name to process")
+	uPtr := flag.String("u", "", "supply: InstanceName,AppName  -- it prints the URL to the host:port")
+	uRpt := flag.Bool("r", false, "Generates test results report")
 	flag.Parse()
 	TestReporter.envDescr = *fPtr
+	TestReporter.urlReq = *uPtr
+	TestReporter.report = *uRpt
 }
 
 func main() {
 	processCommandLine()
 	loadEnvDescriptor(TestReporter.envDescr)
 	BuildReport()
+	PrintURL()
 }

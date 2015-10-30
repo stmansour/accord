@@ -1,0 +1,48 @@
+{
+    "EnvName": "Phonebook Sandbox",
+    "UhuraURL": "http://ip-172-31-56-33:8251/",
+    "UhuraPort": 8100,
+    "ThisInst": 0,
+    "State": 4,
+    "Instances": [
+        {
+            "InstName": "phone",
+            "OS": "Linux",
+            "HostName": "ec2-52-91-34-203.compute-1.amazonaws.com",
+            "InstAwsID": "i-58d0e2e7",
+            "Resources": {
+                "MySQL": true
+            },
+            "Apps": [
+                {
+                    "UID": "t01",
+                    "Name": "tgo",
+                    "Repo": "jenkins-snapshot/tgo/latest",
+                    "UPort": 8102,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "AppRes": {
+                        "RestoreMySQLdb": "",
+                        "DBname": ""
+                    },
+                    "KVs": null
+                },
+                {
+                    "UID": "pb01",
+                    "Name": "phonebook",
+                    "Repo": "jenkins-snapshot/phonebook/latest",
+                    "UPort": 8250,
+                    "IsTest": false,
+                    "State": 4,
+                    "RunCmd": "",
+                    "AppRes": {
+                        "RestoreMySQLdb": "testdb.sql",
+                        "DBname": "accord"
+                    },
+                    "KVs": null
+                }
+            ]
+        }
+    ]
+}
