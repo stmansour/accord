@@ -1,3 +1,5 @@
+// This program is only needed on the jenkins machine.
+
 package main
 
 // This package is devoted to handling the environment descriptor
