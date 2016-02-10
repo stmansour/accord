@@ -43,6 +43,9 @@ install_mysql() {
 	yum -y install mysql55-server.x86_64
 	service mysqld start
 	echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON accord.* TO 'ec2-user'@'localhost';"  | mysql
+
+	# 09-Feb-2016 - ensure that mysql comes back up on reboot...
+	chkconfig mysqld on
 }
 
 restoredb() {
