@@ -62,7 +62,7 @@ for arg do
 		if [ "${MODE}" != "" ]; then
 			chmod ${MODE} ${rfbase}
 		fi
-		rm ${rfbase}.save
+		rm -f ${rfbase}.save
 	else
 		echo "failed to download requested file"
 		if [ -e ${rfbase}.save ]; then
