@@ -63,6 +63,7 @@ restoredb() {
 	DIR=$(pwd)	
 	echo "popd completed, dir = ${DIR}"
 }
+
 #--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
 #--------------------------------------------------------------

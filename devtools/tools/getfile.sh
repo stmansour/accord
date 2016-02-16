@@ -56,7 +56,7 @@ for arg do
 		echo "wget --user=${artu} --password=${artp} ${targetPath}/${remoteFile}"
 		WGETOPTS=
 	fi
-	wget ${WGETOPTS} --user=${artu} --password=$artp ${targetPath}/"${remoteFile}" >/tmp/getfile.out
+	wget ${WGETOPTS} --user=${artu} --password=$artp ${targetPath}/"${remoteFile}" >/dev/null
 
 	if [ -e ${rfbase} ]; then
 		if [ "${MODE}" != "" ]; then
