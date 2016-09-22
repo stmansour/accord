@@ -22,7 +22,7 @@ $(whoami) >> ${LOGFILE}
 #--------------------------------------------------------------
 USR=accord
 PASS=AP3wHZhcQQCvkC4GVCCZzPcqe3L
-ART=http://ec2-52-91-201-195.compute-1.amazonaws.com/artifactory
+ART=http://ec2-54-227-227-112.compute-1.amazonaws.com/artifactory
 
 EXTERNAL_HOST_NAME=$( curl http://169.254.169.254/latest/meta-data/public-hostname )
 ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
