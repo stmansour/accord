@@ -38,7 +38,7 @@ artf_get() {
 #--------------------------------------------------------------
 #  function to install mysql
 #--------------------------------------------------------------
-install_mysql() {
+install_mysql_old() {
 	echo "installing mysql"
 	yum -y install mysql55-server.x86_64
 	service mysqld start
@@ -46,6 +46,49 @@ install_mysql() {
 
 	# 09-Feb-2016 - ensure that mysql comes back up on reboot...
 	chkconfig mysqld on
+}
+
+#---------------------------------------------------------------------------------------------
+# This script will download mysql version as specified in `MYSQL_RELEASE`
+# Origin of this script: https://gist.github.com/rsudip90/99c0bb04d6e2157b4cc12aea5ed0eb36
+# Refer to origin for comments.  Unnecessary lines have been removed, including comments.
+# Guidance: https://dev.mysql.com/doc/refman/5.7/en/linux-installation-yum-repo.html
+#---------------------------------------------------------------------------------------------
+install_mysql() {
+	MYSQL_RELEASE=mysql57-community-release-el6-11.noarch.rpm
+	MYSQL_RELEASE_URL="https://dev.mysql.com/get/${MYSQL_RELEASE}"
+	MYSQL_SERVICE=mysqld
+	MYSQL_LOG_FILE=/var/log/${MYSQL_SERVICE}.log
+	exitError() {
+	    echo "Error: $1" >&2
+	    exit 1
+	}
+	echo "Downloading mysql release package from specified url: $MYSQL_RELEASE_URL..."
+	wget -O $MYSQL_RELEASE $MYSQL_RELEASE_URL || exitError "Could not fetch required release of mysql: ($MYSQL_RELEASE_URL)"
+	echo "Adding mysql yum repo in the system repo list..."
+	yum localinstall -y $MYSQL_RELEASE || exitError "Unable to install mysql release ($MYSQL_RELEASE) locally with yum"
+	echo "Checking that mysql yum repo has been added successfully..."
+	yum repolist enabled | grep "mysql.*-community.*" || exitError "Mysql release package ($MYSQL_RELEASE) has not been added in repolist"
+	echo "Checking that at least one subrepository is enabled for one release..."
+	yum repolist enabled | grep mysql || exitError "At least one subrepository should be enabled for one release series at any time."
+	echo "Installing mysql-community-server..."
+	yum install -y mysql-community-server || exitError "Unable to install mysql mysql-community-server"
+	if cat /etc/my.cnf | grep "sql-mode"; then
+	    echo "sql-mode already has been set !!!"
+	else
+	    echo "Setting up sql-mode in /etc/my.cnf..."
+	    echo 'sql-mode="ALLOW_INVALID_DATES"' >> /etc/my.cnf || exitError "Unable to set sql-mode in /etc/my.cnf file"
+	    echo "sql-mode has been set to ALLOW_INVALID_DATES in /etc/my.cnf"
+	fi
+	echo "Starting mysql service..."
+	service $MYSQL_SERVICE start || exitError "Could not start mysql service"
+	echo "Checking status of mysql service..."
+	service $MYSQL_SERVICE status || exitError "Mysql service is not running"
+	echo "Setting up mysql as in startup service..."
+	chkconfig mysqld on
+	echo "extracting password from log file: ${MYSQL_LOG_FILE}..."
+	MYSQL_PWD=$(grep -oP '(?<=A temporary password is generated for root@localhost: )[^ ]+' ${MYSQL_LOG_FILE})
+	echo "Auto generated password is: ${MYSQL_PWD}" > /home/ec2-user/mysql_pass.txt
 }
 
 restoredb() {
