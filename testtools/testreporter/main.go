@@ -69,7 +69,7 @@ type EnvDescr struct {
 	Instances []InstDescr // the array of InstDescr describing each instance in the env.
 }
 
-//  The main data object for this module
+// UEnv is the global data object for this module
 var UEnv *EnvDescr
 
 type testRpt struct {
