@@ -89,6 +89,39 @@ install_mysql() {
 	echo "extracting password from log file: ${MYSQL_LOG_FILE}..."
 	MYSQL_PWD=$(grep -oP '(?<=A temporary password is generated for root@localhost: )[^ ]+' ${MYSQL_LOG_FILE})
 	echo "Auto generated password is: ${MYSQL_PWD}" > /home/ec2-user/mysql_pass.txt
+	# install expect program to interact with mysql program
+	yum install -y expect
+
+	MYSQL_UPDATE=$(expect -c "
+
+	set timeout 5
+	spawn mysql -u root -p
+
+	expect \"Enter password: \"
+	send \"${MYSQL_PWD}\r\"
+
+	expect \"mysql>\"
+	send \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Admin1234!';\r\"
+
+	expect \"mysql>\"
+	send \"uninstall plugin validate_password;\r\"
+
+	expect \"mysql>\"
+	send \"ALTER USER 'root'@'localhost' IDENTIFIED BY '';\r\"
+
+	expect \"mysql>\"
+	send \"CREATE USER 'ec2-user'@'localhost';\r\"
+
+	expect \"mysql>\"
+	send \"CREATE DATABASE accord; use accord; GRANT ALL PRIVILEGES ON accord.* TO 'ec2-user'@'localhost';\r\"
+
+	expect \"mysql>\"
+	send \"quit;\r\"
+
+	expect eof
+	")
+
+	echo "$MYSQL_UPDATE"
 }
 
 restoredb() {
