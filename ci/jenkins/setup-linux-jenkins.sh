@@ -233,6 +233,7 @@ alias ff='find . -name'
 EOF
 chmod 0644 ~ec2-user/.bash_profile
 
+
 chmod 0666 ~jenkins/.bash_profile
 echo "export GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
 echo 'export GOHOME=~/tmp' >> ~jenkins/.bash_profile
@@ -244,6 +245,22 @@ alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
 alias ff='find . -name'
+alias goa='cd ~/Documents/src/accord'
+alias gom='cd ~/Documents/src/go/src/mojo'
+alias goms='cd ~/Documents/src/go/src/mojo/mojosrv'
+alias gog='cd ~/Documents/src/go'
+alias gogo='cd ~/Documents/src/go'
+alias gou='cd ~/Documents/src/go/src/uhura'
+alias gor='cd ~/Documents/src/go/src/rentroll'
+alias gout='cd ~/Documents/src/go/src/uhura/test'
+alias got='cd ~/Documents/src/go/src/tgo'
+alias god='cd ~/Documents/src/go/src/dir'
+alias gop='cd ~/Documents/src/go/src/phonebook'
+alias goq='cd ~/Documents/src/go/src/tws'
+alias gos='cd ~/Documents/src/go/src/session'
+alias gow='cd ~/Documents/src/go/src/webdoc'
+alias gojnk='cd ~/Documents/src/accord/ci/jenkins'
+alias gotbl='cd ~/Documents/src/go/src/gotable'
 EOF
 chmod 0644 ~jenkins/.bash_profile
 
@@ -290,8 +307,6 @@ mv localtime localtime.old
 ln -s /usr/share/zoneinfo/US/Pacific localtime
 
 echo "installing mysql"
-# yum -y install mysql55-server.x86_64
-# service mysqld start
 install_mysql
 echo "use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
 
