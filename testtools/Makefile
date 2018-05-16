@@ -1,16 +1,26 @@
+top=..
+DIRS=testreporter
+THISDIR=testtools
+
+
+testtools:
+	for dir in $(DIRS); do make -C $$dir ;done
+
 all: clean test
-	@echo "*** COMPLETED in tools **"
+	@echo "*** CLEAN COMPLETED in ${THISDIR} **"
 
 clean:
-	cd testreporter;make clean
-	@echo "*** CLEAN COMPLETED in tools ***"
+	for dir in $(DIRS); do make -C $$dir clean;done
+	@echo "*** CLEAN COMPLETED in ${THISDIR} ***"
 
 test:
-	cd testreporter;make test
-	@echo "*** TEST COMPLETED in tools ***"
+	for dir in $(DIRS); do make -C $$dir test;done
+	@echo "*** TEST COMPLETED in ${THISDIR} ***"
 
 install:
-	cd testreporter;make install
-	if [ ! -d /usr/local/accord/testtools ]; then mkdir /usr/local/accord/testtools; fi
-	cp *.sh /usr/local/accord/testtools/
-	@echo "*** INSTALL COMPLETED in tools ***"
+	for dir in $(DIRS); do make -C $$dir install;done
+	@echo "*** INSTALL COMPLETED in ${THISDIR} ***"
+
+package:
+	for dir in $(DIRS); do make -C $$dir package;done
+	@echo "*** PACKAGE COMPLETED in ${THISDIR} ***"

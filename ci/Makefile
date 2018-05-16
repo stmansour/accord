@@ -1,14 +1,18 @@
+DIRS=artifactory jenkins
+
 install:
-	cd ./artifactory;make install
-	cd ./jenkins;make install
+	for dir in $(DIRS); do make -C $$dir install;done
 	@echo "*** INSTALL COMPLETE in ci ***"
 
 package:
-	cd ./artifactory;make package
-	cd ./jenkins;make package
+	for dir in $(DIRS); do make -C $$dir package;done
 	@echo "*** INSTALL COMPLETE in ci ***"
 
 publish:
-	cd ./artifactory;make publish
-	cd ./jenkins;make publish
+	for dir in $(DIRS); do make -C $$dir publish;done
 	@echo "*** INSTALL COMPLETE in ci ***"
+
+clean:
+	for dir in $(DIRS); do make -C $$dir clean;done
+	@echo "*** CLEAN COMPLETE in ci ***"
+

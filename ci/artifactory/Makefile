@@ -1,8 +1,12 @@
+THISDIR="artifactory"
 install:
-	@echo "nothing to do"
+	@echo "install complete in ${THISDIR}"
 
 package:
-	@echo "nothing to do"
+	@echo "package complete in ${THISDIR}"
 
 publish:
-	@echo "nothing to do"
+	@echo "publish complete in ${THISDIR}"
+
+clean:
+	@echo "clean complete in ${THISDIR}"

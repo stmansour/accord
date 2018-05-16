@@ -1,31 +1,31 @@
-install:	
-	cd ./ci;make install
-	cd ./cloud;make install
-	cd ./devtools;make install
-	cd ./testtools;make install
-	@echo "*** INSTALL COMPLETE in accord ***"
+DIRS=ci cloud devtools testtools
+THISDIR=accord
 
-all: clean install package publish
+accord:
+	for dir in $(DIRS); do make -C $$dir ; done
+
+install:	
+	for dir in $(DIRS); do make -C $$dir install;done
+	@echo "*** INSTALL COMPLETE in ${THISDIR} ***"
+
+all: clean install package
 	@echo "*** COMPLETE ***"
 
 clean:
+	rm -rf tmp
+	for dir in $(DIRS); do make -C $$dir clean;done
 	cd ./devtools;make clean
 	cd ./testtools;make clean
-	@echo "*** CLEAN COMPLETE in accord ***"
+	@echo "*** CLEAN COMPLETE in ${THISDIR} ***"
 
 package:
-	cd ./ci;make package
-	cd ./cloud;make package
-	cd ./devtools;make package
-	cd /usr/local;tar cvf /tmp/accord-linux.tar accord
-	mv /tmp/accord-linux.tar .
-	gzip -f accord-linux.tar
-	@echo "accord-linux.tar.gz ready for publishing"
-	@echo "*** PACKAGE COMPLETE in accord ***"
+	rm -rf tmp
+	mkdir -p tmp/accord/bin
+	mkdir -p tmp/accord/testtools
+	for dir in $(DIRS); do make -C $$dir package;done
+	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"
 
 publish:
-	cd ./ci;make publish
-	cd ./cloud;make publish
-	cd ./devtools;make publish
-	updatefile.sh ext-tools/utils accord-linux.tar.gz
-	@echo "*** PACKAGE COMPLETE in accord ***"
+	cd tmp;tar cvf accord-linux.tar accord;gzip -f accord-linux.tar
+	cd tmp;updatefile.sh ext-tools/utils accord-linux.tar.gz
+	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"

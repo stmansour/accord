@@ -1,18 +1,27 @@
+TOP=../..
+THISDIR=tools
+INSTALLDIR=/usr/local/accord/bin
+PACKAGEDIR=${TOP}/tmp/accord/bin
+
+FILES=artifactory.url credp deployfile.sh getfile.sh jnk-lnx-conf-archiver.sh jnk-lnx-job-archiver.sh publicdns getfile.sh rmfile.sh updatefile.sh
+
+tools:
+	@echo "*** COMPLETE in ${THISDIR} ***"
+
 all: install package publish
 	@echo "*** COMPLETE ***"
 
 install:
-	cp *.sh credp artifactory.url /usr/local/accord/bin
-	@echo "*** INSTALL COMPLETE in tools ***"
+	for f in $(FILES); do cp $$f ${INSTALLDIR};done
+	@echo "*** INSTALL COMPLETE in ${THISDIR} ***"
 
 package:
-	@echo "*** PACKAGE COMPLETE in tools ***"
+	mkdir -p ${PACKAGEDIR}
+	for f in $(FILES); do cp $$f ${PACKAGEDIR};done
+	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"
 
 publish:
-	#updatefile.sh ext-tools/utils jnk-win-conf-archiver.sh
-	#updatefile.sh ext-tools/utils jnk-win-job-archiver.sh
-	#updatefile.sh ext-tools/utils getfile.sh
-	#updatefile.sh ext-tools/utils deployfile.sh
-	#updatefile.sh ext-tools/utils updatefile.sh
-	#updatefile.sh ext-tools/utils rmfile.sh
-	@echo "*** PUBLISH COMPLETE in tools ***"
+	@echo "*** PUBLISH COMPLETE in ${THISDIR} ***"
+
+clean:
+	@echo "*** CLEAN COMPLETE in ${THISDIR} ***"

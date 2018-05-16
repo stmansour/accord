@@ -1,22 +1,27 @@
+TOP=..
+INSTALLDIR=/usr/local/accord/bin
+PACKAGEDIR=${TOP}/tmp/accord/bin
+THISDIR=cloud
+
+clean:
+	@echo "*** CLEAN COMPLETE in ${THISDIR} ***"
+
 all: install package publish
-	@echo "*** COMPLETE in cloud ***"
+	@echo "*** COMPLETE in ${THISDIR} ***"
 
 install:
-	cp cr_win_jenkins.sh cr_linux_jenkins.sh /usr/local/accord/bin
-	cp cr_win_testenv.sh cr_linux_testenv.sh /usr/local/accord/bin
-	cp qmaster.sh qmaster.scr? /usr/local/accord/bin
-	cp cr_win_pow.sh pow.scr /usr/local/accord/bin
-	@echo "*** INSTALL COMPLETE in cloud ***"
+	cp cr_win_jenkins.sh cr_linux_jenkins.sh ${INSTALLDIR}
+	cp cr_win_testenv.sh cr_linux_testenv.sh ${INSTALLDIR}
+	cp qmaster.sh qmaster.scr? ${INSTALLDIR}
+	cp cr_win_pow.sh pow.scr ${INSTALLDIR}
+	@echo "*** INSTALL COMPLETE in ${THISDIR} ***"
 
 package:
-	@echo "*** PACKAGE COMPLETE in cloud ***"
+	mkdir -p ${PACKAGEDIR}
+	cp cr_linux_jenkins.sh ${PACKAGEDIR}
+	cp cr_linux_testenv.sh ${PACKAGEDIR}
+	cp qmaster.sh ${PACKAGEDIR}
+	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"
 
 publish:
-	#updatefile.sh ext-tools/utils cr_win_jenkins.sh
-	#updatefile.sh ext-tools/utils cr_win_testenv.sh
-	#updatefile.sh ext-tools/utils cr_linux_jenkins.sh
-	#updatefile.sh ext-tools/utils cr_linux_testenv.sh
-	#updatefile.sh ext-tools/utils qmaster.sh
-	#updatefile.sh ext-tools/utils qmaster.scr1
-	#updatefile.sh ext-tools/utils qmaster.scr2
-	@echo "*** PUBLISH COMPLETE in cloud ***"
+	@echo "*** PUBLISH COMPLETE in ${THISDIR} ***"

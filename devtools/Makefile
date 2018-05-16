@@ -1,13 +1,23 @@
+DIRS=tools
+THISDIR=devtools
+TOP=..
+
+devtools:
+	for dir in $(DIRS); do make -C $$dir ;done
+	@echo "*** COMPLETE in ${THISDIR} ***"
+
 clean:
+	for dir in $(DIRS); do make -C $$dir clean;done
+	@echo "*** CLEAN COMPLETE in ${THISDIR} ***"
 
 install:
-	cd ./tools;make install
-	@echo "*** INSTALL COMPLETE in devtools ***"
+	for dir in $(DIRS); do make -C $$dir install;done
+	@echo "*** INSTALL COMPLETE in ${THISDIR} ***"
 
 package:
-	cd ./tools;make package
-	@echo "*** PACKAGE COMPLETE in devtools ***"
+	for dir in $(DIRS); do make -C $$dir package;done
+	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"
 
 publish:
-	cd ./tools;make publish
-	@echo "*** RELEASE COMPLETE in devtools ***"
+	for dir in $(DIRS); do make -C $$dir publish;done
+	@echo "*** PUBLISH COMPLETE in ${THISDIR} ***"

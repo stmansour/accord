@@ -1,16 +1,24 @@
-BINLOC = /usr/local/accord/bin
+TOP=..
+INSTALLDIR = /usr/local/accord/bin
+PACKAGEDIR=${TOP}/accord/bin
+THISDIR="jenkins"
 
-all: install package publish
+clean:
+	@echo "CLEAN COMPLETE in ${THISDIR}"
+
+all: clean install package publish
 	@echo "*** COMPLETED ***"
 
 install:
-	if [ ! -d $(BINLOC) ]; then mkdir -p $(BINLOC); fi
-	cp setup-linux-jenkins.sh setup-win-jenkins.bat winjenk.scr $(BINLOC)
-	@echo "*** INSTALL COMPLETE in jenkins ***"
+	mkdir -p ${INSTALLDIR}
+	if [ ! -d $(INSTALLDIR) ]; then mkdir -p $(INSTALLDIR); fi
+	cp setup-linux-jenkins.sh $(INSTALLDIR)
+	@echo "*** INSTALL COMPLETE in ${THISDIR} ***"
 
 package:
-	@echo "*** PACKAGE COMPLETE in jenkins ***"
+	mkdir -p ${PACKAGEDIR}
+	cp setup-linux-jenkins.sh $(PACKAGEDIR)
+	@echo "*** PACKAGE COMPLETE in ${PACKAGEDIR} ***"
 
 publish:
-	./publish-scripts.sh
-	@echo "*** PUBLISH COMPLETE in jenkins ***"
+	@echo "*** PUBLISH COMPLETE in ${THISDIR} ***"
