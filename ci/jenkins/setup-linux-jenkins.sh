@@ -240,7 +240,7 @@ echo 'export GOHOME=~/tmp' >> ~jenkins/.bash_profile
 echo 'export GOPATH=/var/lib/jenkins/tmp' >> ~jenkins/.bash_profile
 echo "export ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
 echo 'PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools' >> ~jenkins/.bash_profile
-cat >> ~ec2-user/.bash_profile <<EOF
+cat >> ~jenkins/.bash_profile <<EOF
 alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
