@@ -1,3 +1,10 @@
+install:	
+	cd ./ci;make install
+	cd ./cloud;make install
+	cd ./devtools;make install
+	cd ./testtools;make install
+	@echo "*** INSTALL COMPLETE in accord ***"
+
 all: clean install package publish
 	@echo "*** COMPLETE ***"
 
@@ -5,13 +12,6 @@ clean:
 	cd ./devtools;make clean
 	cd ./testtools;make clean
 	@echo "*** CLEAN COMPLETE in accord ***"
-
-install:	
-	cd ./ci;make install
-	cd ./cloud;make install
-	cd ./devtools;make install
-	cd ./testtools;make install
-	@echo "*** INSTALL COMPLETE in accord ***"
 
 package:
 	cd ./ci;make package

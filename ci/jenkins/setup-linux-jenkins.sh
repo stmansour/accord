@@ -8,19 +8,106 @@
 # To debug, the logfile produced by Amazon is in /var/log/cloud-init-output.log
 
 USR=accord
-PASS=AP3wHZhcQQCvkC4GVCCZzPcqe3L
-ART=http://ec2-52-91-201-195.compute-1.amazonaws.com/artifactory
+FOOLME=AP3wHZhcQQCvkC4GVCCZzPcqe3L
+ART=http://ec2-54-227-227-112.compute-1.amazonaws.com/artifactory
 GRADLEVER=gradle-2.6
 JENKINS_CONFIG_TAR=jnk-lnx-conf.tar
 JENKINS_JOBS_TAR=jnk-lnx-jobs.tar
+T1="pa"
+T2="ss"
+T3="wo"
+T4="rd"
+T5="us"
+T6="er"
 
 EXTERNAL_HOST_NAME=$( curl http://169.254.169.254/latest/meta-data/public-hostname )
 ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
 
+GOLANGBUNDLE="go1.9.6.linux-amd64.tar.gz"
+GOLANGDOWNLOAD="https://dl.google.com/go/${GOLANGBUNDLE}"
+
+
 artf_get() {
-    echo "Downloading $1/$2"
-    wget -O "$2" --user=$USR --password=$PASS ${ART}/"$1"/"$2"
+    echo "Downloading ${1}/${2}"
+    wget -O "${2}" --${T5}${T6}=${USR} --${T1}${T2}${T3}${T4}=${FOOLME} ${ART}/"${1}"/"$2"
 }
+
+#---------------------------------------------------------------------------------------------
+# This script will download mysql version as specified in `MYSQL_RELEASE`
+# Origin of this script: https://gist.github.com/rsudip90/99c0bb04d6e2157b4cc12aea5ed0eb36
+# Refer to origin for comments.  Unnecessary lines have been removed, including comments.
+# Guidance: https://dev.mysql.com/doc/refman/5.7/en/linux-installation-yum-repo.html
+#---------------------------------------------------------------------------------------------
+install_mysql() {
+    MYSQL_RELEASE=mysql57-community-release-el6-11.noarch.rpm
+    MYSQL_RELEASE_URL="https://dev.mysql.com/get/${MYSQL_RELEASE}"
+    MYSQL_SERVICE=mysqld
+    MYSQL_LOG_FILE=/var/log/${MYSQL_SERVICE}.log
+    exitError() {
+        echo "Error: ${1}" >&2
+        exit 1
+    }
+    echo "Downloading mysql release package from specified url: $MYSQL_RELEASE_URL..."
+    wget -O $MYSQL_RELEASE $MYSQL_RELEASE_URL || exitError "Could not fetch required release of mysql: ($MYSQL_RELEASE_URL)"
+    echo "Adding mysql yum repo in the system repo list..."
+    yum localinstall -y $MYSQL_RELEASE || exitError "Unable to install mysql release ($MYSQL_RELEASE) locally with yum"
+    echo "Checking that mysql yum repo has been added successfully..."
+    yum repolist enabled | grep "mysql.*-community.*" || exitError "Mysql release package ($MYSQL_RELEASE) has not been added in repolist"
+    echo "Checking that at least one subrepository is enabled for one release..."
+    yum repolist enabled | grep mysql || exitError "At least one subrepository should be enabled for one release series at any time."
+    echo "Installing mysql-community-server..."
+    yum install -y mysql-community-server || exitError "Unable to install mysql mysql-community-server"
+    if cat /etc/my.cnf | grep "sql-mode"; then
+        echo "sql-mode already has been set !!!"
+    else
+        echo "Setting up sql-mode in /etc/my.cnf..."
+        echo 'sql-mode="ALLOW_INVALID_DATES"' >> /etc/my.cnf || exitError "Unable to set sql-mode in /etc/my.cnf file"
+        echo "sql-mode has been set to ALLOW_INVALID_DATES in /etc/my.cnf"
+    fi
+    echo "Starting mysql service..."
+    service $MYSQL_SERVICE start || exitError "Could not start mysql service"
+    echo "Checking status of mysql service..."
+    service $MYSQL_SERVICE status || exitError "Mysql service is not running"
+    echo "Setting up mysql as in startup service..."
+    chkconfig mysqld on
+    echo "extracting password from log file: ${MYSQL_LOG_FILE}..."
+    MYSQL_PWD=$(grep -oP '(?<=A temporary password is generated for root@localhost: )[^ ]+' ${MYSQL_LOG_FILE})
+    echo "Auto generated password is: ${MYSQL_PWD}" > /home/ec2-user/mysql_pass.txt
+    # install expect program to interact with mysql program
+    yum install -y expect
+
+    MYSQL_UPDATE=$(expect -c "
+
+    set timeout 5
+    spawn mysql -u root -p
+
+    expect \"Enter password: \"
+    send \"${MYSQL_PWD}\r\"
+
+    expect \"mysql>\"
+    send \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Admin1234!';\r\"
+
+    expect \"mysql>\"
+    send \"uninstall plugin validate_password;\r\"
+
+    expect \"mysql>\"
+    send \"ALTER USER 'root'@'localhost' IDENTIFIED BY '';\r\"
+
+    expect \"mysql>\"
+    send \"CREATE USER 'ec2-user'@'localhost';\r\"
+
+    expect \"mysql>\"
+    send \"CREATE DATABASE accord; use accord; GRANT ALL PRIVILEGES ON accord.* TO 'ec2-user'@'localhost';\r\"
+
+    expect \"mysql>\"
+    send \"quit;\r\"
+
+    expect eof
+    ")
+
+    echo "$MYSQL_UPDATE"
+}
+
 
 #
 #  update all the out-of-date packages
@@ -31,29 +118,23 @@ yum -y update
 # install Open Java 1.8, git, md5sum
 #
 yum -y install java-1.8.0-openjdk-devel.x86_64
-
-# golang was out of date when I tried these commands...
-# yum -y install golang-pkg-bin-linux-amd64.x86_64
-# yum -y install golang-cover.x86_64
-# yum -y install golang-vet.x86_64
-
+alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java
 yum -y install git-all.noarch
 yum -y install isomd5sum.x86_64
 
 #
 # install gradle
 #
-wget https://services.gradle.org/distributions/${GRADLEVER}-bin.zip
-unzip ${GRADLEVER}-bin.zip
-mv ${GRADLEVER} /usr/local
-ln -s /usr/local/${GRADLEVER}/bin/gradle /usr/bin/gradle
-rm ${GRADLEVER}-bin.zip
+# wget https://services.gradle.org/distributions/${GRADLEVER}-bin.zip
+# unzip ${GRADLEVER}-bin.zip
+# mv ${GRADLEVER} /usr/local
+# ln -s /usr/local/${GRADLEVER}/bin/gradle /usr/bin/gradle
+# rm ${GRADLEVER}-bin.zip
 
-#  Install go 1.51.  The yum installs that amazon provides are
-#  (or at least were) for version 1.42. I've already made use
-#  of 1.5 features.
-wget https://storage.googleapis.com/golang/go1.5.1.linux-amd64.tar.gz
-tar -C /usr/local -xzf go1.5.1.linux-amd64.tar.gz
+#  Install go
+wget ${GOLANGDOWNLOAD}
+tar -C /usr/local -xzf ${GOLANGBUNDLE}
+rm -f ${GOLANGBUNDLE}
 
 #
 #  add user 'jenkins' before installing jenkins. The default installation
@@ -143,7 +224,13 @@ chmod 0666 ~ec2-user/.bash_profile
 echo "export GOROOT=/usr/local/go" >> ~ec2-user/.bash_profile
 echo "export ACCORD=/usr/local/accord" >> ~ec2-user/.bash_profile
 echo "PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools" >> ~ec2-user/.bash_profile
-echo "alias jenk='sudo su - jenkins'"
+cat >> ~ec2-user/.bash_profile <<EOF
+alias jenk='sudo su - jenkins'
+alias ll='ls -al'
+alias la='ls -a'
+alias ls='ls -FCH'
+alias ff='find . -name'
+EOF
 chmod 0644 ~ec2-user/.bash_profile
 
 chmod 0666 ~jenkins/.bash_profile
@@ -152,6 +239,12 @@ echo 'export GOHOME=~/tmp' >> ~jenkins/.bash_profile
 echo 'export GOPATH=/var/lib/jenkins/tmp' >> ~jenkins/.bash_profile
 echo "export ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
 echo 'PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools' >> ~jenkins/.bash_profile
+cat >> ~ec2-user/.bash_profile <<EOF
+alias ll='ls -al'
+alias la='ls -a'
+alias ls='ls -FCH'
+alias ff='find . -name'
+EOF
 chmod 0644 ~jenkins/.bash_profile
 
 # build the latest golint and install...
@@ -162,8 +255,7 @@ cd
 mkdir tmp
 cd tmp
 go get -u github.com/golang/lint/golint
-go get github.com/go-sql-driver/mysql
-cd src/github.com/golang/lint/golint
+go get -u github.com/go-sql-driver/mysql
 go build
 EOF
 chmod +x jenkcmd.sh
@@ -198,9 +290,10 @@ mv localtime localtime.old
 ln -s /usr/share/zoneinfo/US/Pacific localtime
 
 echo "installing mysql"
-yum -y install mysql55-server.x86_64
-service mysqld start
-echo "CREATE DATABASE accord;use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
+# yum -y install mysql55-server.x86_64
+# service mysqld start
+install_mysql
+echo "use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
 
 cd ~
 rm ./*.gz

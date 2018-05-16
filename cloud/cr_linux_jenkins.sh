@@ -3,6 +3,7 @@
 #  The server is configured with the last known backup of the running Linux Jenkins server.
 #  The jobs from the last backup of the Linux Jenkins server are also restored.
 
+AMI="ami-14c5486b"
 MAXINSTANCES=20
 instances=1
 ask=1
@@ -23,13 +24,13 @@ if [ $# -gt 0 ]; then
 		exit 1
 		;;
 	    *)
-		echo "Just enter yes or no or Y or n or something..."
+		echo "Just enter yes or no..."
 		;;
 	esac
     done
 fi
 pushd /usr/local/accord/bin
 echo "Creating ${instances} instances..."
-aws ec2 run-instances --output json --image-id ami-1ecae776 --count ${instances} --instance-type t2.micro --key-name smanAWS1  --security-groups Linux-Jenkins-CI  --user-data file://setup-linux-jenkins.sh > new-linux-jenkins-instance.json
+aws ec2 run-instances --output json --image-id ${AMI} --count ${instances} --instance-type t2.micro --key-name smanAWS1  --security-groups Linux-Jenkins-CI  --user-data file://setup-linux-jenkins.sh > new-linux-jenkins-instance.json
 popd
 date
