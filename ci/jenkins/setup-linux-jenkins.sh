@@ -205,11 +205,11 @@ artf_get ext-tools/jenkins ${JENKINS_JOBS_TAR}
 
 echo "Installing /usr/local/accord"
 cd /usr/local
-tar xvzf ~/accord-linux.tar.gz
+tar xzf ~/accord-linux.tar.gz
 
 echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
-tar xvf ~/ottoaccord.tar
+tar xf ~/ottoaccord.tar
 
 #------------------------------------------------------------------------------
 #  Initialize user's files so that things will work nicely.
@@ -238,7 +238,7 @@ export GOROOT=/usr/local/go
 export GOHOME=/var/lib/jenkins/dev
 export GOPATH=/var/lib/jenkins/dev
 export ACCORD=/usr/local/accord
-exportPATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools
+export PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools
 alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
@@ -265,17 +265,17 @@ chmod 0644 ~jenkins/.bash_profile
 # build the latest golint and install...
 cat >jenkcmd.sh << EOF
 #!/bin/bash
-source ~/.bash_profile
-cd
+source /var/lib/jenkins/.bash_profile
+cd /var/lib/jenkins
 mkdir dev
 cd dev
 go get -u github.com/golang/lint/golint
 go get -u github.com/go-sql-driver/mysql
 go build
-cp ${GOHOME}/bin/golint /usr/local/go/bin
+cp ${GOPATH}/bin/golint /usr/local/go/bin
 cd
 rm -rf workspace
-ln -s ${GOHOME}/src workspace
+ln -s ${GOPATH}/src workspace
 EOF
 chmod +x jenkcmd.sh
 su - jenkins -c ./jenkcmd.sh 
@@ -290,10 +290,10 @@ service jenkins stop
 sleep 10
 
 echo "installing last known good configuration"
-tar xvf ~/${JENKINS_CONFIG_TAR}
+tar xf ~/${JENKINS_CONFIG_TAR}
 echo "installing jobs"
 cd jobs
-tar xvf ~/${JENKINS_JOBS_TAR}
+tar xf ~/${JENKINS_JOBS_TAR}
 cd ~jenkins
 
 echo "changing jenkins to be owner of all files"
