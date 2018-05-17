@@ -238,7 +238,7 @@ export GOROOT=/usr/local/go
 export GOHOME=/var/lib/jenkins/dev
 export GOPATH=/var/lib/jenkins/dev
 export ACCORD=/usr/local/accord
-export PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools
+export PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools:${GOPATH}/bin
 alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
@@ -262,7 +262,10 @@ alias gotbl='cd ~/Documents/src/go/src/gotable'
 EOF
 chmod 0644 ~jenkins/.bash_profile
 
-# build the latest golint and install...
+#-----------------------------------------
+# build and install the gotools needed
+# for the golang builds
+#-----------------------------------------
 cat >jenkcmd.sh << EOF
 #!/bin/bash
 source /var/lib/jenkins/.bash_profile
@@ -271,14 +274,22 @@ mkdir dev
 cd dev
 go get -u github.com/golang/lint/golint
 go get -u github.com/go-sql-driver/mysql
+go get -u github.com/cespare/srcstats
+go get -u honnef.co/go/tools/cmd/gosimple
+go get -u github.com/dustin/go-humanize
+go get -u github.com/go-sql-driver/mysql
+go get -u github.com/kardianos/osext
+go get -u gopkg.in/gomail.v2
+go get -u github.com/yosssi/gohtml
+go get -u github.com/aws/aws-sdk-go/...
 go build
-cp ${GOPATH}/bin/golint /usr/local/go/bin
-cd
+cd /var/lib/jenkins
 rm -rf workspace
-ln -s ${GOPATH}/src workspace
+ln -s /var/lib/jenkins/dev/src workspace
 EOF
 chmod +x jenkcmd.sh
 su - jenkins -c ./jenkcmd.sh 
+cp /var/lib/jenkins/dev/bin/golint /usr/local/go/bin
 
 echo "Sleeping for 10 seconds to give Jenkins plenty of time to"
 echo "complete its initial startup."
