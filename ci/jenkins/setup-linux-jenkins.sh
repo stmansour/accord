@@ -29,7 +29,7 @@ GOLANGDOWNLOAD="https://dl.google.com/go/${GOLANGBUNDLE}"
 
 artf_get() {
     echo "Downloading ${1}/${2}"
-    wget -O "${2}" --${T5}${T6}=${USR} --${T1}${T2}${T3}${T4}=${FOOLME} ${ART}/"${1}"/"$2"
+    wget --quiet -O "${2}" --${T5}${T6}=${USR} --${T1}${T2}${T3}${T4}=${FOOLME} ${ART}/"${1}"/"$2"
 }
 
 #---------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ install_mysql() {
         exit 1
     }
     echo "Downloading mysql release package from specified url: $MYSQL_RELEASE_URL..."
-    wget -O $MYSQL_RELEASE $MYSQL_RELEASE_URL || exitError "Could not fetch required release of mysql: ($MYSQL_RELEASE_URL)"
+    wget --quiet -O $MYSQL_RELEASE $MYSQL_RELEASE_URL || exitError "Could not fetch required release of mysql: ($MYSQL_RELEASE_URL)"
     echo "Adding mysql yum repo in the system repo list..."
     yum localinstall -y $MYSQL_RELEASE || exitError "Unable to install mysql release ($MYSQL_RELEASE) locally with yum"
     echo "Checking that mysql yum repo has been added successfully..."
@@ -109,9 +109,13 @@ install_mysql() {
 }
 
 
+###############################################################################
+#
+#  B E G I N
 #
 #  update all the out-of-date packages
 #
+###############################################################################
 yum -y update
 
 #
@@ -122,17 +126,8 @@ alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java
 yum -y install git-all.noarch
 yum -y install isomd5sum.x86_64
 
-#
-# install gradle
-#
-# wget https://services.gradle.org/distributions/${GRADLEVER}-bin.zip
-# unzip ${GRADLEVER}-bin.zip
-# mv ${GRADLEVER} /usr/local
-# ln -s /usr/local/${GRADLEVER}/bin/gradle /usr/bin/gradle
-# rm ${GRADLEVER}-bin.zip
-
 #  Install go
-wget ${GOLANGDOWNLOAD}
+wget --quiet ${GOLANGDOWNLOAD}
 tar -C /usr/local -xzf ${GOLANGBUNDLE}
 rm -f ${GOLANGBUNDLE}
 
@@ -148,10 +143,9 @@ adduser -d /var/lib/jenkins jenkins
 #
 #  install jenkins
 #
-wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+wget --quiet -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 yum -y install jenkins
-
 
 service jenkins start
 chkconfig jenkins on
@@ -217,7 +211,10 @@ echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
 tar xvf ~/ottoaccord.tar
 
-#  update everybody's path so go will work nicely
+#------------------------------------------------------------------------------
+#  Initialize user's files so that things will work nicely.
+#  Set up user: ec2-user
+#------------------------------------------------------------------------------
 GOROOT=/usr/local/go
 ACCORD=/usr/local/accord
 chmod 0666 ~ec2-user/.bash_profile
@@ -231,16 +228,17 @@ alias la='ls -a'
 alias ls='ls -FCH'
 alias ff='find . -name'
 EOF
-chmod 0644 ~ec2-user/.bash_profile
 
-
+#------------------------------------------------------------------------------
+#  Set up user: jenkins
+#------------------------------------------------------------------------------
 chmod 0666 ~jenkins/.bash_profile
-echo "export GOROOT=/usr/local/go" >> ~jenkins/.bash_profile
-echo 'export GOHOME=~/tmp' >> ~jenkins/.bash_profile
-echo 'export GOPATH=/var/lib/jenkins/tmp' >> ~jenkins/.bash_profile
-echo "export ACCORD=/usr/local/accord" >> ~jenkins/.bash_profile
-echo 'PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools' >> ~jenkins/.bash_profile
 cat >> ~jenkins/.bash_profile <<EOF
+export GOROOT=/usr/local/go
+export GOHOME=/var/lib/jenkins/dev
+export GOPATH=/var/lib/jenkins/dev
+export ACCORD=/usr/local/accord
+exportPATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools
 alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
@@ -269,15 +267,18 @@ cat >jenkcmd.sh << EOF
 #!/bin/bash
 source ~/.bash_profile
 cd
-mkdir tmp
-cd tmp
+mkdir dev
+cd dev
 go get -u github.com/golang/lint/golint
 go get -u github.com/go-sql-driver/mysql
 go build
+cp ${GOHOME}/bin/golint /usr/local/go/bin
+cd
+rm -rf workspace
+ln -s ${GOHOME}/src workspace
 EOF
 chmod +x jenkcmd.sh
 su - jenkins -c ./jenkcmd.sh 
-cp tmp/src/github.com/golang/lint/golint/golint /usr/local/go/bin/
 
 echo "Sleeping for 10 seconds to give Jenkins plenty of time to"
 echo "complete its initial startup."

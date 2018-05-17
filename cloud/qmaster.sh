@@ -141,13 +141,6 @@ restoredb() {
 }
 
 #--------------------------------------------------------------
-#  update all the out-of-date packages, add Java 1.8, and md5sum
-#--------------------------------------------------------------
-yum -y update
-yum -y install java-1.8.0-openjdk-devel.x86_64
-yum -y install isomd5sum.x86_64
-
-#--------------------------------------------------------------
 #  Let's get our tools in place...
 #--------------------------------------------------------------
 artf_get ext-tools/utils accord-linux.tar.gz
@@ -156,6 +149,14 @@ cd /usr/local
 tar xvzf ~ec2-user/accord-linux.tar.gz
 chown -R ec2-user:ec2-user accord
 cd ~ec2-user/
+
+#--------------------------------------------------------------
+#  update all the out-of-date packages, add Java 1.8, and md5sum
+#--------------------------------------------------------------
+yum -y update
+yum -y install java-1.8.0-openjdk-devel.x86_64
+yum -y install isomd5sum.x86_64
+
 
 #----------------------------------------------
 #  Now download the requested apps...
