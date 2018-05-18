@@ -286,6 +286,28 @@ go build
 cd /var/lib/jenkins
 rm -rf workspace
 ln -s /var/lib/jenkins/dev/src workspace
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+source ~jenkins/.bashrc
+nvm --version
+nvm install node
+npm root -g
+npm install -g grunt
+npm install -g grunt-contrib-jshint
+npm install -g grunt-contrib-uglify
+npm install -g grunt-contrib-watch
+npm install -g grunt-contrib-concat
+npm install -g grunt-contrib-clean
+npm install -g fs-extra
+npm install -g webpack
+npm install -g webpack-cli
+npm install -g case-sensitive-paths-webpack-plugin
+npm install -g html-webpack-plugin
+npm install -g istanbul-lib-coverage # To make the bundle.js instrumented
+npm install -g istanbul-instrumenter-loader
+npm install -g glob # To match glob pattern for entry point in webpack
+npm install -g nyc # To generate code coverage report
+npm install -g cypress
+
 EOF
 chmod +x jenkcmd.sh
 su - jenkins -c ./jenkcmd.sh 
