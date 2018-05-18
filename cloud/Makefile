@@ -20,7 +20,7 @@ package:
 	mkdir -p ${PACKAGEDIR}
 	cp cr_linux_jenkins.sh ${PACKAGEDIR}
 	cp cr_linux_testenv.sh ${PACKAGEDIR}
-	cp qmaster.sh ${PACKAGEDIR}
+	cp qmaster.* ${PACKAGEDIR}
 	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"
 
 publish:
