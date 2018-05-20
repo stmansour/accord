@@ -94,6 +94,8 @@ shift $((OPTIND-1))
 
 pushd /usr/local/accord/bin
 echo "Creating ${INSTANCECOUNT} Jenkins instances..."
-aws ec2 run-INSTANCECOUNT --output json --image-id ${AMI} --count ${INSTANCECOUNT} --instance-type ${INSTANCESIZE} --key-name ${KEYNAME}  --security-groups Linux-Jenkins-CI  --user-data file://setup-linux-jenkins.sh > new-linux-jenkins-instance.json
+cmd="aws ec2 run-instances --output json --image-id ${AMI} --count ${INSTANCECOUNT} --instance-type ${INSTANCESIZE} --key-name ${KEYNAME}  --security-groups Linux-Jenkins-CI  --user-data file://setup-linux-jenkins.sh > new-linux-jenkins-instance.json"
+echo "Command: ${cmd}"
+aws ec2 run-instances --output json --image-id ${AMI} --count ${INSTANCECOUNT} --instance-type ${INSTANCESIZE} --key-name ${KEYNAME}  --security-groups Linux-Jenkins-CI  --user-data file://setup-linux-jenkins.sh > new-linux-jenkins-instance.json
 popd
 date
