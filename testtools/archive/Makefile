@@ -6,20 +6,20 @@ PACKAGEDIR=${TOP}/tmp/accord/testtools
 archive:
 	@echo "*** COMPLETED in ${THISDIR} **"
 
-all: clean testreporter test
+all: clean archive  test
 	@echo "*** COMPLETED in ${THISDIR} **"
 
 clean:
 	@echo "*** CLEAN COMPLETED in ${THISDIR} ***"
 
-test: testreporter
+test: 
 	@echo "*** TEST COMPLETED in ${THISDIR} ***"
 
-install: testreporter
+install: uhura_shutdown.sh
 	mkdir -p ${INSTALLDIR}
 	cp uhura_shutdown.sh ${INSTALLDIR}
 	@echo "*** INSTALL COMPLETED in ${THISDIR} ***"
 
-package: testreporter
+package: uhura_shutdown.sh
 	mkdir -p ${PACKAGEDIR}
 	cp uhura_shutdown.sh ${PACKAGEDIR}
