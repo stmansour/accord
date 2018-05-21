@@ -1,5 +1,5 @@
 top=..
-DIRS=testreporter
+DIRS=testreporter archive
 THISDIR=testtools
 
 
