@@ -22,4 +22,4 @@ install: uhura_shutdown.sh
 
 package: uhura_shutdown.sh
 	mkdir -p ${PACKAGEDIR}
-	cp uhura_shutdown.sh ${PACKAGEDIR}
+	cp uhura_shutdown.sh clientsim.sh ${PACKAGEDIR}
