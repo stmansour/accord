@@ -211,6 +211,10 @@ echo "Updating credentials for user 'jenkins' to access github"
 cd ~jenkins
 tar xf ~/ottoaccord.tar
 
+curl -fL https://getcli.jfrog.io | sh
+chmod +x jfrog
+mv jfrog /usr/local/bin
+
 #------------------------------------------------------------------------------
 #  Initialize user's files so that things will work nicely.
 #  Set up user: ec2-user
@@ -238,7 +242,7 @@ export GOROOT=/usr/local/go
 export GOHOME=/var/lib/jenkins/dev
 export GOPATH=/var/lib/jenkins/dev
 export ACCORD=/usr/local/accord
-export PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools:${GOPATH}/bin
+export PATH=${PATH}:${GOROOT}/bin:${ACCORD}/bin:${ACCORD}/testtools:${GOPATH}/bin:/usr/local/bin
 alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
