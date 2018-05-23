@@ -346,7 +346,9 @@ ln -s /usr/share/zoneinfo/US/Pacific localtime
 
 echo "installing mysql"
 install_mysql
-echo "use accord;GRANT ALL PRIVILEGES ON Accord TO 'ec2-user'@'localhost';"  | mysql
+
+# our ec2-user must have all privileges
+echo "GRANT ALL PRIVILEGES ON *.* TO 'ec2-user'@'localhost' WITH GRANT OPTION;GRANT ALL PRIVILEGES ON *.* TO 'jenkins'@'localhost' WITH GRANT OPTION;"  | mysql
 
 cd ~
 rm ./*.gz

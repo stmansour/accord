@@ -3,7 +3,7 @@ THISDIR=tools
 INSTALLDIR=/usr/local/accord/bin
 PACKAGEDIR=${TOP}/tmp/accord/bin
 
-FILES=artifactory.url credp deployfile.sh getfile.sh jnk-lnx-conf-archiver.sh jnk-lnx-job-archiver.sh publicdns getfile.sh rmfile.sh updatefile.sh symlinks_in_path.sh govet.sh
+FILES=artifactory.url credp deployfile.sh getfile.sh jnk-lnx-conf-archiver.sh jnk-lnx-job-archiver.sh publicdns getfile.sh rmfile.sh updatefile.sh symlinks_in_path.sh govet.sh snapshot.sh release.sh rollback.sh
 
 tools:
 	@echo "*** COMPLETE in ${THISDIR} ***"
