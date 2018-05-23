@@ -17,7 +17,7 @@ test:
 
 install: uhura_shutdown.sh
 	mkdir -p ${INSTALLDIR}
-	cp uhura_shutdown.sh ${INSTALLDIR}
+	cp uhura_shutdown.sh clientsim.sh ${INSTALLDIR}
 	@echo "*** INSTALL COMPLETED in ${THISDIR} ***"
 
 package: uhura_shutdown.sh
