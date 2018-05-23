@@ -8,6 +8,11 @@
 #       found in the current directory.
 
 DRYRUN=0
+AMI="ami-14c5486b"
+INSTANCESIZE="t2.micro"
+#INSTANCESIZE="t2.medium"
+KEYNAME="smanAWS1"
+
 
 if [ "x" == "x$1" ]; then
 	echo "*** ERROR ***  You must supply the launch startup script"
@@ -30,7 +35,7 @@ if [ "x" != "x$3" ]; then
 	fi
 fi
 
-echo "cd ${DIR};aws ec2 run-instances --output json --image-id ami-1ecae776 --count 1 --instance-type t2.micro --key-name smanAWS1  --security-groups Linux-Jenkins-CI  --user-data file://$1 >> $1.json"
+echo "cd ${DIR};aws ec2 run-instances --output json --image-id ${AMI} --count 1 --instance-type ${INSTANCESIZE} --key-name smanAWS1  --security-groups Linux-Jenkins-CI  --user-data file://$1 >> $1.json"
 if [ ${DRYRUN} -eq 0 ]; then
-	cd ${DIR};aws ec2 run-instances --output json --image-id ami-1ecae776 --count 1 --instance-type t2.micro --key-name smanAWS1  --security-groups Linux-Jenkins-CI  --user-data file://$1 >> $1.json
+	cd ${DIR};aws ec2 run-instances --output json --image-id ${AMI} --count 1 --instance-type ${INSTANCESIZE} --key-name smanAWS1  --security-groups Linux-Jenkins-CI  --user-data file://$1 >> $1.json
 fi
