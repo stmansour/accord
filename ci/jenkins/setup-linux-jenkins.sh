@@ -265,6 +265,7 @@ alias gojnk='cd ~/workspace/accord/ci/jenkins'
 alias gotbl='cd ~/workspace/gotable'
 EOF
 chmod 0644 ~jenkins/.bash_profile
+echo "export PATH=${PATH}:${NPM}" >> ~/.bash_profile
 
 #-----------------------------------------
 # build and install the gotools needed
@@ -311,7 +312,7 @@ npm install -g istanbul-instrumenter-loader
 npm install -g glob # To match glob pattern for entry point in webpack
 npm install -g nyc # To generate code coverage report
 npm install -g cypress
-
+npm install -g jshint
 EOF
 chmod +x jenkcmd.sh
 su - jenkins -c ./jenkcmd.sh 
