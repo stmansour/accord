@@ -16,8 +16,8 @@ Examples:
 $0  ext-tools/utils/s.bat
 	This command will download s.bat from Artifactory directory ext-tools/utils
 
-$0	-m 400 db/config.json
-	Download config.json, set its permissions to 400 (only owner can read)
+$0	-m 400 accord/db/confdev.json
+	Download confdev.json, set its permissions to 400 (only owner can read)
 
 ZZEOF
 }

@@ -3,7 +3,7 @@
 # USAGE:
 # 	release prodname
 #
-# SYNOPSIS: elevate airepo:/air/snapshot/<bundle> to release status in the 
+# SYNOPSIS: elevate airepo:/air/snapshot/<bundle> to release status in the
 #           repository
 #
 # DESCRIPTION:
@@ -18,7 +18,7 @@
 # 	5. Create a BOM_YYYMMDD_hhmmss.txt file with the system date containing 1
 # 	   line with the version number associated with each bundle. Lines are of
 #	   the format:  <bundle file name> <version stamp>
-# 
+#
 # EXAMPLES:
 #       ./release.sh rentroll
 #------------------------------------------------------------------------------
@@ -31,6 +31,17 @@ DEBUG=1
 OS=$(uname)
 BOMMAX=100
 PRODMAX=10
+JFROG=$(which jfrog)
+
+if [ "x${JFROG}" == "x" ]; then
+    JFROG=/usr/local/bin/jfrog
+fi
+
+if [ ! -f "${JFROG}" ]; then
+    echo "This script requires jfrog, which could not be found in your path or in /usr/local/bin"
+    echo "Please make sure that jfrog can be found, then rerun this script."
+    exit 2
+fi
 
 if [ "x${PRODNAME}" == "x" ]; then
         echo "You must supply the bundle to release"
@@ -133,7 +144,7 @@ function bom {
 			Linux)
 				dt3=$(date -d "${dmy} ${hr}:${m}:${s} ${tz}" "+%B %d, %Y %l:%M:%S%P %Z")
 				;;
-		esac 
+		esac
 
         printf '%-11s  %-20s  %-50s\n' "${prod}" "${dt}" "${dt3}" >> ${BOM}
     done < ${BOMTMP}
@@ -173,7 +184,7 @@ function setChecksum {
 	        md5Value="${md5Value:0:32}"
 	        echo "MD5 = ${md5Value} ${1}"
 	        xchkmd5="-H \"X-Checksum-Md5: ${md5Value}\""
-	        ;;  
+	        ;;
 
 	    "MINGW32_NT-6.2" | "CYGWIN_NT-6.2" )
 	        echo "will attempt to md5sum ${1}"
@@ -182,9 +193,9 @@ function setChecksum {
 	        md5Value="$($MD5 "${1}")"
 	        md5Value="${md5Value:0:32}"
 	        xchkmd5="-H \"X-Checksum-Md5: ${md5Value}\""
-	        ;;  
+	        ;;
 
-	    *) 
+	    *)
 	        echo "will attempt to md5sum ${1}"
 	        MD5="md5sum"
 	        which $MD5 || exit $?
@@ -196,7 +207,7 @@ function setChecksum {
 	        sha1Value="${sha1Value:0:40}"
 	        echo "MD5 and SHA1 = ${md5Value} $sha1Value ${1}"
 	        xchksha1="-H \"X-Checksum-Sha1: ${sha1Value}\""
-	        ;;  
+	        ;;
 	esac
 
 	decho "*** Exit setChecksum, xchkmd5 = ${xchkmd5}, xchksha1 = ${xchksha1}"
@@ -328,7 +339,7 @@ function prune {
 		max=$(cat max.txt)
 		rm -f max.txt
 	fi
-	
+
 	decho "*** PRUNE ${1} - Max = ${MaxArchiveDepth} -- found ${#n[@]} files"
 	if (( ${#n[@]} > ${max} )); then
 		LIMIT=$(( ${#n[@]} - MaxArchiveDepth ));
@@ -347,7 +358,7 @@ function prune {
 #############################################################################
 # archive
 #   Description:
-#   	Move the contents of accord/air/release/${1}* 
+#   	Move the contents of accord/air/release/${1}*
 #		to air/archives/${1}/
 #
 #   Params:
@@ -367,7 +378,7 @@ function archive {
 	jfrog rt s "accord/air/release/${1}*" | grep path | awk '{print $2;}' | sed 's/\"//g' | while read -r line; do
 		repomove "${line}" "${t}"
 	done
-	
+
 	t="accord/air/archives/bom/"
 	jfrog rt s "accord/air/release/bom*" | grep path | awk '{print $2;}' | sed 's/\"//g' | while read -r line; do
 		repomove "${line}" "${t}"
