@@ -100,7 +100,7 @@ function bom {
     BOM="bom.txt"
     ReadableDate=$(date "+%B %d, %Y %l:%M:%S%P %Z")
 
-    jfrog rt s "accord/air/release/*" | grep path | awk '{print $2;}' | sed 's/\"//g' > ${BOMTMP}
+    ${JFROG} rt s "accord/air/release/*" | grep path | awk '{print $2;}' | sed 's/\"//g' > ${BOMTMP}
 
     #      20180123 _ 18  08  35  PST
     dtre="(........)_(..)(..)(..)(...)"
@@ -322,7 +322,7 @@ function prune {
 	#-------------------------------------------------------------------------
 	# this statement creates an array of filenames that are in accord/air/
 	#-------------------------------------------------------------------------
-	n=($(jfrog rt s "accord/air/archives/${1}/${1}*" | grep path| awk '{print $2;}' | sed 's/\"//g'))
+	n=($(${JFROG} rt s "accord/air/archives/${1}/${1}*" | grep path| awk '{print $2;}' | sed 's/\"//g'))
 
 	#-------------------------------------------------------------------------
 	# if there are files in the archive dir, then read "max.txt" to determine
@@ -331,7 +331,7 @@ function prune {
 	max=${MaxArchiveDepth}  ## default value
 	if (( ${#n[@]} > 0 )); then
 		# first make sure that we actually have a max file...
-		n1=$(jfrog rt s "accord/air/archives/${1}/max.txt" | grep "path:" | wc -l)
+		n1=$(${JFROG} rt s "accord/air/archives/${1}/max.txt" | grep "path:" | wc -l)
 		if (( ${n1} == 0 )); then
 			setDefaultMax "${1}"
 		fi
@@ -375,12 +375,12 @@ function archive {
 	# release directory
 	#-----------------------------------------------------------------
 	t="accord/air/archives/${1}/"
-	jfrog rt s "accord/air/release/${1}*" | grep path | awk '{print $2;}' | sed 's/\"//g' | while read -r line; do
+	${JFROG} rt s "accord/air/release/${1}*" | grep path | awk '{print $2;}' | sed 's/\"//g' | while read -r line; do
 		repomove "${line}" "${t}"
 	done
 
 	t="accord/air/archives/bom/"
-	jfrog rt s "accord/air/release/bom*" | grep path | awk '{print $2;}' | sed 's/\"//g' | while read -r line; do
+	${JFROG} rt s "accord/air/release/bom*" | grep path | awk '{print $2;}' | sed 's/\"//g' | while read -r line; do
 		repomove "${line}" "${t}"
 	done
 
@@ -419,7 +419,7 @@ repocopy "${f}" "${t}"
 # are of the format:  <bundle file name> <version stamp>
 #----------------------------------------------------------------------
 bom
-jfrog rt upload bom.txt "accord/air/release/bom_${TS}.txt"
+${JFROG} rt upload bom.txt "accord/air/release/bom_${TS}.txt"
 rm -f bom.txt
 
 decho "*** END RELEASE"
