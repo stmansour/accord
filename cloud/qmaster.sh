@@ -140,6 +140,25 @@ restoredb() {
 	echo "popd completed, dir = ${DIR}"
 }
 
+initBashProfile() {
+    chmod 0666 ~ec2-user/.bash_profile
+    cat >> ~ec2-user/.bash_profile <<EOF
+export ACCORD=/usr/local/accord
+export PATH=${PATH}:${ACCORD}/bin:${ACCORD}/testtools:/usr/local/bin
+alias ll='ls -al'
+alias la='ls -a'
+alias ls='ls -FCH'
+alias ff='find . -name'
+alias goa='cd ~/apps/accord'
+alias gom='cd ~/apps/mojo'
+alias goms='cd ~/apps/mojo/mojosrv'
+alias gor='cd ~/apps/rentroll'
+alias got='cd ~/apps/tgo'
+alias gop='cd ~/apps/phonebook'
+EOF
+    chmod 0644 ~ec2-user/.bash_profile
+
+}
 # install jfrog
 installJFrog() {
 	# Download jfrog cli from the repo.
@@ -150,7 +169,7 @@ installJFrog() {
     echo -n "Current directory = "
     pwd
     echo "will execute: curl -u ${USER}:${PSWD} ${ARTF}accord/tools/jfrog > jfrog"
-    curl -u -s ${USER}:${PSWD} ${ARTF}accord/tools/jfrog > jfrog
+    curl -s -u ${USER}:${PSWD} ${ARTF}accord/tools/jfrog > jfrog
     if [ ! -d /usr/local/bin ]; then
         mkdir -p /usr/local/bin
     fi
@@ -169,6 +188,7 @@ cd ~ec2-user/
 tar xvf /usr/local/accord/bin/jfrog.tar
 chown -R ec2-user:ec2-user .jfrog
 installJFrog
+initBashProfile
 
 #--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
