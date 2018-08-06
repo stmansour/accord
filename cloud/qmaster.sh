@@ -140,6 +140,19 @@ restoredb() {
 	echo "popd completed, dir = ${DIR}"
 }
 
+# install jfrog
+installJFrog() {
+	# Download jfrog cli from the repo.
+	USER=$(grep user ~/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
+	PASS=$(grep password ~/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
+	ARTF=$(grep url ~/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
+    curl -u ${USER}:${PASS} ${ARTF}accord/tools/jfrog > jfrog
+    if [ ! -d /usr/local/bin ]; then
+        mkdir /usr/local/bin
+    fi
+    mv jfrog /usr/local/bin
+}
+
 #--------------------------------------------------------------
 #  Let's get our tools in place...
 #--------------------------------------------------------------
@@ -150,6 +163,7 @@ tar xvzf ~ec2-user/accord-linux.tar.gz
 chown -R ec2-user:ec2-user accord
 cd ~ec2-user/
 tar xvf /usr/local/accord/bin/jfrog.tar
+installJFrog
 
 #--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
