@@ -32,7 +32,7 @@ ${EXTERNAL_HOST_NAME:?"Need to set EXTERNAL_HOST_NAME non-empty"}
 #--------------------------------------------------------------
 artf_get() {
     echo "Downloading $1/$2"
-    wget -O "$2" --user=$USR --password=$PASS ${ART}/"$1"/"$2"
+    wget -q -O "$2" --user=${USR} --password=${PASS} ${ART}/"$1"/"$2"
 }
 
 #--------------------------------------------------------------
@@ -143,12 +143,16 @@ restoredb() {
 # install jfrog
 installJFrog() {
 	# Download jfrog cli from the repo.
-	USER=$(grep user ~/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
-	PASS=$(grep password ~/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
-	ARTF=$(grep url ~/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
-    curl -u ${USER}:${PASS} ${ARTF}accord/tools/jfrog > jfrog
+	USER=$(grep user ~ec2-user/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
+	PSWD=$(grep password ~ec2-user/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
+	ARTF=$(grep url ~ec2-user/.jfrog/jfrog-cli.conf | awk '{print $2;}' | sed 's/\"//g' | sed 's/,//')
+    echo "In instalJfrog()  USER=${USER}, PSWD=${PSWD}, ARTF=${ARTF}"
+    echo -n "Current directory = "
+    pwd
+    echo "will execute: curl -u ${USER}:${PSWD} ${ARTF}accord/tools/jfrog > jfrog"
+    curl -u -s ${USER}:${PSWD} ${ARTF}accord/tools/jfrog > jfrog
     if [ ! -d /usr/local/bin ]; then
-        mkdir /usr/local/bin
+        mkdir -p /usr/local/bin
     fi
     mv jfrog /usr/local/bin
 }
@@ -163,6 +167,7 @@ tar xvzf ~ec2-user/accord-linux.tar.gz
 chown -R ec2-user:ec2-user accord
 cd ~ec2-user/
 tar xvf /usr/local/accord/bin/jfrog.tar
+chown -R ec2-user:ec2-user .jfrog
 installJFrog
 
 #--------------------------------------------------------------
