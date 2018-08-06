@@ -2,7 +2,7 @@
 #
 # qmaster for linux
 # This script is designed prepare a new linux instance to run an
-# application and potentially a test. Uhura is the coordinator and 
+# application and potentially a test. Uhura is the coordinator and
 # handles communication between the apps and the master, which runs
 # on the build machine.
 #
@@ -136,7 +136,7 @@ restoredb() {
 	${ACCORDHOME}/testtools/restoredb.sh /tmp/$1
 	echo "restoredb.sh completed"
 	popd
-	DIR=$(pwd)	
+	DIR=$(pwd)
 	echo "popd completed, dir = ${DIR}"
 }
 
@@ -149,6 +149,7 @@ cd /usr/local
 tar xvzf ~ec2-user/accord-linux.tar.gz
 chown -R ec2-user:ec2-user accord
 cd ~ec2-user/
+tar xvf /usr/local/accord/bin/jfrog.tar
 
 #--------------------------------------------------------------
 #  update all the out-of-date packages, add Java 1.8, and md5sum
