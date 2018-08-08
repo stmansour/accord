@@ -144,7 +144,7 @@ initBashProfile() {
     chmod 0666 ~ec2-user/.bash_profile
     cat >> ~ec2-user/.bash_profile <<EOF
 export ACCORD=/usr/local/accord
-export PATH=${PATH}:${ACCORD}/bin:${ACCORD}/testtools:/usr/local/bin
+export PATH=\${PATH}:\${ACCORD}/bin:\${ACCORD}/testtools:/usr/local/bin
 alias ll='ls -al'
 alias la='ls -a'
 alias ls='ls -FCH'
