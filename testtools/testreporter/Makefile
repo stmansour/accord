@@ -5,7 +5,8 @@ PACKAGEDIR=${TOP}/tmp/accord/testtools
 
 testreporter:
 	go vet
-	golint
+	if [[ `uname` = "Darwin" ]]; then echo "staticcheck"; else echo "golint"; fi
+	if [[ `uname` = "Darwin" ]]; then staticcheck; else golint; fi
 	go build
 
 all: clean testreporter test

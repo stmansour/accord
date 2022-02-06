@@ -23,7 +23,7 @@ package:
 	mkdir -p tmp/accord/bin
 	mkdir -p tmp/accord/testtools
 	for dir in $(DIRS); do make -C $$dir package;done
-	cd ; tar cvf jfrog.tar .jfrog ; mv jfrog.tar workspace/accord/tmp/accord/bin/
+	pushd ~ ; tar cvf jfrog.tar .jfrog ; popd; mv ~/jfrog.tar tmp/accord/bin/
 	@echo "*** PACKAGE COMPLETE in ${THISDIR} ***"
 
 publish:

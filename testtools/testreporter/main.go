@@ -14,15 +14,6 @@ import (
 	"strings"
 )
 
-const (
-	uUNKNOWN = iota
-	uINIT
-	uREADY
-	uTEST
-	uDONE
-	uTERM
-)
-
 // KeyVal is a generic key/value pair struct
 type KeyVal struct {
 	Key string
